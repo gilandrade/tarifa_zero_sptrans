@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas do Notebook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        p {
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .mapa-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .mapa-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .mapa-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .mapa-titulo {
+            padding: 15px;
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .mapa-preview {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+        .mapa-botoes {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .mapa-botoes a {
+            flex: 1;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            font-size: 0.9em;
+        }
+        .mapa-botoes a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mapas de Comparação de Demanda</h1>
+    <p>Visualize os mapas gerados através do notebook. Clique em "Tela Inteira" para explorar o mapa em detalhes.</p>
+
+    <div class="mapa-container" id="mapa-container"></div>
+
+    <script>
+        const containerEl = document.getElementById("mapa-container");
+
+        // Lista de mapas gerados no notebook
+        // Você pode adicionar mais itens a esta lista conforme gera novos arquivos HTML
+        const mapas = [
+            {
+                titulo: "Diferença de Demanda (OD)",
+                caminho: "mapa_diferenca_demanda.html" // Nome do arquivo salvo no notebook
+            }
+        ];
+
+        function renderMapas() {
+            containerEl.innerHTML = "";
+
+            if (!mapas.length) {
+                containerEl.innerHTML = "<p>Nenhum mapa configurado no momento.</p>";
+                return;
+            }
+
+            mapas.forEach((mapa) => {
+                const card = document.createElement("div");
+                card.className = "mapa-item";
+                card.innerHTML = `
+                    <div class="mapa-titulo">${mapa.titulo}</div>
+                    <iframe class="mapa-preview" src="${mapa.caminho}"></iframe>
+                    <div class="mapa-botoes">
+                        <a href="${mapa.caminho}" target="_blank" rel="noopener">Tela Inteira</a>
+                    </div>
+                `;
+                containerEl.appendChild(card);
+            });
+        }
+
+        renderMapas();
+    </script>
+
+</body>
+</html>
