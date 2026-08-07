@@ -185,6 +185,10 @@ registra(Tabela(
     fonte=DIR_TABELAS_03 / "resumo_fontes.parquet",
     rotulo_indice="fonte",
     colunas=[
+        Coluna("domingo_2023", "domingo 2023", 0),
+        Coluna("domingo_2024", "domingo 2024", 0),
+        Coluna("util_2023", "útil 2023", 0),
+        Coluna("util_2024", "útil 2024", 0),
         Coluna("PctDiff_domingo", "Δ% domingo", 2),
         Coluna("PctDiff_util", "Δ% dia útil", 2),
         Coluna("Sinal_tarifa_zero", "sinal (p.p.)", 1, destaque=True),

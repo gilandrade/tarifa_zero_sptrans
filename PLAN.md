@@ -41,12 +41,14 @@ idade) pela bilhetagem.* Medido na Seção 8, com médias por dia e conjuntos de
 |---|---|---|---|
 | oficial | +35,95% | +7,03% | **+28,9 p.p.** |
 | bilhetagem sem `linha_blt` nula | +27,96% | +4,08% | +23,9 p.p. |
-| bilhetagem como as seções calculam | +20,87% | +5,74% | +15,1 p.p. |
 
-Mesmo sinal, magnitude diferente. **No site isso não é apresentado como intervalo de confiança**
-— as três são agregações censitárias, sem amostragem, então erro-padrão/IC não estão definidos; a
-amplitude é divergência de critério de contagem entre fontes, e o número publicado como manchete é
-o do oficial (+28,9 p.p.), não uma média ou faixa das três.
+As duas usam o mesmo critério de contagem (sem `linha_blt` nula, médias por dia); a versão bruta,
+que incluía os registros sem linha, saiu da tabela publicada — `linha_blt` nula não é embarque de
+ônibus municipal, então não é um recorte alternativo, é contagem errada. Mesmo sinal, magnitude
+diferente. **No site isso não é apresentado como intervalo de confiança** — as duas são agregações
+censitárias, sem amostragem, então erro-padrão/IC não estão definidos; a amplitude é divergência
+entre fontes, e o número publicado como manchete é o do oficial (+28,9 p.p.), não uma média ou
+faixa das duas.
 
 ### 2. Validar a tabela de capacidade nominal
 
