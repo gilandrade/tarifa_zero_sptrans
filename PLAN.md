@@ -1,69 +1,89 @@
 # PLAN — análise tarifa zero domingos: demanda x oferta x gênero/idade
 
-Reorganização em pastas já concluída (`01_criacao_de_bases/`, `02_oferta/`, `03_comparacoes/`, caminhos relativos ajustados, `CLAUDE.md` atualizado com a nova estrutura). Faltam as duas etapas abaixo.
+## Estado atual
 
-## Etapa 1 — Criar `03_comparacoes/compara_demanda_oferta_genero_idade.ipynb`
+Concluído:
 
-Notebook novo, self-contained (não estende `02_cria_base_demanda_mes.ipynb`, cujo agregado line×zona×mês já é consumido por `compara_demanda.ipynb` — mudar esse schema quebraria esse consumidor).
+- Reorganização em pastas numeradas por estágio, com `outputs/` também namespaceado por estágio
+  (`outputs/01/`, `outputs/03/`).
+- `03_comparacoes/compara_demanda_oferta_genero_idade.ipynb` — construído e rodando de ponta a
+  ponta, Seções 0 a 8.
+- `01_criacao_de_bases/03_cria_base_oficial.ipynb` — série oficial de passageiros transportados,
+  **731/731 dias** de 2023-2024 (989.311 registros), com célula de integridade sobre os arquivos
+  brutos. O único arquivo corrompido na origem (`20230529.xls`) foi recuperado via Excel.
+- `01_criacao_de_bases/04_diagnostico_domingos_antiga_vs_nova.ipynb` — caracterizou a relação entre
+  as duas entregas de domingo e validou a base nova contra o oficial.
+- `01_criacao_de_bases/05_imputa_zona_domingo.ipynb` — **`zona_emb` do domingo imputada**
+  (cobertura ~99% do volume com linha), o que devolveu a análise por zona ao dia da política.
+- Migração dos caminhos de origem para `C:\Users\9837292\Desktop\SSD\SPTrans\`, com a constante
+  `RAIZ_SPTRANS` no topo de cada notebook que lê dado bruto.
+- `CLAUDE.md` atualizado com tudo acima.
 
-**Seção 0 — imports/config**: `polars`, `pandas`, `geopandas`, `folium`, `branca.colormap`, `shapely.geometry.Point`. `od = 2023`. `MESES = ["04","05","09","10"]` (janela comum às duas bases — decisão já tomada com o usuário).
+O mapa detalhado do pipeline vive no `CLAUDE.md`, não aqui. Este arquivo é só o que ainda falta.
 
-**Seção 1 — agregado de demanda** (linha × zona × Ano × Mês × tipo_dia × genero × faixa_etaria):
-- De `../outputs/Dados_4Meses_2023_2024.parquet`: derivar `tipo_dia` do weekday de `data` (`pl.col("data").str.to_date("%Y%m%d").dt.weekday()`), filtrar `MESES`, **excluir domingos** (weekday==7) para não duplicar com a base de domingos.
-- De `../outputs/Dados_Domingos_2023_2024.parquet`: filtrar `MESES`, marcar `tipo_dia="domingo"` (todas as linhas já são domingo por construção).
-- Agregar cada fonte por `linha_blt, zona_emb, Ano, Mês, tipo_dia, genero, faixa_etaria` → `N_embarques` (via `pl.len()`, streaming), depois `pl.concat` das duas agregações (não concatenar linhas brutas antes de agregar).
-- Persistir como `../outputs/Dados_4Meses_Domingos_2023_2024_genero_idade.parquet`.
-- Célula de validação: comparar a proporção util/sábado/domingo derivada do weekday contra a coluna `Tipo Dia` de `Partidas.csv` (mais autoritativa) para linhas/meses em comum; avisar se divergência > 5%.
+## O que ainda falta
 
-**Seção 2 — geometria de zonas, ponto de referência do CBD, tiers de periferia**:
-- Reusar o toggle `od` e o shapefile de zonas já usado em `compara_demanda.ipynb`.
-- Ponto de referência: Praça da Sé, `Point(-46.6333, -23.5505)` em WGS84, reprojetado para o CRS das zonas (confirmar `22523`, já usado em `compara_demanda.ipynb` — reprojetar explicitamente se `zonas.crs` vier geográfico).
-- `dist_cbd_km = zonas.centroid.distance(cbd_point) / 1000`.
-- Tiers por quartil (`pd.qcut`, 4 grupos: Centro / Intermediário 1 / Intermediário 2 / Periferia).
-- Sanity check: tabela de contagem de zonas e distância média por tier + `zonas.plot(column="periferia_tier")`.
+### 1. Publicar / consolidar os resultados
 
-**Seção 3 — diffs de demanda por zona, domingo vs útil, isolando o efeito tarifa-zero**:
-- Para cada `tipo_dia`, pivot Ano 2023→2024 por zona (soma sobre genero/faixa_etaria, esse corte fica para a Seção 6).
-- `PctDiff_domingo` e `PctDiff_util` por zona.
-- Métrica-chave: `Sinal_tarifa_zero = PctDiff_domingo - PctDiff_util`.
-- Mapas: (a) diff % domingo, (b) diff % útil (controle), (c) `Sinal_tarifa_zero` em folium com `branca.colormap.LinearColormap` divergente vermelho-branco-verde (mesmo padrão de `compara_demanda.ipynb`).
-- Estratificar `Sinal_tarifa_zero` por `periferia_tier` (boxplot/barras agrupadas).
+O notebook de gênero/idade continua exploratório: os mapas ficam locais a `03_comparacoes/` e não
+vão para `../docs/`. Falta decidir o recorte que vira resultado publicável e escrever a narrativa
+com as ressalvas metodológicas já levantadas.
 
-**Seção 4 — lado da oferta**: `Partidas.csv` (`E:\SPTrans\pedido 096412- oferta\`) + `Tecnologias.csv` (`F:\SPTrans\pedido 096412- oferta\`, `encoding="latin-1"`).
-- Tabela de capacidade nominal por `Tecnologia` (Miniônibus, Midiônibus09/11, Básico, Padron13/14/15, Articulado18/19/20/23, variantes elétricas "e"-prefixadas = mesma capacidade do correspondente a combustão; Embarcacao* excluídas) — célula markdown deixando explícito que são valores públicos aproximados, a validar antes de qualquer conclusão publicada.
-- `Capacidade_frota = Frota × capacidade_nominal`, agregado por `Linha × Ano Mês × Tipo Dia`. Print de linhas com `Tecnologia` não mapeada antes de confiar nos totais.
-- Proxy de oferta principal: **capacidade de frota** (`Frota × capacidade_nominal`), não partidas × capacidade. `n_partidas` (contagem de `Partidas.csv`) fica como métrica secundária de checagem.
-- Mapear valores de `Tipo Dia` (Partidas/Tecnologias) para o vocabulário `tipo_dia` da Seção 1 — checar strings exatas ao carregar, não assumir.
-- Join oferta→zona (maior risco do plano): casar `Linha` (Partidas/Tecnologias) com `linha_blt` (demanda) e/ou `line_name` (gpkg de linhas, mesma derivação de `compara_demanda.ipynb`: split de `trip_id` em `-`, duas primeiras partes). Célula de diagnóstico de taxa de match antes de prosseguir. Se taxa alta (>90% ponderado por demanda): join espacial linha×zona (mesmo padrão de overlay de `compara_demanda.ipynb`). Se taxa baixa: fallback explícito para análise em nível de linha.
+**Regra que precisa sobreviver a qualquer publicação:** *níveis pela série oficial, desagregação
+(zona, gênero, idade) pela bilhetagem.* Medido na Seção 8, com médias por dia e conjuntos de datas
+corretos por `tipo_dia`:
 
-**Seção 5 — razão lugares ofertados / demanda**: `Ratio = Capacidade_frota / N_embarques` por zona (ou linha, conforme fallback), diff 2023→2024, estratificado por `periferia_tier`, domingo (principal) e útil (controle).
+| fonte | Δ% domingo | Δ% dia útil | sinal isolado |
+|---|---|---|---|
+| oficial | +35,95% | +7,03% | **+28,9 p.p.** |
+| bilhetagem sem `linha_blt` nula | +27,96% | +4,08% | +23,9 p.p. |
+| bilhetagem como as seções calculam | +20,87% | +5,74% | +15,1 p.p. |
 
-**Seção 6 — recorte por gênero e idade**: usando o agregado completo da Seção 1.
-- Crescimento % por zona, por gênero (F vs M), domingo vs útil, mesma lógica de isolamento da Seção 3.
-- Idade: bucket `60+` (`'60 a 69'` até `'90 a 99'`) vs `<60`, mesmo cálculo.
-- Reportar também números-resumo agregados na cidade toda (não só mapas por zona), dado risco de esparsidade; suprimir/acinzentar zonas com `N_embarques_2023 < 30` nos mapas.
+Mesmo sinal, magnitude diferente — a diferença é a margem de incerteza, e precisa ser declarada.
 
-**Seção 7 — mapas e saída**: reusar os padrões de plot de `compara_demanda.ipynb` (matplotlib `cmap="YlOrRd"` para níveis absolutos; folium divergente para diffs/sinais). Manter HTMLs locais ao notebook, **não salvar em `docs/`** por enquanto (análise exploratória).
+### 2. Validar a tabela de capacidade nominal
 
-## Etapa 2 — Atualizar `CLAUDE.md` com o novo notebook
+`CAPACIDADE_POR_CATEGORIA` (Seção 4) é aproximação a partir de dado público, não valor oficial
+certificado. Enquanto não for validada, só as **diferenças ano a ano** de capacidade são
+defensáveis; nenhum número absoluto de lugares ofertados deve ser publicado.
 
-Documentar:
-- O novo notebook e sua posição no pipeline (consome `01_criacao_de_bases` diretamente; não depende de `02_cria_base_demanda_mes.ipynb`).
-- O novo artefato `outputs/Dados_4Meses_Domingos_2023_2024_genero_idade.parquet` e seu schema.
-- A nova fonte `Tecnologias.csv` (encoding latin-1) e a tabela de capacidade nominal como premissa a validar.
-- O ponto de referência do CBD (Praça da Sé) e o método de tiers de periferia (quartil de distância) em "Key domain columns".
-- A decisão de escopo de meses (abr/mai/set/out, não ano completo).
+Some-se a isso que `Tecnologias.csv` só traz linhas `UTIL`: a composição de frota por tecnologia é
+conhecida apenas para dia útil, e `Capacidade_ofertada_estimada` assume que ela não muda em
+sábado/domingo (só a frequência muda). Premissa forçada pela disponibilidade do dado, não
+verificada.
 
-## Riscos a sinalizar no notebook
+### 3. Melhorar o join oferta → zona
 
-1. Join de ID de linha (`linha_blt` vs `Linha` vs `line_name`) entre três sistemas diferentes — diagnóstico de match-rate obrigatório, fallback para nível de linha.
-2. Capacidade nominal por tecnologia é aproximação pública, não valor oficial certificado. Diffs ano-a-ano são mais defensáveis que valores absolutos.
-3. Esparsidade em cortes zona × gênero × idade × tipo_dia simultâneos — priorizar agregados por tier/cidade.
-4. Vocabulário de `Tipo Dia` diferente entre Partidas/Tecnologias e o `tipo_dia` derivado do weekday — mapear explicitamente.
-5. Consistência entre a base de Domingos (semanal) e a base de 4-Meses (diária) — documentar como limitação conhecida.
+A taxa de match `linha_blt` × `Linha` é de 1317/1327 linhas distintas mas só **73,2% do volume
+ponderado por demanda**, abaixo do limiar de 90% — então `USAR_JOIN_ESPACIAL=False` e a alocação
+espacial linha→zona não roda. Investigar de onde vêm os 27% de volume sem correspondência
+(linhas renomeadas no período? recorte de datas?) destravaria a análise de oferta por zona, que
+hoje não existe.
 
-## Verificação
+### 4. Entender as linhas persistentemente divergentes do oficial
 
-- Célula de validação de `tipo_dia` (Seção 1) sem divergência > 5%.
-- Tabela de diagnóstico de match-rate de linha (Seção 4) antes do join espacial.
-- Inspecionar visualmente os 3 mapas da Seção 3 e o mapa/tabela da Seção 5 antes de tirar conclusões.
+A validação por linha da Seção 8 fecha bem (96,8% das linhas e 93,3% do volume dentro de ±10%),
+mas sobra um conjunto pequeno, estável e identificável de linhas que rodam ~1,3–1,45x o oficial
+nos **dois** anos: `209P-10`, `8700-10`, `5110-10`. Por serem consistentes, provavelmente é
+diferença de contabilidade (linha operada em conjunto? código reaproveitado?), não ruído. Vale
+identificar antes de qualquer conclusão por linha.
+
+### 5. Reduzir a dependência de estimativa no domingo
+
+`zona_emb` no domingo é estimativa sobre estimativa: a SPTrans já a deriva de GPS × endereço
+cadastrado × horário, e por cima disso vem a imputação. Além disso ~26–33% do volume imputado sai
+de pares `(hash, linha)` com mais de uma zona no doador. O caminho definitivo é a **SPTrans
+reenviar a entrega de domingos com `zona_emb` preenchido** — enquanto isso não acontece, toda
+leitura por zona no domingo anda de par com a versão por `linha_blt` (unidade observada), que as
+Seções 3 e 6 mantêm ao lado.
+
+## Riscos permanentes a sinalizar em qualquer publicação
+
+1. Capacidade nominal por tecnologia é aproximação pública, não valor oficial certificado.
+2. `Tecnologias.csv` só cobre `UTIL` — capacidade média por veículo assumida constante entre tipos
+   de dia.
+3. `zona_emb` é estimativa da SPTrans mesmo quando original; no domingo é imputada por cima disso.
+4. A bilhetagem subestima o crescimento do domingo em relação ao oficial (razão escorrega de ~1,05
+   para ~0,99 entre os anos).
+5. Esparsidade em cortes zona × gênero × idade × tipo_dia simultâneos — daí a supressão por base
+   mínima nos mapas e a prioridade aos agregados por tier e cidade.
