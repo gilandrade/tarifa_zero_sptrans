@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapas interativos — Tarifa Zero SPTrans</title>
+<meta name="description" content="Mapas interativos do efeito da Tarifa Zero dominical e da comparação de demanda 2023 x 2024, por zona da Pesquisa Origem-Destino de São Paulo.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="interno">
+    <h1>Mapas interativos</h1>
+    <p class="subtitulo">Coropléticos por zona OD, com tooltip e camadas alternáveis. Carregamento sob demanda — os arquivos são grandes.</p>
+  </div>
+</header>
+
+<nav class="principal">
+  <div class="interno">
+    <a href="index.html">Resultados</a>
+    <a href="mapas.html" class="ativo">Mapas interativos</a>
+    <a href="metodologia.html">Metodologia e ressalvas</a>
+    <a href="https://github.com/gilandrade/tarifa_zero_sptrans" target="_blank" rel="noopener">Código</a>
+  </div>
+</nav>
+
+<main>
+
+<p>
+  Os dois mapas abaixo são gerados via Folium/Leaflet e embutem a geometria de ~527 zonas da
+  Pesquisa Origem-Destino 2023 — por isso pesam entre 7 e 12 MB cada. Eles não carregam
+  automaticamente; use o botão "Carregar mapa" em cada cartão, ou "Tela inteira" para abrir
+  diretamente numa aba própria.
+</p>
+
+<div class="grade-mapas" id="grade-mapas"></div>
+
+</main>
+
+<footer class="rodape">
+  <div class="interno">
+    <p>Voltar ao <a href="index.html">relatório de resultados</a> ou ver a <a href="metodologia.html">metodologia</a>.</p>
+  </div>
+</footer>
+
+<script>
+  const MAPAS = [
+    {
+      titulo: "Sinal Tarifa Zero por zona",
+      descricao: "Efeito isolado da política (domingo menos dia útil), por zona de embarque, em pontos percentuais.",
+      caminho: "mapa_sinal_tarifa_zero_zona.html",
+    },
+    {
+      titulo: "Demanda de viagens 2023 × 2024",
+      descricao: "Embarques por zona em cada ano, diferença entre eles, e malha de linhas de ônibus, Metrô e CPTM.",
+      caminho: "mapa_diferenca_demanda.html",
+    },
+  ];
+
+  const grade = document.getElementById("grade-mapas");
+
+  MAPAS.forEach(function (mapa) {
+    const cartao = document.createElement("div");
+    cartao.className = "cartao-mapa";
+    cartao.innerHTML = `
+      <div class="cabecalho">
+        <h3>${mapa.titulo}</h3>
+        <p>${mapa.descricao}</p>
+      </div>
+      <div class="palco">
+        <button class="botao primario botao-carregar">Carregar mapa</button>
+      </div>
+      <div class="acoes">
+        <a class="botao" href="${mapa.caminho}" target="_blank" rel="noopener">Tela inteira ↗</a>
+      </div>
+    `;
+    const palco = cartao.querySelector(".palco");
+    const botao = cartao.querySelector(".botao-carregar");
+    botao.addEventListener("click", function () {
+      const iframe = document.createElement("iframe");
+      iframe.loading = "lazy";
+      iframe.src = mapa.caminho;
+      iframe.title = mapa.titulo;
+      palco.innerHTML = "";
+      palco.appendChild(iframe);
+    });
+    grade.appendChild(cartao);
+  });
+</script>
+
+</body>
+</html>

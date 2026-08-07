@@ -1,122 +1,438 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapas do Notebook</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        p {
-            color: #666;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .mapa-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        .mapa-item {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        .mapa-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .mapa-titulo {
-            padding: 15px;
-            background-color: #3498db;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-        }
-        .mapa-preview {
-            width: 100%;
-            height: 400px;
-            border: none;
-        }
-        .mapa-botoes {
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        .mapa-botoes a {
-            flex: 1;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            font-size: 0.9em;
-        }
-        .mapa-botoes a:hover {
-            background-color: #2980b9;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifa Zero aos domingos — efeito sobre a demanda de ônibus em São Paulo</title>
+<meta name="description" content="Avaliação do efeito da política de Tarifa Zero aos domingos sobre a demanda e a oferta de ônibus municipais de São Paulo, 2023 x 2024.">
+<link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
-    <h1>Mapas de Comparação de Demanda</h1>
-    <p>Visualize os mapas gerados através do notebook. Clique em "Tela Inteira" para explorar o mapa em detalhes.</p>
+<header class="topo">
+  <div class="interno">
+    <h1>Tarifa Zero aos domingos: efeito sobre a demanda de ônibus em São Paulo</h1>
+    <p class="subtitulo">Comparação 2023 × 2024 — demanda, oferta, território, gênero e idade. CEM/USP.</p>
+  </div>
+</header>
 
-    <div class="mapa-container" id="mapa-container"></div>
+<nav class="principal">
+  <div class="interno">
+    <a href="index.html" class="ativo">Resultados</a>
+    <a href="mapas.html">Mapas interativos</a>
+    <a href="metodologia.html">Metodologia e ressalvas</a>
+    <a href="https://github.com/gilandrade/tarifa_zero_sptrans" target="_blank" rel="noopener">Código</a>
+  </div>
+</nav>
 
-    <script>
-        const containerEl = document.getElementById("mapa-container");
+<main>
 
-        // Lista de mapas gerados no notebook
-        // Você pode adicionar mais itens a esta lista conforme gera novos arquivos HTML
-        const mapas = [
-            {
-                titulo: "Diferença de Demanda (OD)",
-                caminho: "mapa_diferenca_demanda.html" // Nome do arquivo salvo no notebook
-            }
-        ];
+<!-- ================= 1. RESUMO ================= -->
+<h2 id="resumo">1. Resumo</h2>
 
-        function renderMapas() {
-            containerEl.innerHTML = "";
+<p>
+  Em 2024 a Prefeitura de São Paulo passou a não cobrar tarifa nos ônibus municipais aos domingos.
+  Este estudo mede quanto da variação de demanda entre 2023 e 2024 pode ser atribuído à política,
+  usando o <strong>dia útil como controle</strong>: se a demanda de domingo cresceu muito mais que a
+  de dia útil, a diferença isola o efeito da gratuidade do crescimento geral do sistema.
+</p>
 
-            if (!mapas.length) {
-                containerEl.innerHTML = "<p>Nenhum mapa configurado no momento.</p>";
-                return;
-            }
+<p>
+  A métrica central, usada em todo o relatório, é o
+  <strong>Sinal Tarifa Zero</strong> = variação percentual da demanda de domingo (2024 vs. 2023)
+  <em>menos</em> a mesma variação no dia útil, em pontos percentuais (p.p.).
+</p>
 
-            mapas.forEach((mapa) => {
-                const card = document.createElement("div");
-                card.className = "mapa-item";
-                card.innerHTML = `
-                    <div class="mapa-titulo">${mapa.titulo}</div>
-                    <iframe class="mapa-preview" src="${mapa.caminho}"></iframe>
-                    <div class="mapa-botoes">
-                        <a href="${mapa.caminho}" target="_blank" rel="noopener">Tela Inteira</a>
-                    </div>
-                `;
-                containerEl.appendChild(card);
-            });
-        }
+<div class="numeros">
+  <div class="numero alta">
+    <span class="valor">+35,95%</span>
+    <span class="rotulo">demanda aos domingos, 2024 vs. 2023</span>
+  </div>
+  <div class="numero controle">
+    <span class="valor">+7,03%</span>
+    <span class="rotulo">demanda em dia útil (controle)</span>
+  </div>
+  <div class="numero principal">
+    <span class="valor">+28,9 p.p.</span>
+    <span class="rotulo">Sinal Tarifa Zero (efeito isolado)</span>
+  </div>
+</div>
 
-        renderMapas();
-    </script>
+<p>
+  Os três números vêm da <strong>série oficial de passageiros transportados</strong> da
+  Prefeitura/SPTrans — a única fonte deste estudo que é publicamente auditável (ver
+  <a href="#confiavel">seção 5</a>). São médias por dia, dentro dos meses de abril, maio, setembro e
+  outubro de cada ano.
+</p>
+
+<h3>O mesmo efeito medido por três fontes</h3>
+
+<div class="quadro-tabela" data-tabela="resumo_fontes"></div>
+<p class="legenda-tabela">
+  Variação 2023→2024 da demanda por tipo de dia e o sinal resultante, em três recortes.
+  Gerado por <code>03_comparacoes/compara_demanda_oferta_genero_idade.ipynb</code>, Seção 8.
+</p>
+
+<div class="caixa alerta">
+  <h3>A amplitude 15,1–28,9 p.p. não é um intervalo de confiança</h3>
+  <p>
+    São <strong>três estimativas pontuais</strong> do mesmo efeito, calculadas pelo mesmo
+    procedimento sobre recortes diferentes: a série oficial, a bilhetagem excluindo registros sem
+    linha identificada, e a bilhetagem incluindo esses registros. O intervalo é simplesmente o
+    menor e o maior dos três valores.
+  </p>
+  <p>
+    Nenhuma variância amostral é calculada: as três são agregações censitárias — todos os embarques
+    do período, não uma amostra — de modo que erro-padrão e intervalo de confiança não estão
+    definidos aqui. <strong>A amplitude mede divergência entre critérios de contagem, não margem de
+    erro estatística.</strong> As três concordam no sinal e na ordem de grandeza; divergem na
+    magnitude.
+  </p>
+</div>
+
+<div class="caixa metodo">
+  <h3>Regra editorial deste relatório</h3>
+  <p>
+    <strong>Níveis pela série oficial; desagregação (zona, gênero, idade) pela bilhetagem.</strong>
+    O número de manchete é <strong>+28,9 p.p.</strong>, da fonte auditável. Os recortes internos —
+    onde o efeito acontece e sobre quem — só existem na bilhetagem, que subestima levemente o
+    crescimento de domingo. Por isso as seções seguintes leem <em>padrões</em> e <em>contrastes
+    relativos</em>, não níveis absolutos.
+  </p>
+</div>
+
+<!-- ================= 2. TERRITÓRIO ================= -->
+<h2 id="territorio">2. Onde o efeito aparece no território</h2>
+
+<p>
+  Cada zona da Pesquisa Origem-Destino 2023 foi classificada em um <em>tier</em> pela distância do
+  seu centroide à Praça da Sé, em quartis: Centro, Intermediário 1, Intermediário 2 e Periferia.
+</p>
+
+<figure>
+  <img src="img/tiers_periferia.png" alt="Mapa das zonas OD classificadas em quatro tiers por distância à Praça da Sé">
+  <figcaption>
+    Tiers de periferia — quartis da distância do centroide de cada zona à Praça da Sé.
+    527 zonas da Pesquisa OD 2023.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="tiers_periferia"></div>
+<p class="legenda-tabela">Número de zonas e distância média ao centro, por tier.</p>
+
+<h3>O sinal por zona de embarque</h3>
+
+<figure>
+  <img src="img/sinal_zona_3paineis.png" alt="Três mapas lado a lado: variação percentual no domingo, no dia útil, e o sinal resultante por zona">
+  <figcaption>
+    Esquerda: variação % da demanda no domingo. Centro: a mesma variação no dia útil (controle).
+    Direita: o Sinal Tarifa Zero, a diferença entre as duas. Zonas com base pequena em 2023
+    (&lt; 500 embarques no domingo) aparecem em cinza.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="sinal_por_tier_zona"></div>
+<p class="legenda-tabela">Sinal Tarifa Zero por zona, agregado por tier (p.p.).</p>
+
+<figure>
+  <img src="img/sinal_zona_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por zona, estratificado por tier de periferia">
+  <figcaption>Distribuição do sinal entre as zonas de cada tier.</figcaption>
+</figure>
+
+<p>
+  O efeito é <strong>positivo em todos os tiers</strong>, mas o gradiente é decrescente do centro
+  para a periferia: a mediana cai de cerca de 30 p.p. no Centro para cerca de 18 p.p. na Periferia.
+  A leitura mais direta é que a gratuidade dominical estimulou sobretudo deslocamentos com destino
+  às áreas centrais.
+</p>
+
+<h3>Verificação: a mesma conta na unidade observada</h3>
+
+<p>
+  A zona de embarque no domingo é uma variável <em>imputada</em> (ver
+  <a href="metodologia.html#imputacao">metodologia</a>), enquanto a linha de ônibus é observada
+  diretamente. Por isso o mesmo sinal é recalculado tendo a linha como unidade, classificada pelo
+  tier da sua zona de embarque predominante.
+</p>
+
+<figure>
+  <img src="img/sinal_linha_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por linha, estratificado por tier">
+  <figcaption>Sinal Tarifa Zero por linha de ônibus, agrupado pelo tier da zona de embarque predominante no domingo.</figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="robustez_zona_vs_linha"></div>
+<p class="legenda-tabela">
+  Mediana do sinal por tier nas duas unidades de análise. A divergência máxima entre elas é de
+  poucos pontos percentuais e o gradiente centro→periferia se mantém — as duas contam a mesma
+  história.
+</p>
+
+<!-- ================= 3. QUEM RESPONDE ================= -->
+<h2 id="quem">3. Quem responde à política</h2>
+
+<h3>Idade: o contraste mais forte do estudo</h3>
+
+<div class="quadro-tabela" data-tabela="resumo_idade"></div>
+<p class="legenda-tabela">Demanda e sinal por faixa etária agregada (60 anos ou mais × menos de 60).</p>
+
+<figure>
+  <img src="img/sinal_zona_idade.png" alt="Dois mapas do sinal Tarifa Zero por zona: 60 anos ou mais, e menos de 60">
+  <figcaption>Sinal Tarifa Zero por zona, separado entre 60+ e &lt;60.</figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="sinal_tier_idade"></div>
+<p class="legenda-tabela">Mediana do sinal por tier, em cada grupo etário (p.p.).</p>
+
+<p>
+  <strong>O resultado é internamente consistente com a política.</strong> Pessoas com 60 anos ou mais
+  <em>já tinham gratuidade</em> antes da Tarifa Zero — para elas o domingo de 2024 não mudou de
+  preço, e o sinal é próximo de zero ou negativo. Praticamente todo o efeito vem do grupo com menos
+  de 60 anos, exatamente o que passou a não pagar. Esse contraste funciona como um teste de placebo:
+  se o sinal aparecesse igualmente nos dois grupos, ele estaria capturando alguma outra coisa.
+</p>
+
+<h3>Gênero: sem diferença relevante</h3>
+
+<div class="quadro-tabela" data-tabela="resumo_genero"></div>
+<p class="legenda-tabela">
+  Demanda e sinal por gênero. Cerca de 4% dos embarques não têm gênero identificado e ficam de fora
+  desta tabela — não constituem uma terceira categoria.
+</p>
+
+<figure>
+  <img src="img/sinal_zona_genero.png" alt="Dois mapas do sinal Tarifa Zero por zona, feminino e masculino">
+  <figcaption>Sinal Tarifa Zero por zona, feminino e masculino. Supressão de zonas com base pequena.</figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="sinal_tier_genero"></div>
+<p class="legenda-tabela">Mediana do sinal por tier, em cada gênero (p.p.).</p>
+
+<figure>
+  <img src="img/sinal_linha_boxplot_genero.png" alt="Boxplots do sinal por linha, feminino e masculino, por tier">
+  <figcaption>A mesma leitura na unidade observada (linha), como verificação.</figcaption>
+</figure>
+
+<p>
+  Homens e mulheres respondem praticamente da mesma forma, e o gradiente territorial se repete nos
+  dois. Não há aqui evidência de efeito diferenciado por gênero.
+</p>
+
+<!-- ================= 4. OFERTA ================= -->
+<h2 id="oferta">4. A oferta acompanhou?</h2>
+
+<p>
+  Se a demanda de domingo cresceu perto de 30 p.p. acima do controle, a pergunta seguinte é se a
+  oferta de lugares cresceu junto. A resposta é medida pela razão entre capacidade ofertada e
+  embarques, comparada entre 2023 e 2024.
+</p>
+
+<div class="caixa metodo">
+  <h3>Como a capacidade ofertada é calculada</h3>
+  <ol>
+    <li>
+      <code>Tecnologias.csv</code> informa a <strong>frota por linha, mês e tecnologia</strong>
+      (Miniônibus, Micro Ônibus, Midiônibus, Básico, Padron, Articulado…).
+    </li>
+    <li>
+      Cada tecnologia recebe uma capacidade nominal de uma tabela de referência
+      (Miniônibus 40, Micro Ônibus 30, Midiônibus 60, Midiônibus Rural 55, Básico 80, Padron 95,
+      Articulado 150 lugares).
+    </li>
+    <li>
+      Daí sai a <strong>capacidade média por veículo</strong> de cada linha em cada mês:
+      <code>Σ(frota × capacidade nominal) / Σ frota</code>.
+    </li>
+    <li>
+      <code>Partidas.csv</code> informa o <strong>número de partidas programadas</strong> por linha,
+      mês e tipo de dia — e este cobre domingo, sábado e dia útil.
+    </li>
+    <li>
+      <strong>Capacidade ofertada</strong> = partidas × capacidade média por veículo. Como a frota é
+      o conjunto físico de veículos da linha, ela não muda por ser domingo; o que muda entre tipos de
+      dia é a frequência, e essa vem do passo 4. A capacidade dominical é portanto
+      <strong>inferida</strong>, não suposta.
+    </li>
+    <li>
+      <strong>Razão</strong> = capacidade ofertada ÷ embarques, calculada <strong>por linha</strong>.
+      Não por zona: a correspondência entre o identificador de linha da bilhetagem e o da base de
+      oferta cobre 73,2% do volume, abaixo do limiar de 90% adotado, então a alocação espacial de
+      oferta para zonas não é executada.
+    </li>
+    <li>
+      O que se publica é a <strong>diferença 2024 − 2023</strong> dessa razão, agregada pela mediana
+      dentro de cada tier.
+    </li>
+  </ol>
+</div>
+
+<figure>
+  <img src="img/ratio_oferta_demanda_tier.png" alt="Boxplots da variação da razão oferta/demanda por tier, domingo e dia útil">
+  <figcaption>
+    Variação 2024−2023 da razão lugares ofertados por embarque, no domingo e no dia útil (controle),
+    por tier de periferia.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="ratio_oferta_demanda_tier"></div>
+<p class="legenda-tabela">Mediana da variação da razão oferta/demanda, por tier e tipo de dia.</p>
+
+<p>
+  O padrão é claro e vai na direção oposta entre os tipos de dia: <strong>no domingo a razão
+  lugares por embarque piora</strong> na maior parte dos tiers, <strong>enquanto no dia útil ela
+  melhora em todos</strong>. Ou seja, a demanda dominical cresceu mais rápido que a oferta
+  correspondente — o sistema absorveu o aumento sobretudo por maior ocupação dos veículos, não por
+  ampliação proporcional do serviço.
+</p>
+
+<div class="caixa alerta">
+  <h3>Três ressalvas sobre esta seção</h3>
+  <ul>
+    <li>
+      A tabela de capacidade nominal por tecnologia é uma <strong>aproximação a partir de dado
+      público, não um valor oficial certificado</strong>. Por isso <strong>nenhum número absoluto de
+      lugares é publicado aqui</strong> — apenas diferenças ano a ano, em que um erro constante de
+      escala se cancela.
+    </li>
+    <li>
+      A capacidade média por veículo é a média do <em>conjunto cadastrado</em> da linha, não da
+      fração dele que efetivamente circula no domingo. Em linha de frota homogênea o desvio é nulo,
+      mas <strong>essa não é a maioria dos casos</strong>: 72% das linhas — e 83% do volume de
+      demanda — rodam com mais de uma tecnologia de veículo, então a exposição é ampla, não um
+      detalhe de borda. O que limita o dano é a escala do desvio dentro dessas linhas: a diferença
+      entre o maior e o menor veículo do conjunto é, na mediana, de apenas 1,33× — a maior parte da
+      mistura é entre categorias de tamanho parecido (ex. Básico e Padron), não entre miniônibus e
+      articulado. E o viés, seja qual for seu tamanho, tende a se repetir em 2023 e 2024 e por isso
+      se cancelar na diferença entre anos, que é o número publicado.
+    </li>
+    <li>
+      A análise é por linha, não por zona, pelo motivo explicado no passo 6 acima.
+    </li>
+  </ul>
+</div>
+
+<div class="quadro-tabela" data-tabela="heterogeneidade_frota"></div>
+<p class="legenda-tabela">
+  Quanto da demanda circula em linhas com mais de uma tecnologia de veículo, e qual a dispersão de
+  capacidade dentro dessas linhas — a medida direta da exposição à ressalva anterior.
+</p>
+
+<!-- ================= 5. VALIDAÇÃO ================= -->
+<h2 id="confiavel">5. A base é confiável?</h2>
+
+<p>
+  Os dados de bilhetagem usados nas seções 2 a 4 vieram de pedidos de acesso à informação e não são
+  públicos — não há como um terceiro conferi-los diretamente. Por isso toda a análise é validada
+  contra uma fonte publicada e independente.
+</p>
+
+<div class="fonte">
+  <p>
+    <strong>Fonte de validação:</strong> <em>Demonstrativo diário de passageiros transportados por
+    linha de ônibus, por modalidade de pagamento</em> — Prefeitura de São Paulo / SPTrans,
+    Acesso à Informação.
+  </p>
+  <p>
+    <a href="https://prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416"
+       target="_blank" rel="noopener">
+      prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416
+    </a>
+  </p>
+  <p>
+    Foram baixados e compilados <strong>os 731 dias de 2023 e 2024</strong>, um arquivo por dia,
+    totalizando 989.311 registros por dia × linha × modalidade de pagamento, sem lacunas.
+    Reprodução em <code>01_criacao_de_bases/03_cria_base_oficial.ipynb</code>.
+  </p>
+</div>
+
+<h3>Validação linha a linha</h3>
+
+<p>
+  Comparar apenas os totais da cidade é um teste fraco: erros de sinais opostos se cancelam. O teste
+  forte é confrontar cada linha de ônibus individualmente contra o valor oficial do mesmo ano e tipo
+  de dia.
+</p>
+
+<div class="quadro-tabela" data-tabela="validacao_por_linha"></div>
+<p class="legenda-tabela">
+  Distribuição da razão bilhetagem ÷ oficial, por ano e tipo de dia. Mediana próxima de 1 indica
+  concordância.
+</p>
+
+<p>
+  <strong>96,8% das linhas e 93,3% do volume oficial ficam dentro de ±10%</strong> do valor
+  publicado. Os desvios remanescentes não são ruído difuso: concentram-se num conjunto pequeno,
+  estável e identificável de linhas que divergem <em>nos dois anos</em>, o que aponta para diferença
+  de contabilidade e não para erro de medição.
+</p>
+
+<div class="quadro-tabela" data-tabela="linhas_divergentes"></div>
+<p class="legenda-tabela">
+  Linhas de maior volume com maior divergência frente ao oficial. As que aparecem em 2023 e em 2024
+  são as que merecem investigação de contabilidade.
+</p>
+
+<!-- ================= 6. RESSALVAS ================= -->
+<h2 id="ressalvas">6. Ressalvas</h2>
+
+<p>Cinco limitações valem para qualquer leitura deste relatório. A versão detalhada está na
+   <a href="metodologia.html">página de metodologia</a>.</p>
+
+<ol>
+  <li>
+    <strong>A capacidade nominal por tecnologia é aproximação de dado público</strong>, não valor
+    oficial certificado — só diferenças ano a ano são publicáveis.
+  </li>
+  <li>
+    <strong>A composição de frota é conhecida apenas para dia útil.</strong> A capacidade de domingo
+    é inferida da frequência dominical aplicada ao conjunto de veículos da linha; o resíduo está em
+    linhas de frota mista — que são 83% do volume de demanda, não um caso raro — e é quantificado
+    na <a href="#oferta">seção 4</a>.
+  </li>
+  <li>
+    <strong>A zona de embarque é uma estimativa da própria SPTrans</strong> (derivada de GPS,
+    endereço cadastrado e horário da validação), e no domingo é imputada por cima disso — por isso
+    toda leitura por zona anda ao lado da versão por linha.
+  </li>
+  <li>
+    <strong>A bilhetagem subestima o crescimento de domingo</strong> em relação à série oficial: a
+    razão entre as duas escorrega de cerca de 1,05 para cerca de 0,99 entre os anos.
+  </li>
+  <li>
+    <strong>Cortes simultâneos de zona × gênero × idade × tipo de dia ficam esparsos</strong> — daí a
+    supressão de zonas com base pequena nos mapas e a prioridade aos agregados por tier.
+  </li>
+</ol>
+
+</main>
+
+<footer class="rodape">
+  <div class="interno">
+    <p>
+      Análise de impacto da política de Tarifa Zero aos domingos sobre a demanda e a oferta de
+      ônibus municipais de São Paulo. Dados de 2023 e 2024.
+    </p>
+    <p>
+      Código e pipeline completo:
+      <a href="https://github.com/gilandrade/tarifa_zero_sptrans" target="_blank" rel="noopener">github.com/gilandrade/tarifa_zero_sptrans</a>
+    </p>
+  </div>
+</footer>
+
+<script src="tabelas.js"></script>
+<script>
+  document.querySelectorAll("[data-tabela]").forEach(function (el) {
+    var chave = el.getAttribute("data-tabela");
+    var html = (typeof TABELAS !== "undefined") ? TABELAS[chave] : null;
+    if (html) {
+      el.innerHTML = html;
+    } else {
+      el.classList.remove("quadro-tabela");
+      el.className = "tabela-pendente";
+      el.textContent = "Tabela “" + chave + "” ainda não gerada — rode "
+        + "python scripts/gera_tabelas.py na raiz do repositório.";
+    }
+  });
+</script>
 
 </body>
 </html>

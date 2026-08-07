@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodologia e ressalvas — Tarifa Zero SPTrans</title>
+<meta name="description" content="Fontes de dado, definições, armadilhas de contagem e limitações metodológicas do estudo sobre o efeito da Tarifa Zero dominical em São Paulo.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="interno">
+    <h1>Metodologia e ressalvas</h1>
+    <p class="subtitulo">Fontes, definições e limitações — leitura recomendada antes de citar qualquer número deste site.</p>
+  </div>
+</header>
+
+<nav class="principal">
+  <div class="interno">
+    <a href="index.html">Resultados</a>
+    <a href="mapas.html">Mapas interativos</a>
+    <a href="metodologia.html" class="ativo">Metodologia e ressalvas</a>
+    <a href="https://github.com/gilandrade/tarifa_zero_sptrans" target="_blank" rel="noopener">Código</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= FONTES ================= -->
+<h2 id="fontes">Fontes de dado</h2>
+
+<div class="fonte">
+  <p><strong>Série oficial de passageiros transportados</strong> — Prefeitura de São Paulo / SPTrans.</p>
+  <p>
+    <a href="https://prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416"
+       target="_blank" rel="noopener">
+      prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416
+    </a>
+  </p>
+  <p>
+    Demonstrativo diário de passageiros transportados por linha de ônibus, por modalidade de
+    pagamento. Compilados os 731 dias de 2023–2024, 989.311 registros, sem lacunas.
+    <strong>É a única fonte deste estudo que qualquer pessoa pode conferir diretamente</strong> — é
+    contra ela que a bilhetagem é validada (<a href="index.html#confiavel">seção 5 dos
+    resultados</a>). Reprodução em
+    <code>01_criacao_de_bases/03_cria_base_oficial.ipynb</code>.
+  </p>
+</div>
+
+<div class="fonte">
+  <p><strong>Bilhetagem (fare-tap)</strong> — não pública, obtida via pedido de acesso à informação.</p>
+  <p>
+    Duas entregas: domingos (SEI 5010.2026-0008307-9, 101 arquivos, um domingo por semana, jan/2023
+    a dez/2024) e 4 meses (SEI 5010.2026-0011927-8, dias completos de abril, maio, setembro e
+    outubro de 2023 e 2024). Uma entrega anterior (Pedido 097465) é usada apenas como doadora do
+    atributo de zona de embarque nos domingos — ver <a href="#imputacao">imputação</a> abaixo.
+  </p>
+</div>
+
+<div class="fonte">
+  <p><strong>Oferta de serviço</strong> — <code>Partidas.csv</code> e <code>Tecnologias.csv</code>, pedido de acesso à informação 096412.</p>
+  <p>
+    <code>Partidas.csv</code>: partidas programadas por linha, mês e tipo de dia (útil, sábado,
+    domingo). <code>Tecnologias.csv</code>: composição da frota por linha, mês e tecnologia de
+    veículo — cobre apenas dia útil.
+  </p>
+</div>
+
+<div class="fonte">
+  <p><strong>Zonas de embarque</strong> — Pesquisa Origem-Destino 2023, Metrô/SP.</p>
+  <p>527 zonas, usadas para o mapeamento territorial e para os tiers de periferia.</p>
+</div>
+
+<!-- ================= DEFINIÇÕES ================= -->
+<h2 id="definicoes">Definições</h2>
+
+<p>
+  <strong>Sinal Tarifa Zero</strong> = variação percentual da demanda entre 2023 e 2024 no domingo,
+  menos a mesma variação no dia útil:
+</p>
+
+<p><code>Sinal_tarifa_zero = PctDiff_domingo − PctDiff_util</code></p>
+
+<p>
+  O dia útil serve de controle porque não teve mudança de tarifa entre os dois anos — capta o
+  crescimento geral do sistema (população, retomada pós-pandemia, mudanças de linha) que também
+  afetaria o domingo na ausência da política. Subtrair o controle isola o efeito específico da
+  gratuidade dominical.
+</p>
+
+<h3>Como a capacidade ofertada é calculada</h3>
+
+<ol>
+  <li><code>Tecnologias.csv</code> dá a frota por linha, mês e tecnologia — só para dia útil.</li>
+  <li>
+    Cada tecnologia recebe uma capacidade nominal de uma tabela por categoria (Miniônibus 40,
+    Micro Ônibus 30, Midiônibus 60, Midiônibus Rural 55, Básico 80, Padron 95, Articulado 150),
+    após remover o prefixo de variante elétrica (<code>e</code>) e o sufixo numérico de tamanho —
+    variantes elétricas usam numeração de tamanho diferente das combustão, então o agrupamento é
+    por categoria, não por sufixo exato.
+  </li>
+  <li>
+    <code>capacidade_media_veiculo(linha, mês) = Σ(frota × capacidade_nominal) / Σ frota</code> —
+    lugares por veículo, ponderados pela frota da linha naquele mês.
+  </li>
+  <li>
+    <code>Partidas.csv</code> dá <code>n_partidas(linha, mês, tipo_dia)</code>, cobrindo
+    <code>UTIL</code>/<code>SABD</code>/<code>DOMG</code>.
+  </li>
+  <li>
+    <code>Capacidade_ofertada_estimada = n_partidas × capacidade_media_veiculo</code>. A frota é o
+    conjunto físico de veículos cadastrados na linha — não muda por ser domingo; o que varia entre
+    tipos de dia é a frequência, capturada no passo anterior. A capacidade dominical é portanto
+    <strong>inferida</strong> a partir de dado observado, não uma suposição não verificável.
+  </li>
+  <li>
+    <code>Ratio = Capacidade_ofertada_estimada / N_embarques</code>, por linha — o match
+    <code>linha_blt</code> × <code>Linha</code> cobre 1317/1327 linhas distintas mas só 73,2% do
+    volume ponderado por demanda, abaixo do limiar de 90% adotado para acionar a alocação espacial
+    linha→zona, que por isso não roda.
+  </li>
+  <li><code>Diff_Ratio = Ratio_2024 − Ratio_2023</code>, agregado pela mediana dentro de cada tier.</li>
+</ol>
+
+<div class="quadro-tabela" data-tabela="heterogeneidade_frota"></div>
+<p class="legenda-tabela">
+  Exposição ao resíduo do passo 5. Medido: 72% das linhas e 83% do volume de demanda rodam com
+  mais de uma tecnologia de veículo — a exposição é ampla, não um caso de borda. O que limita o
+  impacto é a escala da mistura: a razão mediana entre a maior e a menor capacidade do conjunto,
+  nas linhas mistas, é de 1,33× — variação moderada, tipicamente entre categorias de tamanho
+  parecido. Em linha de frota homogênea (uma só tecnologia) o resíduo é exatamente zero.
+</p>
+
+<!-- ================= TRÊS ESTIMATIVAS ================= -->
+<h2 id="tres-estimativas">As três estimativas do sinal — e por que não formam um intervalo de confiança</h2>
+
+<p>
+  A Seção 8 do notebook de gênero/idade mede o Sinal Tarifa Zero por três caminhos, todos com o
+  mesmo procedimento temporal — média diária dentro de cada um dos quatro meses (abril, maio,
+  setembro, outubro), depois média entre os quatro meses, nunca soma mensal direta.
+</p>
+
+<div class="quadro-tabela" data-tabela="resumo_fontes"></div>
+
+<p>
+  <strong>O intervalo 15,1–28,9 p.p. é apenas o mínimo e o máximo dessas três linhas.</strong> Não
+  há amostragem em nenhuma delas: cada uma soma <em>todos</em> os embarques do período que a fonte
+  cobre, não uma amostra de um universo maior. Erro-padrão, desvio-padrão entre observações e
+  intervalo de confiança pressupõem uma distribuição amostral, que não existe aqui. A amplitude
+  reflete diferenças de <strong>critério</strong> — qual fonte, e se registros sem linha identificada
+  entram na conta — não incerteza de medição.
+</p>
+
+<h3>As duas armadilhas de contagem que produzem números plausíveis e errados</h3>
+
+<p>Ambas já foram cometidas e corrigidas neste projeto; reintroduzi-las silenciosamente é o erro mais provável ao mexer nesta seção.</p>
+
+<ol>
+  <li>
+    <strong>Cada tipo de dia tem seu próprio conjunto de datas entregues.</strong> Domingo vem da
+    entrega de domingos; dia útil e sábado vêm da entrega de 4 meses. A entrega de 4 meses também
+    contém alguns domingos de 2024, que são descartados para não contar em duplicidade com a
+    entrega de domingos — contá-los do lado oficial sem o mesmo cuidado distorce a razão
+    bilhetagem/oficial para baixo artificialmente.
+  </li>
+  <li>
+    <strong>Comparar médias diárias, nunca somas mensais.</strong> A entrega é desbalanceada entre
+    os anos — por exemplo, 84 dias úteis cobertos em 2023 contra 66 em 2024, 16 domingos contra 13.
+    Somar por mês mede o tamanho da entrega, não a demanda; nesse caso produziu uma queda espúria de
+    16,6% na demanda de dia útil. O procedimento correto — média diária dentro do mês, depois média
+    entre os meses — é o mesmo usado em
+    <code>01_criacao_de_bases/04_diagnostico_domingos_antiga_vs_nova.ipynb</code>.
+  </li>
+</ol>
+
+<!-- ================= IMPUTAÇÃO ================= -->
+<h2 id="imputacao">Imputação da zona de embarque nos domingos</h2>
+
+<p>
+  A entrega de bilhetagem dos domingos veio com a zona de embarque marcada como não classificada em
+  praticamente 100% dos registros — um defeito de qualidade confirmado diretamente nos arquivos
+  brutos, não introduzido por este pipeline. Uma entrega anterior e mais antiga (Pedido 097465), que
+  replica cada registro por um fator inteiro por classe tarifária e por isso não serve para
+  contagem, preserva no entanto a zona de embarque original e cobre 100% dos pares (cartão, linha)
+  da entrega nova — o que a torna utilizável como <strong>doadora do atributo</strong>, nunca do
+  volume.
+</p>
+
+<p>
+  Para cada par (cartão, linha), a entrega antiga dá uma distribuição de zonas — a mesma pessoa pode
+  embarcar na mesma linha em zonas diferentes no mesmo dia. Como a entrega antiga é a nova
+  multiplicada por uma constante por classe, essa distribuição é a real a menos de arredondamento.
+  Os embarques de cada par são então divididos entre as zonas por essa proporção — só os pesos
+  relativos são usados, o que cancela o fator de replicação da entrega antiga.
+</p>
+
+<p>
+  <strong>Cobertura:</strong> cerca de 99% do volume que tem linha identificada, 74–78% do volume
+  total (o restante é o ~25% de registros sem linha, que de todo modo não são embarques em ônibus
+  municipal — ver ressalva 3 abaixo). Entre 26% e 33% do volume imputado vem de pares ambíguos (mais
+  de uma zona na entrega doadora), onde a divisão proporcional está de fato estimando, não copiando.
+</p>
+
+<p>
+  <strong>Checagem de sanidade espacial:</strong> a distribuição de zonas por linha em domingos
+  imputados foi comparada com sábados (zona real, sem imputação), por similaridade de cosseno
+  ponderada por volume: <strong>0,994</strong>. Como referência, a mesma comparação entre sábado e
+  dia útil — dois tipos de dia reais, sem imputação nenhuma — dá <strong>0,987</strong>. A
+  imputação, portanto, fica <em>mais</em> próxima do padrão espacial esperado do que a variação
+  natural entre dois tipos de dia observados diretamente.
+</p>
+
+<!-- ================= RISCOS ================= -->
+<h2 id="riscos">Limitações permanentes</h2>
+
+<ol>
+  <li>
+    <strong>Capacidade nominal por tecnologia é aproximação de dado público, não valor oficial
+    certificado.</strong> Nenhum número absoluto de lugares ofertados é publicado neste site —
+    apenas diferenças ano a ano, em que um erro constante de escala se cancela.
+  </li>
+  <li>
+    <strong><code>Tecnologias.csv</code> só cobre dia útil.</strong> A capacidade de domingo é
+    inferida da frequência dominical (<code>Partidas.csv</code>) aplicada à composição de frota da
+    linha, que é uma propriedade física estável e não muda por ser domingo. O resíduo real está em
+    linhas de frota mista, e essas são 72% das linhas e 83% do volume de demanda — uma exposição
+    ampla, quantificada (não presumida pequena) na tabela de heterogeneidade de frota acima. O que
+    limita essa exposição é a escala da mistura: razão mediana de 1,33× entre a maior e a menor
+    capacidade do conjunto nas linhas mistas.
+  </li>
+  <li>
+    <strong>A zona de embarque é uma estimativa da própria SPTrans</strong> mesmo quando vem
+    original na entrega (derivada de GPS do veículo, endereço cadastrado e horário da validação, não
+    observação direta), e no domingo é imputada por cima dessa estimativa. Por isso toda leitura por
+    zona no domingo é acompanhada da versão por linha (unidade observada) como robustez.
+  </li>
+  <li>
+    <strong>A bilhetagem subestima o crescimento do domingo</strong> em relação à série oficial: a
+    razão entre bilhetagem e oficial escorrega de cerca de 1,05 em 2023 para cerca de 0,99 em 2024.
+    É por isso que o número de manchete vem da série oficial, não da bilhetagem.
+  </li>
+  <li>
+    <strong>Esparsidade em cortes simultâneos</strong> de zona × gênero × idade × tipo de dia — daí a
+    supressão de zonas com base pequena nos mapas (limiares de 200 a 500 embarques conforme o corte)
+    e a prioridade a agregados por tier em vez de por zona individual nesses cruzamentos.
+  </li>
+</ol>
+
+<h3>Validação agregada complementar</h3>
+
+<div class="quadro-tabela" data-tabela="razao_base_oficial"></div>
+<p class="legenda-tabela">Razão entre a bilhetagem de domingo e a série oficial, por ano — com e sem excluir registros sem linha identificada.</p>
+
+<div class="quadro-tabela" data-tabela="oficial_media_dia"></div>
+<p class="legenda-tabela">Passageiros transportados por dia (série oficial), média dentro dos quatro meses analisados, por tipo de dia e ano.</p>
+
+</main>
+
+<footer class="rodape">
+  <div class="interno">
+    <p>Voltar ao <a href="index.html">relatório de resultados</a> ou explorar os <a href="mapas.html">mapas interativos</a>.</p>
+  </div>
+</footer>
+
+<script src="tabelas.js"></script>
+<script>
+  document.querySelectorAll("[data-tabela]").forEach(function (el) {
+    var chave = el.getAttribute("data-tabela");
+    var html = (typeof TABELAS !== "undefined") ? TABELAS[chave] : null;
+    if (html) {
+      el.innerHTML = html;
+    } else {
+      el.classList.remove("quadro-tabela");
+      el.className = "tabela-pendente";
+      el.textContent = "Tabela “" + chave + "” ainda não gerada — rode "
+        + "python scripts/gera_tabelas.py na raiz do repositório.";
+    }
+  });
+</script>
+
+</body>
+</html>
