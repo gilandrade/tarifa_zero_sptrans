@@ -245,6 +245,14 @@
     supressão de zonas com base pequena nos mapas (limiares de 200 a 500 embarques conforme o corte)
     e a prioridade a agregados por tier em vez de por zona individual nesses cruzamentos.
   </li>
+  <li>
+    <strong>Nem todo registro tem os campos de recorte preenchidos</strong> — cada um é excluído do
+    recorte correspondente, nunca contado como uma categoria à parte:
+    <code>linha_blt</code> nulo em ~26-28% dos registros (não é embarque de ônibus municipal —
+    excluído de toda contagem de demanda deste site, incluindo os mapas); <code>genero</code> nulo
+    em ~4-5% (cartão não identificado/não cadastrado — excluído dos recortes por gênero);
+    <code>faixa_etaria</code> nulo em ~3-4% (excluído dos recortes por idade).
+  </li>
 </ol>
 
 <h3>Validação agregada complementar</h3>
