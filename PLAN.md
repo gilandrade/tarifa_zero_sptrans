@@ -23,15 +23,19 @@ O mapa detalhado do pipeline vive no `CLAUDE.md`, não aqui. Este arquivo é só
 
 ## O que ainda falta
 
-### 1. Publicar / consolidar os resultados
+### 1. ~~Publicar / consolidar os resultados~~ — feito
 
-O notebook de gênero/idade continua exploratório: os mapas ficam locais a `03_comparacoes/` e não
-vão para `../docs/`. Falta decidir o recorte que vira resultado publicável e escrever a narrativa
-com as ressalvas metodológicas já levantadas.
+`docs/` agora é um relatório de 3 páginas (`index.html`, `mapas.html`, `metodologia.html`) com os
+resultados de `compara_demanda_oferta_genero_idade.ipynb` e `compara_demanda.ipynb`: headline,
+gradiente territorial, idade/gênero, oferta, validação e ressalvas, com figuras
+(`docs/img/*.png`) e tabelas (`docs/tabelas.js`, gerado por `scripts/gera_tabelas.py` a partir de
+`outputs/03/tabelas/*.parquet`) — ver "Publicação" no `CLAUDE.md` para o fluxo completo. O mapa da
+Seção 3 (`mapa_sinal_tarifa_zero_zona.html`) saiu de `03_comparacoes/` e foi para `docs/`, onde é
+efetivamente publicado.
 
-**Regra que precisa sobreviver a qualquer publicação:** *níveis pela série oficial, desagregação
-(zona, gênero, idade) pela bilhetagem.* Medido na Seção 8, com médias por dia e conjuntos de datas
-corretos por `tipo_dia`:
+**Regra que sobreviveu à publicação:** *níveis pela série oficial, desagregação (zona, gênero,
+idade) pela bilhetagem.* Medido na Seção 8, com médias por dia e conjuntos de datas corretos por
+`tipo_dia`:
 
 | fonte | Δ% domingo | Δ% dia útil | sinal isolado |
 |---|---|---|---|
@@ -39,18 +43,32 @@ corretos por `tipo_dia`:
 | bilhetagem sem `linha_blt` nula | +27,96% | +4,08% | +23,9 p.p. |
 | bilhetagem como as seções calculam | +20,87% | +5,74% | +15,1 p.p. |
 
-Mesmo sinal, magnitude diferente — a diferença é a margem de incerteza, e precisa ser declarada.
+Mesmo sinal, magnitude diferente. **No site isso não é apresentado como intervalo de confiança**
+— as três são agregações censitárias, sem amostragem, então erro-padrão/IC não estão definidos; a
+amplitude é divergência de critério de contagem entre fontes, e o número publicado como manchete é
+o do oficial (+28,9 p.p.), não uma média ou faixa das três.
 
 ### 2. Validar a tabela de capacidade nominal
 
 `CAPACIDADE_POR_CATEGORIA` (Seção 4) é aproximação a partir de dado público, não valor oficial
 certificado. Enquanto não for validada, só as **diferenças ano a ano** de capacidade são
-defensáveis; nenhum número absoluto de lugares ofertados deve ser publicado.
+defensáveis; nenhum número absoluto de lugares ofertados deve ser publicado. **Esta segue sendo a
+única razão real da restrição** — não o dia da semana (ver correção abaixo).
 
-Some-se a isso que `Tecnologias.csv` só traz linhas `UTIL`: a composição de frota por tecnologia é
-conhecida apenas para dia útil, e `Capacidade_ofertada_estimada` assume que ela não muda em
-sábado/domingo (só a frequência muda). Premissa forçada pela disponibilidade do dado, não
-verificada.
+**Correção a uma formulação anterior deste risco:** este item costumava dizer que
+`Capacidade_ofertada_estimada` "assume" que a composição de frota não muda no domingo, como se
+fosse uma suposição não verificável. Não é — a frota é o conjunto físico de veículos cadastrados
+na linha, uma propriedade que não muda por ser domingo; o que varia entre tipos de dia é a
+frequência, e essa vem de `Partidas.csv`, que cobre `DOMG` explicitamente. A capacidade de domingo
+é portanto **inferida** a partir de frequência observada, não suposta.
+
+O resíduo real, agora medido em vez de descartado como "premissa forçada pelo dado, não
+verificada" (`outputs/03/tabelas/heterogeneidade_frota.parquet`, Seção 4): **72% das linhas e 83%
+do volume de demanda rodam em linhas com mais de uma tecnologia de veículo** — exposição ampla,
+não um caso de borda — mas a razão mediana entre a maior e a menor capacidade dentro dessas linhas
+mistas é de apenas **1,33×**, o que limita o tamanho do possível viés. Esse viés, além disso,
+tende a se repetir em 2023 e 2024 e a se cancelar na diferença entre anos, que é o número
+publicado.
 
 ### 3. Melhorar o join oferta → zona
 
@@ -79,9 +97,12 @@ Seções 3 e 6 mantêm ao lado.
 
 ## Riscos permanentes a sinalizar em qualquer publicação
 
-1. Capacidade nominal por tecnologia é aproximação pública, não valor oficial certificado.
-2. `Tecnologias.csv` só cobre `UTIL` — capacidade média por veículo assumida constante entre tipos
-   de dia.
+1. Capacidade nominal por tecnologia é aproximação pública, não valor oficial certificado — é essa
+   a razão de nenhum número absoluto de lugares ofertados ser publicado, não o dia da semana.
+2. `Tecnologias.csv` só cobre `UTIL`, mas a capacidade de domingo é **inferida** (frequência
+   observada de `Partidas.csv` × composição de frota, que não muda por ser domingo), não suposta.
+   O resíduo real — 72% das linhas e 83% do volume em linhas de frota mista, razão mediana de
+   capacidade 1,33× dentro delas — está medido em `heterogeneidade_frota`.
 3. `zona_emb` é estimativa da SPTrans mesmo quando original; no domingo é imputada por cima disso.
 4. A bilhetagem subestima o crescimento do domingo em relação ao oficial (razão escorrega de ~1,05
    para ~0,99 entre os anos).
