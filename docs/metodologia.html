@@ -89,6 +89,55 @@
   gratuidade dominical.
 </p>
 
+<h3>Data de início da política</h3>
+
+<p>
+  <strong>17 de dezembro de 2023</strong>, identificada no próprio dado e não assumida: na série
+  oficial, o campo <code>of_pagantes</code> dos domingos cai de ~55% do total (10/12/2023) para 0,1%
+  (17/12/2023) e não volta. Consequências para todas as comparações deste relatório: os domingos de
+  17, 24 e 31/12/2023 são <strong>pós-política</strong> e não podem entrar na linha de base de 2023,
+  e 2024 é o primeiro ano <em>completo</em> de gratuidade, não o primeiro ano de gratuidade.
+</p>
+
+<h3>Critério de calendário da análise agregada</h3>
+
+<p>
+  A seção agregada de oferta × demanda
+  (<code>02_oferta/compara_oferta_demanda_agregada.ipynb</code>) usa os <strong>24 meses</strong> de
+  2023-2024, e não a janela de quatro meses do resto do relatório: <code>Partidas.csv</code> cobre
+  todos os meses nos três tipos de dia e a série oficial cobre os 731 dias — a restrição a abril,
+  maio, setembro e outubro vinha da entrega de bilhetagem, que essa seção não usa.
+</p>
+
+<p>Três exclusões, todas por critério explícito e todas com o efeito medido na tabela de sensibilidade:</p>
+
+<ul>
+  <li>
+    <strong>Feriados.</strong> <code>tipo_dia</code> é derivado do dia da semana, então um feriado de
+    terça entraria no controle como dia útil comum. São 15 datas por ano (nacionais, estaduais de SP
+    e municipais, incluindo 09/07, 25/01 e 20/11), excluídas por lista explícita mesmo quando caem no
+    fim de semana, para o critério ficar simétrico entre tipos de dia.
+  </li>
+  <li>
+    <strong>Vésperas e recesso</strong> — 24/12, 31/12 e 02/01 — também por lista.
+  </li>
+  <li>
+    <strong>Outliers residuais</strong>: qualquer dia com volume abaixo de <strong>60% da mediana do
+    seu próprio <code>tipo_dia</code>/ano</strong>, calculada já sem feriados e atípicos. A regra pega
+    três domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na série oficial com cerca de um terço
+    do volume habitual. Eles rebaixam a linha de base de 2023 e, mantidos, <em>inflam</em> o
+    crescimento medido do domingo: +41,6% em vez de +35,2%.
+  </li>
+</ul>
+
+<p>
+  A demanda é sempre <strong>média diária dentro de cada mês, depois média entre os meses</strong> —
+  nunca soma acumulada do período. Do lado da oferta a normalização é desnecessária:
+  <code>Partidas.csv</code> é a programação de um <strong>dia típico</strong> de cada tipo em cada mês
+  ("com base no planejamento de partidas no dia primeiro de cada mês", conforme a descrição de campos
+  da SPTrans), de modo que <code>n_partidas</code> já é nativamente uma grandeza diária.
+</p>
+
 <h3>Como a capacidade ofertada é calculada</h3>
 
 <ol>

@@ -31,7 +31,9 @@
 <h2 id="resumo">1. Resumo</h2>
 
 <p>
-  Em 2024 a Prefeitura de São Paulo passou a não cobrar tarifa nos ônibus municipais aos domingos.
+  Em <strong>17 de dezembro de 2023</strong> a Prefeitura de São Paulo passou a não cobrar tarifa nos
+  ônibus municipais aos domingos — 2024 é, portanto, o primeiro ano completo da política, e 2023 é o
+  "antes" a menos dos seus três últimos domingos.
   Este estudo mede quanto da variação de demanda entre 2023 e 2024 pode ser atribuído à política,
   usando o <strong>dia útil como controle</strong>: se a demanda de domingo cresceu muito mais que a
   de dia útil, a diferença isola o efeito da gratuidade do crescimento geral do sistema.
@@ -222,13 +224,125 @@
 
 <p>
   Se a demanda de domingo cresceu perto de 30 p.p. acima do controle, a pergunta seguinte é se a
-  oferta de lugares cresceu junto. A resposta é medida pela razão entre capacidade ofertada e
-  embarques, comparada entre 2023 e 2024.
+  oferta de lugares cresceu junto. <strong>Não cresceu.</strong> Entre 2023 e 2024, aos domingos, a
+  demanda subiu cerca de 35% e o serviço programado ficou praticamente igual — o sistema absorveu o
+  aumento por <strong>ocupação</strong>, não por ampliação.
+</p>
+
+<div class="numeros">
+  <div class="numero alta">
+    <span class="valor">+35,2%</span>
+    <span class="rotulo">embarques por domingo, 2024 vs. 2023</span>
+  </div>
+  <div class="numero controle">
+    <span class="valor">−0,2%</span>
+    <span class="rotulo">partidas programadas por domingo</span>
+  </div>
+  <div class="numero principal">
+    <span class="valor">−26,0%</span>
+    <span class="rotulo">lugares ofertados por embarque, aos domingos</span>
+  </div>
+</div>
+
+<div class="caixa metodo">
+  <h3>Esta é a parte mais sólida do relatório</h3>
+  <p>
+    Diferente do resto do estudo, este resultado <strong>não depende de nenhuma estimativa nossa</strong>:
+  </p>
+  <ul>
+    <li>
+      <strong>Não usa <code>zona_emb</code></strong> — não há recorte territorial aqui, então a
+      imputação de zona nos domingos, com todas as ressalvas da
+      <a href="metodologia.html">metodologia</a>, não entra na conta.
+    </li>
+    <li>
+      <strong>Não usa a bilhetagem</strong> — a demanda vem da série oficial de passageiros
+      transportados, publicada pela Prefeitura/SPTrans e verificável por terceiros.
+    </li>
+    <li>
+      <strong>Usa os 24 meses de 2023-2024</strong>, não a janela de quatro meses do resto do
+      relatório: <code>Partidas.csv</code> cobre os três tipos de dia em todos os meses e a série
+      oficial cobre os 731 dias. Só a bilhetagem era limitada a abril, maio, setembro e outubro.
+    </li>
+  </ul>
+  <p>
+    Em compensação, ele responde a uma pergunta menor: <em>quanto</em> a lotação piorou, não
+    <em>onde</em>. Essa segunda pergunta continua dependendo do recorte por zona.
+  </p>
+</div>
+
+<figure>
+  <img src="img/variacao_oferta_demanda_barras.png" alt="Barras comparando a variação percentual da demanda e da oferta em domingo, sábado e dia útil">
+  <figcaption>
+    Variação 2024 vs. 2023 da demanda (embarques por dia) e da oferta (lugares por dia), por tipo de
+    dia. Só o domingo descola.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="oferta_demanda_agregada"></div>
+<p class="legenda-tabela">
+  Médias por dia de cada tipo, calculadas mês a mês e depois entre os doze meses do ano. Gerado por
+  <code>02_oferta/compara_oferta_demanda_agregada.ipynb</code>.
+</p>
+
+<h3>A razão lugares por embarque</h3>
+
+<p>
+  A conta é publicada em duas unidades de propósito. <strong>Partidas por mil embarques</strong> é
+  totalmente observada — sai da programação de viagens da SPTrans e não depende de nenhuma tabela de
+  capacidade. <strong>Lugares por embarque</strong> é a leitura em assentos, que depende da tabela de
+  capacidade nominal descrita abaixo. As duas dão praticamente a mesma resposta, o que significa que
+  <strong>a conclusão não está apoiada na tabela de capacidade</strong>.
+</p>
+
+<div class="quadro-tabela" data-tabela="sinal_ocupacao"></div>
+<p class="legenda-tabela">
+  A razão oferta/demanda no domingo e no dia útil (controle), e o sinal isolado — a diferença entre
+  as duas variações, em pontos percentuais.
+</p>
+
+<figure>
+  <img src="img/lugares_por_embarque_mensal.png" alt="Série mensal de lugares ofertados por embarque, domingo e dia útil, 2023-2024">
+  <figcaption>
+    Lugares ofertados por embarque, mês a mês. O domingo sai de um patamar bem mais folgado que o do
+    dia útil e converge para perto dele. O ponto de dezembro de 2023 é de transição: mistura dois
+    domingos ainda tarifados e três já gratuitos.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="img/oferta_demanda_mensal.png" alt="Série mensal de embarques e lugares ofertados por domingo, 2023-2024">
+  <figcaption>
+    Os dois componentes da razão, em nível: os embarques por domingo sobem em degrau, os lugares
+    ofertados seguem uma reta.
+  </figcaption>
+</figure>
+
+<h3>Quando a política começou: 17 de dezembro de 2023</h3>
+
+<p>
+  A data não precisa ser assumida — está no dado. A série oficial separa o total por modalidade de
+  pagamento, e aos domingos os <strong>pagantes saem de 55% do total para 0,1% entre 10 e 17 de
+  dezembro de 2023</strong>. Isso tem duas consequências para a comparação: os domingos de 17, 24 e
+  31/12/2023 já são <em>pós-política</em> e ficam fora da linha de base, e 2024 é o primeiro ano
+  completo de gratuidade — não o primeiro ano de gratuidade.
+</p>
+
+<div class="quadro-tabela" data-tabela="inicio_politica"></div>
+<p class="legenda-tabela">
+  Domingos de outubro de 2023 a fevereiro de 2024. O colapso dos pagantes é a política, não um erro
+  de leitura do arquivo.
 </p>
 
 <div class="caixa metodo">
-  <h3>Como a capacidade ofertada é calculada</h3>
+  <h3>Como a oferta é medida</h3>
   <ol>
+    <li>
+      <code>Partidas.csv</code> traz a <strong>programação de partidas por linha, mês e tipo de
+      dia</strong> — e cobre domingo, sábado e dia útil. Cada linha do arquivo é uma partida
+      programada de um <strong>dia típico</strong> daquele tipo, então o número de partidas já é uma
+      grandeza diária: não há como confundir tamanho do período com tamanho do serviço.
+    </li>
     <li>
       <code>Tecnologias.csv</code> informa a <strong>frota por linha, mês e tecnologia</strong>
       (Miniônibus, Micro Ônibus, Midiônibus, Básico, Padron, Articulado…).
@@ -236,33 +350,94 @@
     <li>
       Cada tecnologia recebe uma capacidade nominal de uma tabela de referência
       (Miniônibus 40, Micro Ônibus 30, Midiônibus 60, Midiônibus Rural 55, Básico 80, Padron 95,
-      Articulado 150 lugares).
+      Articulado 150 lugares), de onde sai a <strong>capacidade média por veículo</strong> de cada
+      linha em cada mês: <code>Σ(frota × capacidade nominal) / Σ frota</code>.
     </li>
     <li>
-      Daí sai a <strong>capacidade média por veículo</strong> de cada linha em cada mês:
-      <code>Σ(frota × capacidade nominal) / Σ frota</code>.
-    </li>
-    <li>
-      <code>Partidas.csv</code> informa o <strong>número de partidas programadas</strong> por linha,
-      mês e tipo de dia — e este cobre domingo, sábado e dia útil.
-    </li>
-    <li>
-      <strong>Capacidade ofertada</strong> = partidas × capacidade média por veículo. Como a frota é
-      o conjunto físico de veículos da linha, ela não muda por ser domingo; o que muda entre tipos de
-      dia é a frequência, e essa vem do passo 4. A capacidade dominical é portanto
+      <strong>Lugares ofertados</strong> = partidas × capacidade média por veículo. Como a frota é o
+      conjunto físico de veículos da linha, ela não muda por ser domingo; o que muda entre tipos de
+      dia é a frequência, e essa vem do passo 1. A capacidade dominical é portanto
       <strong>inferida</strong>, não suposta.
     </li>
     <li>
-      <strong>Razão</strong> = capacidade ofertada ÷ embarques, calculada <strong>por linha</strong>.
-      Não por zona: a correspondência entre o identificador de linha da bilhetagem e o da base de
-      oferta cobre 73,2% do volume, abaixo do limiar de 90% adotado, então a alocação espacial de
-      oferta para zonas não é executada.
+      Do lado da demanda, a média é sempre <strong>por dia</strong>: média diária dentro de cada mês,
+      depois média entre os meses — nunca soma acumulada do período.
+    </li>
+  </ol>
+</div>
+
+<div class="caixa alerta">
+  <h3>O que sai da conta, e por quê</h3>
+  <ul>
+    <li>
+      <strong>Feriados.</strong> O tipo de dia vem do dia da semana, então um feriado de terça-feira
+      entraria no controle como dia útil comum. São 15 datas por ano — nacionais, estaduais e
+      municipais — excluídas por lista explícita, inclusive quando caem no fim de semana, para o
+      critério ficar simétrico.
+    </li>
+    <li>
+      <strong>Vésperas e recesso</strong> (24/12, 31/12, 02/01) e <strong>dias com volume anômalo</strong>
+      — qualquer dia abaixo de 60% da mediana do seu próprio tipo de dia no ano. Essa regra pega três
+      domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na série oficial com cerca de um terço do
+      volume habitual. Mantê-los rebaixaria a linha de base de 2023 e <em>inflaria</em> o crescimento
+      medido: sem a limpeza, o domingo daria +41,6% em vez de +35,2%.
+    </li>
+    <li>
+      <strong>Os três domingos já gratuitos de dezembro de 2023.</strong>
+    </li>
+  </ul>
+  <p>
+    A tabela de sensibilidade abaixo mostra o efeito de cada uma dessas escolhas. Nenhuma delas muda
+    a conclusão.
+  </p>
+</div>
+
+<div class="quadro-tabela" data-tabela="sensibilidade_ocupacao"></div>
+<p class="legenda-tabela">
+  Cada linha refaz a conta mudando uma única escolha. O sinal — o domingo perdendo lugares por
+  embarque muito mais rápido que o dia útil — sobrevive a todas.
+</p>
+
+<div class="caixa alerta">
+  <h3>A ressalva que permanece</h3>
+  <p>
+    A tabela de capacidade nominal por tecnologia é uma <strong>aproximação a partir de dado público,
+    não um valor oficial certificado</strong>. Por isso os níveis absolutos de lugares por embarque
+    (3,12 em 2023, 2,31 em 2024) valem como <strong>ordem de grandeza provisória</strong>, e o número
+    de manchete é a <strong>variação percentual</strong>, em que um erro constante de escala se
+    cancela. As partidas por dia, essas sim, são contagem direta da programação e não têm essa
+    ressalva — e apontam a mesma coisa.
+  </p>
+</div>
+
+<h3>Desagregação por linha e tier</h3>
+
+<p>
+  Leitura complementar, e mais frágil que a agregada acima: aqui a demanda vem da
+  <strong>bilhetagem</strong>, o recorte é a <strong>janela de quatro meses</strong> e o tier de
+  periferia depende da zona de embarque. Serve para ver se a piora se distribui de forma desigual
+  pela cidade, não para medir seu tamanho.
+</p>
+
+<div class="caixa metodo">
+  <h3>O que muda em relação à conta agregada</h3>
+  <p>
+    A capacidade ofertada é construída do mesmo jeito descrito acima. O que muda é a unidade e a
+    fonte da demanda:
+  </p>
+  <ul>
+    <li>
+      <strong>A razão é calculada por linha</strong>, não por zona: a correspondência entre o
+      identificador de linha da bilhetagem e o da base de oferta cobre 73,2% do volume, abaixo do
+      limiar de 90% adotado, então a alocação espacial de oferta para zonas não é executada. O tier
+      de periferia entra só depois, pela zona de embarque predominante de cada linha.
     </li>
     <li>
       O que se publica é a <strong>diferença 2024 − 2023</strong> dessa razão, agregada pela mediana
-      dentro de cada tier.
+      dentro de cada tier — uma diferença absoluta, não percentual, e por isso não comparável
+      diretamente com os números da conta agregada.
     </li>
-  </ol>
+  </ul>
 </div>
 
 <figure>
@@ -277,22 +452,15 @@
 <p class="legenda-tabela">Mediana da variação da razão oferta/demanda, por tier e tipo de dia.</p>
 
 <p>
-  O padrão é claro e vai na direção oposta entre os tipos de dia: <strong>no domingo a razão
-  lugares por embarque piora</strong> na maior parte dos tiers, <strong>enquanto no dia útil ela
-  melhora em todos</strong>. Ou seja, a demanda dominical cresceu mais rápido que a oferta
-  correspondente — o sistema absorveu o aumento sobretudo por maior ocupação dos veículos, não por
-  ampliação proporcional do serviço.
+  O padrão corrobora a conta agregada e acrescenta uma informação que ela não tem: a direção é oposta
+  entre os tipos de dia — <strong>no domingo a razão lugares por embarque piora</strong> na maior
+  parte dos tiers, <strong>enquanto no dia útil ela melhora em todos</strong> — e a piora não é
+  uniforme pela cidade.
 </p>
 
 <div class="caixa alerta">
-  <h3>Três ressalvas sobre esta seção</h3>
+  <h3>Duas ressalvas sobre esta subseção</h3>
   <ul>
-    <li>
-      A tabela de capacidade nominal por tecnologia é uma <strong>aproximação a partir de dado
-      público, não um valor oficial certificado</strong>. Por isso <strong>nenhum número absoluto de
-      lugares é publicado aqui</strong> — apenas diferenças ano a ano, em que um erro constante de
-      escala se cancela.
-    </li>
     <li>
       A capacidade média por veículo é a média do <em>conjunto cadastrado</em> da linha, não da
       fração dele que efetivamente circula no domingo. Em linha de frota homogênea o desvio é nulo,
@@ -305,7 +473,8 @@
       se cancelar na diferença entre anos, que é o número publicado.
     </li>
     <li>
-      A análise é por linha, não por zona, pelo motivo explicado no passo 6 acima.
+      A análise é por linha, não por zona, pelo motivo explicado acima — o tier entra apenas como
+      rótulo da zona de embarque predominante de cada linha.
     </li>
   </ul>
 </div>
