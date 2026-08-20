@@ -23,6 +23,7 @@ import numpy as np
 import pandas as pd
 
 RAIZ = Path(__file__).resolve().parent.parent
+DIR_TABELAS_02 = RAIZ / "outputs" / "02" / "tabelas"
 DIR_TABELAS_03 = RAIZ / "outputs" / "03" / "tabelas"
 PARQUET_DIAG = RAIZ / "outputs" / "01" / "diag_bases_por_domingo.parquet"
 PARQUET_OFICIAL = RAIZ / "outputs" / "01" / "Dados_4Meses_Domingos_2023_2024_site.parquet"
@@ -179,6 +180,65 @@ TABELAS: dict[str, Tabela] = {}
 def registra(t: Tabela) -> None:
     TABELAS[t.chave] = t
 
+
+# ---- 02_oferta/compara_oferta_demanda_agregada.ipynb (resultado agregado, sem recorte espacial) ----
+
+registra(Tabela(
+    chave="oferta_demanda_agregada",
+    fonte=DIR_TABELAS_02 / "oferta_demanda_agregada.parquet",
+    rotulo_indice="tipo de dia",
+    colunas=[
+        Coluna("embarques_2023", "embarques/dia 2023", 0),
+        Coluna("embarques_2024", "embarques/dia 2024", 0),
+        Coluna("pct_embarques", "Δ% demanda", 1, destaque=True),
+        Coluna("n_partidas_2023", "partidas/dia 2023", 0),
+        Coluna("n_partidas_2024", "partidas/dia 2024", 0),
+        Coluna("pct_n_partidas", "Δ% partidas", 1, destaque=True),
+        Coluna("pct_lugares", "Δ% lugares", 1),
+    ],
+))
+
+registra(Tabela(
+    chave="sinal_ocupacao",
+    fonte=DIR_TABELAS_02 / "sinal_ocupacao.parquet",
+    rotulo_indice="métrica",
+    colunas=[
+        Coluna("domingo_2023", "domingo 2023", 2),
+        Coluna("domingo_2024", "domingo 2024", 2),
+        Coluna("pct_domingo", "Δ% domingo", 1, destaque=True),
+        Coluna("util_2023", "dia útil 2023", 2),
+        Coluna("util_2024", "dia útil 2024", 2),
+        Coluna("pct_util", "Δ% dia útil", 1),
+        Coluna("sinal_pp", "sinal (p.p.)", 1, destaque=True),
+    ],
+))
+
+registra(Tabela(
+    chave="inicio_politica",
+    fonte=DIR_TABELAS_02 / "inicio_politica.parquet",
+    rotulo_indice="domingo",
+    colunas=[
+        Coluna("embarques", "embarques", 0),
+        Coluna("pagantes", "pagantes", 0),
+        Coluna("pct_pagantes", "% pagantes", 1, destaque=True),
+    ],
+))
+
+registra(Tabela(
+    chave="sensibilidade_ocupacao",
+    fonte=DIR_TABELAS_02 / "sensibilidade_ocupacao.parquet",
+    rotulo_indice="variante",
+    colunas=[
+        Coluna("pct_embarques_domingo", "Δ% demanda domingo", 1),
+        Coluna("pct_embarques_util", "Δ% demanda útil", 1),
+        Coluna("pct_razao_domingo", "Δ% lugares/embarque domingo", 1),
+        Coluna("pct_razao_util", "Δ% lugares/embarque útil", 1),
+        Coluna("sinal_pp", "sinal (p.p.)", 1, destaque=True),
+    ],
+))
+
+
+# ---- 03_comparacoes/compara_demanda_oferta_genero_idade.ipynb ------------------------
 
 registra(Tabela(
     chave="resumo_fontes",
