@@ -10,9 +10,18 @@
     --cor-positivo: #1a7f37;
     --cor-negativo: #b2182b;
     --largura: 900px;
+    /* altura real de nav.principal (sticky): 0.9rem x line-height 1.6 = 23px,
+       mais 12px de padding em cima e embaixo, mais 3px de borda inferior */
+    --altura-nav: 50px;
 }
 
 * { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -92,6 +101,9 @@ h2 {
 h2:first-of-type { margin-top: 16px; }
 
 h3 { margin: 32px 0 8px; font-size: 1.1rem; }
+
+/* Sem isso o link interno (#oferta, #confiavel) para o titulo atras da nav sticky. */
+h2, h3 { scroll-margin-top: calc(var(--altura-nav) + 16px); }
 
 p { margin: 0 0 16px; }
 
