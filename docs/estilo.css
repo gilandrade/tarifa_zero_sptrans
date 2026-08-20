@@ -9,7 +9,9 @@
     --cor-destaque: #0969da;
     --cor-positivo: #1a7f37;
     --cor-negativo: #b2182b;
-    --largura: 900px;
+    --largura: 900px;          /* coluna de conteúdo */
+    --largura-pagina: 1240px;  /* conteúdo + índice lateral */
+    --largura-indice: 240px;
     /* altura real de nav.principal (sticky): 0.9rem x line-height 1.6 = 23px,
        mais 12px de padding em cima e embaixo, mais 3px de borda inferior */
     --altura-nav: 50px;
@@ -83,6 +85,67 @@ nav.principal a {
 nav.principal a:hover { color: #fff; border-bottom-color: #5a8dc0; }
 nav.principal a.ativo { color: #fff; border-bottom-color: #6cb6ff; font-weight: 600; }
 
+/* ==== índice lateral (docs/indice.js monta a lista) ==== */
+
+/* Em tela estreita é um <details> recolhível acima do conteúdo; a partir de 1080px
+   vira a barra lateral fixa à esquerda (ver media query no fim deste bloco). */
+.indice {
+    border: 1px solid var(--cor-borda);
+    border-left: 4px solid var(--cor-destaque);
+    background: var(--cor-fundo-alt);
+    border-radius: 6px;
+    margin: 24px 20px 0;
+    font-size: 0.88rem;
+}
+
+.indice[hidden] { display: none; }
+
+.indice > summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-weight: 600;
+    list-style-position: inside;
+}
+
+.indice > nav { padding: 0 16px 12px; }
+
+.indice ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.indice li { margin: 0; }
+
+.indice a {
+    display: block;
+    padding: 5px 10px;
+    color: var(--cor-suave);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    line-height: 1.35;
+}
+
+.indice a:hover { color: var(--cor-texto); background: rgba(9, 105, 218, 0.06); }
+
+.indice a.ativo {
+    color: var(--cor-destaque);
+    border-left-color: var(--cor-destaque);
+    background: rgba(9, 105, 218, 0.08);
+    font-weight: 600;
+}
+
+.indice .n2 > a { font-weight: 600; color: var(--cor-texto); }
+.indice .n2 + .n2 > a,
+.indice .n3 + .n2 > a { margin-top: 6px; }
+
+.indice .n3 > a {
+    padding-left: 22px;
+    font-size: 0.95em;
+}
+
+.indice .n3 > a.ativo { font-weight: 600; }
+
 /* ==== conteúdo ==== */
 
 main {
@@ -102,7 +165,7 @@ h2:first-of-type { margin-top: 16px; }
 
 h3 { margin: 32px 0 8px; font-size: 1.1rem; }
 
-/* Sem isso o link interno (#oferta, #confiavel) para o titulo atras da nav sticky. */
+/* Sem isso o link interno (#oferta, #confiavel) para o título atrás da nav sticky. */
 h2, h3 { scroll-margin-top: calc(var(--altura-nav) + 16px); }
 
 p { margin: 0 0 16px; }
@@ -349,9 +412,53 @@ footer.rodape {
 footer.rodape .interno { max-width: var(--largura); margin: 0 auto; }
 footer.rodape p { margin: 0 0 8px; }
 
+/* ==== layout de duas colunas ====
+   Depois das regras base de `main`, senão o `padding` da coluna de conteúdo
+   sobrescreveria o que é zerado aqui. */
+
+@media (min-width: 1080px) {
+    .pagina {
+        display: flex;
+        align-items: flex-start;
+        gap: 40px;
+        max-width: var(--largura-pagina);
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .indice {
+        flex: 0 0 var(--largura-indice);
+        position: sticky;
+        top: var(--altura-nav);
+        max-height: calc(100vh - var(--altura-nav));
+        overflow-y: auto;
+        margin: 32px 0 0;
+        padding: 0;
+        border: none;
+        border-left: 1px solid var(--cor-borda);
+        border-radius: 0;
+        background: none;
+    }
+
+    .indice > summary { display: none; }
+    .indice > nav { padding: 0; }
+
+    /* min-width: 0 é obrigatório — sem ele as tabelas largas de .quadro-tabela
+       esticam o flex item em vez de rolarem dentro do próprio quadro.
+       As margens auto da regra base seguem valendo: centralizam o conteúdo
+       quando o índice está escondido (mapas.html). */
+    main {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 @media (max-width: 600px) {
     header.topo h1 { font-size: 1.3rem; }
     .numero .valor { font-size: 1.5rem; }
     .cartao-mapa .palco { height: 320px; }
     main { padding: 24px 16px 60px; }
+    .indice { margin: 20px 16px 0; }
 }
