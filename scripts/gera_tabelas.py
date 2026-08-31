@@ -26,7 +26,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 DIR_TABELAS_02 = RAIZ / "outputs" / "02" / "tabelas"
 DIR_TABELAS_03 = RAIZ / "outputs" / "03" / "tabelas"
 PARQUET_DIAG = RAIZ / "outputs" / "01" / "diag_bases_por_domingo.parquet"
-PARQUET_OFICIAL = RAIZ / "outputs" / "01" / "Dados_4Meses_Domingos_2023_2024_site.parquet"
+PARQUET_OFICIAL = RAIZ / "outputs" / "01" / "Dados_Diario_Oficial_2023_2026.parquet"
 SAIDA_JS = RAIZ / "docs" / "tabelas.js"
 
 
@@ -116,7 +116,7 @@ class Tabela:
 # Réplica de 01_criacao_de_bases/04_diagnostico_domingos_antiga_vs_nova.ipynb, Seção 5 —
 # a razão entre a bilhetagem de domingo (bruta e com linha) e o total oficial do mesmo
 # domingo, por ano. Só usa outputs/01/diag_bases_por_domingo.parquet e a série oficial já
-# compilada (outputs/01/Dados_4Meses_Domingos_2023_2024_site.parquet) — nenhum dos dois
+# compilada (outputs/01/Dados_Diario_Oficial_2023_2026.parquet) — nenhum dos dois
 # depende de reexecutar notebook 04, então esta tabela não é um to_parquet de notebook, é
 # calculada aqui. Valores conferidos contra o notebook: 2023 r_com_linha=1,035±0,038,
 # r_bruto=1,397±0,099; 2024 r_com_linha=0,999±0,037, r_bruto=1,269±0,040 (93 domingos
@@ -186,28 +186,26 @@ def registra(t: Tabela) -> None:
 registra(Tabela(
     chave="oferta_demanda_agregada",
     fonte=DIR_TABELAS_02 / "oferta_demanda_agregada.parquet",
-    rotulo_indice="tipo de dia",
+    rotulo_indice="tipo de dia / ano",
     colunas=[
-        Coluna("embarques_2023", "embarques/dia 2023", 0),
-        Coluna("embarques_2024", "embarques/dia 2024", 0),
-        Coluna("pct_embarques", "Δ% demanda", 1, destaque=True),
-        Coluna("n_partidas_2023", "partidas/dia 2023", 0),
-        Coluna("n_partidas_2024", "partidas/dia 2024", 0),
-        Coluna("pct_n_partidas", "Δ% partidas", 1, destaque=True),
-        Coluna("pct_lugares", "Δ% lugares", 1),
+        Coluna("embarques", "embarques/dia", 0),
+        Coluna("pct_embarques", "Δ% demanda (vs. ano anterior)", 1, destaque=True),
+        Coluna("n_partidas", "partidas/dia", 0),
+        Coluna("pct_n_partidas", "Δ% partidas (vs. ano anterior)", 1, destaque=True),
+        Coluna("pct_lugares", "Δ% lugares (vs. ano anterior)", 1),
     ],
 ))
 
 registra(Tabela(
     chave="sinal_ocupacao",
     fonte=DIR_TABELAS_02 / "sinal_ocupacao.parquet",
-    rotulo_indice="métrica",
+    rotulo_indice="métrica (transição de ano)",
     colunas=[
-        Coluna("domingo_2023", "domingo 2023", 2),
-        Coluna("domingo_2024", "domingo 2024", 2),
+        Coluna("domingo_ini", "domingo início", 2),
+        Coluna("domingo_fim", "domingo fim", 2),
         Coluna("pct_domingo", "Δ% domingo", 1, destaque=True),
-        Coluna("util_2023", "dia útil 2023", 2),
-        Coluna("util_2024", "dia útil 2024", 2),
+        Coluna("util_ini", "dia útil início", 2),
+        Coluna("util_fim", "dia útil fim", 2),
         Coluna("pct_util", "Δ% dia útil", 1),
         Coluna("sinal_pp", "sinal (p.p.)", 1, destaque=True),
     ],

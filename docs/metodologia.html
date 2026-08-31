@@ -47,7 +47,10 @@
   </p>
   <p>
     Demonstrativo diário de passageiros transportados por linha de ônibus, por modalidade de
-    pagamento. Compilados os 731 dias de 2023–2024, 989.311 registros, sem lacunas.
+    pagamento. Compilados os dias de 2023 a 2026 (2026 até a data de corte), 1.198 datas e
+    1.595.280 registros — descontadas 17 datas de outubro/2025 cujo arquivo publicado veio com o
+    conteúdo de setembro/2025 sob o nome de outubro (fonte publicou o dia errado, não é lacuna de
+    coleta; descartadas por não serem confiáveis).
     <strong>É a única fonte deste estudo que qualquer pessoa pode conferir diretamente</strong> — é
     contra ela que a bilhetagem é validada (<a href="index.html#confiavel">seção 5 dos
     resultados</a>). Reprodução em
@@ -110,30 +113,43 @@
 
 <p>
   A seção agregada de oferta × demanda
-  (<code>02_oferta/compara_oferta_demanda_agregada.ipynb</code>) usa os <strong>24 meses</strong> de
-  2023-2024, e não a janela de quatro meses do resto do relatório: <code>Partidas.csv</code> cobre
-  todos os meses nos três tipos de dia e a série oficial cobre os 731 dias — a restrição a abril,
-  maio, setembro e outubro vinha da entrega de bilhetagem, que essa seção não usa.
+  (<code>02_oferta/compara_oferta_demanda_agregada.ipynb</code>) usa os <strong>12 meses de cada
+  ano entre 2023 e 2025</strong>, e não a janela de quatro meses do resto do relatório:
+  <code>Partidas.csv</code> cobre todos os meses desse período nos três tipos de dia e a série
+  oficial cobre o mesmo período — a restrição a abril, maio, setembro e outubro vinha da entrega
+  de bilhetagem, que essa seção não usa. 2026 ainda não entra: <code>Partidas.csv</code> só tem
+  dados até dezembro de 2025.
 </p>
 
-<p>Três exclusões, todas por critério explícito e todas com o efeito medido na tabela de sensibilidade:</p>
+<p>Quatro correções de calendário, todas por critério explícito e as três primeiras com o efeito
+  medido na tabela de sensibilidade:</p>
 
 <ul>
   <li>
-    <strong>Feriados.</strong> <code>tipo_dia</code> é derivado do dia da semana, então um feriado de
-    terça entraria no controle como dia útil comum. São 15 datas por ano (nacionais, estaduais de SP
-    e municipais, incluindo 09/07, 25/01 e 20/11), excluídas por lista explícita mesmo quando caem no
-    fim de semana, para o critério ficar simétrico entre tipos de dia.
+    <strong>Feriados com tarifa zero somam-se ao domingo (tratamento).</strong> Natal, Ano Novo e
+    Aniversário de São Paulo também têm gratuidade quando caem fora do domingo. A partir do início
+    da política, essas três datas deixam de ser tratadas como feriado comum (que seria excluído) e
+    passam a contar como uma observação de domingo — exceto quando isso contaminaria a linha de
+    base pré-política (o Natal de 2023, que cai na janela de transição de dezembro/2023, continua
+    fora por esse motivo). Ficam também fora da regra de outlier abaixo, já que um feriado tem
+    volume naturalmente mais baixo que um domingo comum, e isso não é um problema de dado.
+  </li>
+  <li>
+    <strong>Feriados comuns.</strong> <code>tipo_dia</code> é derivado do dia da semana, então um
+    feriado de terça entraria no controle como dia útil comum. São cerca de 15 datas por ano
+    (nacionais, estaduais de SP e municipais, incluindo 09/07, 25/01 e 20/11), excluídas por lista
+    explícita mesmo quando caem no fim de semana, para o critério ficar simétrico entre tipos de
+    dia.
   </li>
   <li>
     <strong>Vésperas e recesso</strong> — 24/12, 31/12 e 02/01 — também por lista.
   </li>
   <li>
     <strong>Outliers residuais</strong>: qualquer dia com volume abaixo de <strong>60% da mediana do
-    seu próprio <code>tipo_dia</code>/ano</strong>, calculada já sem feriados e atípicos. A regra pega
-    três domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na série oficial com cerca de um terço
-    do volume habitual. Eles rebaixam a linha de base de 2023 e, mantidos, <em>inflam</em> o
-    crescimento medido do domingo: +41,6% em vez de +35,2%.
+    seu próprio <code>tipo_dia</code>/ano</strong>, calculada já sem feriados, atípicos e
+    feriados-tarifa-zero. A regra pega três domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na
+    série oficial com cerca de um terço do volume habitual. Eles rebaixam a linha de base de 2023 e,
+    mantidos, <em>inflam</em> o crescimento medido do domingo.
   </li>
 </ul>
 

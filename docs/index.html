@@ -230,23 +230,23 @@
 <h2 id="oferta">4. A oferta acompanhou?</h2>
 
 <p>
-  Se a demanda de domingo cresceu perto de 30 p.p. acima do controle, a pergunta seguinte é se a
-  oferta de lugares cresceu junto. <strong>Não cresceu.</strong> Entre 2023 e 2024, aos domingos, a
-  demanda subiu cerca de 35% e o serviço programado ficou praticamente igual — o sistema absorveu o
+  Se a demanda de domingo cresceu bem acima do controle, a pergunta seguinte é se a oferta de
+  lugares cresceu junto. <strong>Não cresceu.</strong> Entre 2023 e 2025, aos domingos, a demanda
+  subiu cerca de 29% e o serviço programado ficou praticamente igual — o sistema absorveu o
   aumento por <strong>ocupação</strong>, não por ampliação.
 </p>
 
 <div class="numeros">
   <div class="numero alta">
-    <span class="valor">+35,2%</span>
-    <span class="rotulo">embarques por domingo, 2024 vs. 2023</span>
+    <span class="valor">+29%</span>
+    <span class="rotulo">embarques por domingo, 2025 vs. 2023</span>
   </div>
   <div class="numero controle">
-    <span class="valor">−0,2%</span>
+    <span class="valor">+0,4%</span>
     <span class="rotulo">partidas programadas por domingo</span>
   </div>
   <div class="numero principal">
-    <span class="valor">−26,0%</span>
+    <span class="valor">−22%</span>
     <span class="rotulo">lugares ofertados por embarque, aos domingos</span>
   </div>
 </div>
@@ -267,9 +267,12 @@
       transportados, publicada pela Prefeitura/SPTrans e verificável por terceiros.
     </li>
     <li>
-      <strong>Usa os 24 meses de 2023-2024</strong>, não a janela de quatro meses do resto do
-      relatório: <code>Partidas.csv</code> cobre os três tipos de dia em todos os meses e a série
-      oficial cobre os 731 dias. Só a bilhetagem era limitada a abril, maio, setembro e outubro.
+      <strong>Usa os 12 meses de cada ano entre 2023 e 2025</strong>, não a janela de quatro meses
+      do resto do relatório: <code>Partidas.csv</code> cobre os três tipos de dia em todos os meses
+      desse período e a série oficial cobre o mesmo período sem lacunas relevantes. Só a bilhetagem
+      era limitada a abril, maio, setembro e outubro. (2026 ainda não entra aqui: <code>Partidas.csv</code>
+      só tem dados até dezembro de 2025 — a série oficial de demanda já cobre parte de 2026, mas sem
+      oferta para comparar não há razão a calcular.)
     </li>
   </ul>
   <p>
@@ -281,14 +284,15 @@
 <figure>
   <img src="img/variacao_oferta_demanda_barras.png" alt="Barras comparando a variação percentual da demanda e da oferta em domingo, sábado e dia útil">
   <figcaption>
-    Variação 2024 vs. 2023 da demanda (embarques por dia) e da oferta (lugares por dia), por tipo de
+    Variação 2025 vs. 2023 da demanda (embarques por dia) e da oferta (lugares por dia), por tipo de
     dia. Só o domingo descola.
   </figcaption>
 </figure>
 
 <div class="quadro-tabela" data-tabela="oferta_demanda_agregada"></div>
 <p class="legenda-tabela">
-  Médias por dia de cada tipo, calculadas mês a mês e depois entre os doze meses do ano. Gerado por
+  Médias por dia de cada tipo, calculadas mês a mês e depois entre os doze meses do ano — uma linha
+  por tipo de dia e ano, com a variação contra o ano anterior. Gerado por
   <code>02_oferta/compara_oferta_demanda_agregada.ipynb</code>.
 </p>
 
@@ -305,11 +309,14 @@
 <div class="quadro-tabela" data-tabela="sinal_ocupacao"></div>
 <p class="legenda-tabela">
   A razão oferta/demanda no domingo e no dia útil (controle), e o sinal isolado — a diferença entre
-  as duas variações, em pontos percentuais.
+  as duas variações, em pontos percentuais — para cada transição de ano consecutiva. A maior parte
+  da queda acontece na primeira transição (2023→2024, quando a política entra em vigor); entre
+  2024 e 2025 o sinal já não é negativo, o que é consistente com um efeito concentrado na entrada
+  da tarifa zero, não numa deterioração contínua.
 </p>
 
 <figure>
-  <img src="img/lugares_por_embarque_mensal.png" alt="Série mensal de lugares ofertados por embarque, domingo e dia útil, 2023-2024">
+  <img src="img/lugares_por_embarque_mensal.png" alt="Série mensal de lugares ofertados por embarque, domingo e dia útil, 2023-2025">
   <figcaption>
     Lugares ofertados por embarque, mês a mês. O domingo sai de um patamar bem mais folgado que o do
     dia útil e converge para perto dele. O ponto de dezembro de 2023 é de transição: mistura dois
@@ -318,7 +325,7 @@
 </figure>
 
 <figure>
-  <img src="img/oferta_demanda_mensal.png" alt="Série mensal de embarques e lugares ofertados por domingo, 2023-2024">
+  <img src="img/oferta_demanda_mensal.png" alt="Série mensal de embarques e lugares ofertados por domingo, 2023-2025">
   <figcaption>
     Os dois componentes da razão, em nível: os embarques por domingo sobem em degrau, os lugares
     ofertados seguem uma reta.
@@ -374,23 +381,32 @@
 </div>
 
 <div class="caixa alerta">
-  <h3>O que sai da conta, e por quê</h3>
+  <h3>O que sai da conta, o que entra, e por quê</h3>
   <ul>
     <li>
-      <strong>Feriados.</strong> O tipo de dia vem do dia da semana, então um feriado de terça-feira
-      entraria no controle como dia útil comum. São 15 datas por ano — nacionais, estaduais e
-      municipais — excluídas por lista explícita, inclusive quando caem no fim de semana, para o
-      critério ficar simétrico.
+      <strong>Feriados com tarifa zero somam-se ao domingo, não são descartados.</strong> Natal,
+      Ano Novo e Aniversário de São Paulo também têm gratuidade quando caem fora do domingo — a
+      partir do início da política, essas datas contam como tratamento em vez de serem jogadas fora
+      como feriado comum. Ficam de fora, porém, da própria regra de outlier abaixo: um feriado tem
+      naturalmente menos gente circulando que um domingo comum, e isso não é defeito de dado.
+    </li>
+    <li>
+      <strong>Feriados comuns.</strong> O tipo de dia vem do dia da semana, então um feriado de
+      terça-feira entraria no controle como dia útil comum. São cerca de 15 datas por ano —
+      nacionais, estaduais e municipais — excluídas por lista explícita, inclusive quando caem no
+      fim de semana, para o critério ficar simétrico.
     </li>
     <li>
       <strong>Vésperas e recesso</strong> (24/12, 31/12, 02/01) e <strong>dias com volume anômalo</strong>
       — qualquer dia abaixo de 60% da mediana do seu próprio tipo de dia no ano. Essa regra pega três
       domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na série oficial com cerca de um terço do
       volume habitual. Mantê-los rebaixaria a linha de base de 2023 e <em>inflaria</em> o crescimento
-      medido: sem a limpeza, o domingo daria +41,6% em vez de +35,2%.
+      medido.
     </li>
     <li>
-      <strong>Os três domingos já gratuitos de dezembro de 2023.</strong>
+      <strong>Os três domingos já gratuitos de dezembro de 2023</strong> ficam fora da linha de base
+      de 2023 (inclui o Natal daquele ano, mesmo já sendo feriado-tarifa-zero — contá-lo em 2023
+      contaminaria justamente essa linha de base).
     </li>
   </ul>
   <p>
@@ -410,7 +426,7 @@
   <p>
     A tabela de capacidade nominal por tecnologia é uma <strong>aproximação a partir de dado público,
     não um valor oficial certificado</strong>. Por isso os níveis absolutos de lugares por embarque
-    (3,12 em 2023, 2,31 em 2024) valem como <strong>ordem de grandeza provisória</strong>, e o número
+    (3,12 em 2023, 2,34 em 2024, 2,44 em 2025) valem como <strong>ordem de grandeza provisória</strong>, e o número
     de manchete é a <strong>variação percentual</strong>, em que um erro constante de escala se
     cancela. As partidas por dia, essas sim, são contagem direta da programação e não têm essa
     ressalva — e apontam a mesma coisa.
@@ -514,8 +530,10 @@
     </a>
   </p>
   <p>
-    Foram baixados e compilados <strong>os 731 dias de 2023 e 2024</strong>, um arquivo por dia,
-    totalizando 989.311 registros por dia × linha × modalidade de pagamento, sem lacunas.
+    Foram baixados e compilados <strong>os dias de 2023 a 2026</strong> (2026 até a data de corte,
+    e sem 17 dias de outubro/2025 cujo arquivo publicado veio com o conteúdo de setembro/2025 sob o
+    nome de outubro — descartados por não serem confiáveis, não por lacuna nossa), um arquivo por
+    dia, totalizando 1.595.280 registros por dia × linha × modalidade de pagamento em 1.198 datas.
     Reprodução em <code>01_criacao_de_bases/03_cria_base_oficial.ipynb</code>.
   </p>
 </div>
@@ -609,7 +627,7 @@
   <div class="interno">
     <p>
       Análise de impacto da política de Tarifa Zero aos domingos sobre a demanda e a oferta de
-      ônibus municipais de São Paulo. Dados de 2023 e 2024.
+      ônibus municipais de São Paulo. Dados de 2023 a 2025 (série oficial de demanda até 2026).
     </p>
     <p>
       Código e pipeline completo:
