@@ -3,3 +3,5 @@ CLAUDE.md
 /.venv/
 /outputs/
 __pycache__/
+*.docx
+*.tmp
