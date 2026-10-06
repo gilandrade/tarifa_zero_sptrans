@@ -114,20 +114,26 @@
 <h2 id="territorio">2. Onde o efeito aparece no território</h2>
 
 <p>
-  Cada zona da Pesquisa Origem-Destino 2023 foi classificada em um <em>tier</em> pela distância do
-  seu centroide à Praça da Sé, em quartis: Centro, Intermediário 1, Intermediário 2 e Periferia.
+  Cada zona da Pesquisa Origem-Destino 2023 com demanda na bilhetagem foi classificada em um
+  <em>tier</em> pela <strong>renda domiciliar per capita média</strong> dos seus moradores, em
+  quintis: do Q1, o quinto de zonas de menor renda, ao Q5, o de maior renda. A renda vem dos
+  microdados da amostra do Censo 2022 (ver <a href="metodologia.html#renda">metodologia</a>).
 </p>
 
 <figure>
-  <img src="img/tiers_periferia.png" alt="Mapa das zonas OD classificadas em quatro tiers por distância à Praça da Sé">
+  <img src="img/tiers_periferia.png" alt="Mapa das zonas OD classificadas em cinco quintis de renda domiciliar per capita">
   <figcaption>
-    Tiers de periferia — quartis da distância do centroide de cada zona à Praça da Sé.
-    527 zonas da Pesquisa OD 2023.
+    Tiers por quintil de renda domiciliar per capita média (Censo 2022, amostra). 355 zonas da
+    Pesquisa OD 2023 com demanda na bilhetagem; as demais, em cinza, ficam sem tier.
   </figcaption>
 </figure>
 
 <div class="quadro-tabela" data-tabela="tiers_periferia"></div>
-<p class="legenda-tabela">Número de zonas e distância média ao centro, por tier.</p>
+<p class="legenda-tabela">
+  Número de zonas, faixa de renda (R$ de julho de 2022), moradores e distância média à Praça da Sé,
+  por quintil. Os quintis têm o mesmo número de zonas, não de moradores: o Q1 reúne 4,6 milhões de
+  pessoas, o Q5 pouco mais de 1 milhão.
+</p>
 
 <h3>O sinal por zona de embarque</h3>
 
@@ -141,18 +147,19 @@
 </figure>
 
 <div class="quadro-tabela" data-tabela="sinal_por_tier_zona"></div>
-<p class="legenda-tabela">Sinal Tarifa Zero por zona, agregado por tier (p.p.).</p>
+<p class="legenda-tabela">Sinal Tarifa Zero por zona, agregado por quintil de renda (p.p.).</p>
 
 <figure>
-  <img src="img/sinal_zona_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por zona, estratificado por tier de periferia">
-  <figcaption>Distribuição do sinal entre as zonas de cada tier.</figcaption>
+  <img src="img/sinal_zona_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por zona, estratificado por quintil de renda">
+  <figcaption>Distribuição do sinal entre as zonas de cada quintil de renda.</figcaption>
 </figure>
 
 <p>
-  O efeito é <strong>positivo em todos os tiers</strong>, mas o gradiente é decrescente do centro
-  para a periferia: a mediana cai de cerca de 32 p.p. no Centro para cerca de 18 p.p. na Periferia.
-  A leitura mais direta é que a gratuidade dominical estimulou sobretudo deslocamentos com destino
-  às áreas centrais.
+  O efeito é <strong>positivo em todos os quintis</strong>, mas não cresce nem cai de forma
+  contínua com a renda: a mediana é maior nas zonas de renda intermediária — entre 31 e 33 p.p. do
+  Q2 ao Q4 — e menor nos dois extremos, cerca de 26 p.p. no Q1 e 23 p.p. no Q5. As zonas mais pobres,
+  que são também as mais distantes do centro, e as mais ricas responderam menos que o miolo da
+  distribuição.
 </p>
 
 <h3>Verificação: a mesma conta na unidade observada</h3>
@@ -161,19 +168,19 @@
   A zona de embarque é uma <em>estimativa</em> da própria SPTrans (ver
   <a href="metodologia.html#imputacao">metodologia</a>), enquanto a linha de ônibus é observada
   diretamente. Por isso o mesmo sinal é recalculado tendo a linha como unidade, classificada pelo
-  tier da sua zona de embarque predominante.
+  quintil de renda da sua zona de embarque predominante.
 </p>
 
 <figure>
-  <img src="img/sinal_linha_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por linha, estratificado por tier">
-  <figcaption>Sinal Tarifa Zero por linha de ônibus, agrupado pelo tier da zona de embarque predominante no domingo.</figcaption>
+  <img src="img/sinal_linha_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por linha, estratificado por quintil de renda">
+  <figcaption>Sinal Tarifa Zero por linha de ônibus, agrupado pelo quintil de renda da zona de embarque predominante no domingo.</figcaption>
 </figure>
 
 <div class="quadro-tabela" data-tabela="robustez_zona_vs_linha"></div>
 <p class="legenda-tabela">
-  Mediana do sinal por tier nas duas unidades de análise. A divergência máxima entre elas é de
-  poucos pontos percentuais e o gradiente centro→periferia se mantém — as duas contam a mesma
-  história.
+  Mediana do sinal por quintil de renda nas duas unidades de análise. A divergência máxima entre
+  elas é de cerca de 5 p.p. e o formato se mantém — sinal maior nos quintis intermediários, menor
+  nos extremos —, então as duas contam a mesma história.
 </p>
 
 <!-- ================= 3. QUEM RESPONDE ================= -->
@@ -190,7 +197,7 @@
 </figure>
 
 <div class="quadro-tabela" data-tabela="sinal_tier_idade"></div>
-<p class="legenda-tabela">Mediana do sinal por tier, em cada grupo etário (p.p.).</p>
+<p class="legenda-tabela">Mediana do sinal por quintil de renda, em cada grupo etário (p.p.).</p>
 
 <p>
   <strong>O resultado é internamente consistente com a política.</strong> Pessoas com 60 anos ou mais
@@ -214,16 +221,18 @@
 </figure>
 
 <div class="quadro-tabela" data-tabela="sinal_tier_genero"></div>
-<p class="legenda-tabela">Mediana do sinal por tier, em cada gênero (p.p.).</p>
+<p class="legenda-tabela">Mediana do sinal por quintil de renda, em cada gênero (p.p.).</p>
 
 <figure>
-  <img src="img/sinal_linha_boxplot_genero.png" alt="Boxplots do sinal por linha, feminino e masculino, por tier">
+  <img src="img/sinal_linha_boxplot_genero.png" alt="Boxplots do sinal por linha, feminino e masculino, por quintil de renda">
   <figcaption>A mesma leitura na unidade observada (linha), como verificação.</figcaption>
 </figure>
 
 <p>
-  Homens e mulheres respondem praticamente da mesma forma, e o gradiente territorial se repete nos
-  dois. Não há aqui evidência de efeito diferenciado por gênero.
+  No agregado, homens e mulheres respondem praticamente da mesma forma. Por quintil de renda, as
+  duas medianas praticamente coincidem no Q1 e se afastam à medida que a renda sobe, com o sinal
+  feminino de 3 a 4 p.p. abaixo do masculino do Q3 ao Q5 — uma diferença pequena diante da dispersão
+  entre zonas.
 </p>
 
 <!-- ================= 4. OFERTA ================= -->
@@ -433,12 +442,12 @@
   </p>
 </div>
 
-<h3>Desagregação por linha e tier</h3>
+<h3>Desagregação por linha e quintil de renda</h3>
 
 <p>
   Leitura complementar, e mais frágil que a agregada acima: aqui a demanda vem da
-  <strong>bilhetagem</strong>, o recorte é a <strong>janela de quatro meses</strong> e o tier de
-  periferia depende da zona de embarque. Serve para ver se a piora se distribui de forma desigual
+  <strong>bilhetagem</strong>, o recorte é a <strong>janela de quatro meses</strong> e o quintil
+  de renda depende da zona de embarque. Serve para ver se a piora se distribui de forma desigual
   pela cidade, não para medir seu tamanho.
 </p>
 
@@ -452,33 +461,34 @@
     <li>
       <strong>A razão é calculada por linha</strong>, não por zona: a correspondência entre o
       identificador de linha da bilhetagem e o da base de oferta cobre 73,2% do volume, abaixo do
-      limiar de 90% adotado, então a alocação espacial de oferta para zonas não é executada. O tier
-      de periferia entra só depois, pela zona de embarque predominante de cada linha.
+      limiar de 90% adotado, então a alocação espacial de oferta para zonas não é executada. O quintil
+      de renda entra só depois, pela zona de embarque predominante de cada linha.
     </li>
     <li>
       O que se publica é a <strong>diferença 2024 − 2023</strong> dessa razão, agregada pela mediana
-      dentro de cada tier — uma diferença absoluta, não percentual, e por isso não comparável
+      dentro de cada quintil de renda — uma diferença absoluta, não percentual, e por isso não comparável
       diretamente com os números da conta agregada.
     </li>
   </ul>
 </div>
 
 <figure>
-  <img src="img/ratio_oferta_demanda_tier.png" alt="Boxplots da variação da razão oferta/demanda por tier, domingo e dia útil">
+  <img src="img/ratio_oferta_demanda_tier.png" alt="Boxplots da variação da razão oferta/demanda por quintil de renda, domingo e dia útil">
   <figcaption>
     Variação 2024−2023 da razão lugares ofertados por embarque, no domingo e no dia útil (controle),
-    por tier de periferia.
+    por quintil de renda.
   </figcaption>
 </figure>
 
 <div class="quadro-tabela" data-tabela="ratio_oferta_demanda_tier"></div>
-<p class="legenda-tabela">Mediana da variação da razão oferta/demanda, por tier e tipo de dia.</p>
+<p class="legenda-tabela">Mediana da variação da razão oferta/demanda, por quintil de renda e tipo de dia.</p>
 
 <p>
-  O padrão corrobora a conta agregada e acrescenta uma informação que ela não tem: a direção é oposta
-  entre os tipos de dia — <strong>no domingo a razão lugares por embarque piora</strong> na maior
-  parte dos tiers, <strong>enquanto no dia útil ela melhora em todos</strong> — e a piora não é
-  uniforme pela cidade.
+  Na linha mediana, a razão lugares por embarque sobe nos dois tipos de dia, mas
+  <strong>sobe menos no domingo que no dia útil do Q1 ao Q4</strong> — no Q3 fica parada, contra
+  +0,04 no dia útil. A exceção é o Q5, onde o ganho de domingo é ligeiramente maior. A direção do
+  contraste é a mesma da conta agregada (o domingo perde em relação ao controle), e ele não é
+  uniforme entre as faixas de renda.
 </p>
 
 <div class="caixa alerta">
@@ -496,7 +506,7 @@
       se cancelar na diferença entre anos, que é o número publicado.
     </li>
     <li>
-      A análise é por linha, não por zona, pelo motivo explicado acima — o tier entra apenas como
+      A análise é por linha, não por zona, pelo motivo explicado acima — o quintil de renda entra apenas como
       rótulo da zona de embarque predominante de cada linha.
     </li>
   </ul>
@@ -616,7 +626,7 @@
   </li>
   <li>
     <strong>Cortes simultâneos de zona × gênero × idade × tipo de dia ficam esparsos</strong> — daí a
-    supressão de zonas com base pequena nos mapas e a prioridade aos agregados por tier.
+    supressão de zonas com base pequena nos mapas e a prioridade aos agregados por quintil de renda.
   </li>
 </ol>
 

@@ -82,7 +82,16 @@
 
 <div class="fonte">
   <p><strong>Zonas de embarque</strong> — Pesquisa Origem-Destino 2023, Metrô/SP.</p>
-  <p>527 zonas, usadas para o mapeamento territorial e para os tiers de periferia.</p>
+  <p>527 zonas, usadas para o mapeamento territorial; 355 têm demanda na bilhetagem.</p>
+</div>
+
+<div class="fonte">
+  <p><strong>Renda das zonas</strong> — Censo Demográfico 2022, IBGE.</p>
+  <p>
+    Microdados da amostra (rendimento domiciliar per capita, identificado até a área de ponderação),
+    composição das áreas de ponderação por setor censitário, malha de setores e agregados do
+    Universo por setor (moradores e rendimento do responsável).
+  </p>
 </div>
 
 <!-- ================= DEFINIÇÕES ================= -->
@@ -100,6 +109,43 @@
   crescimento geral do sistema (população, retomada pós-pandemia, mudanças de linha) que também
   afetaria o domingo na ausência da política. Subtrair o controle isola o efeito específico da
   gratuidade dominical.
+</p>
+
+<h3 id="renda">Tiers por quintil de renda</h3>
+
+<p>
+  Os <em>tiers</em> usados para estratificar os resultados são quintis da <strong>renda domiciliar
+  per capita média</strong> da zona de embarque, em reais de julho de 2022. Substituem o critério
+  anterior, a distância do centroide da zona à Praça da Sé.
+</p>
+
+<ol>
+  <li>
+    <strong>Renda por área de ponderação.</strong> A amostra do Censo só identifica a área de
+    ponderação (AP), não o setor. Para cada AP calcula-se a média do rendimento domiciliar per
+    capita dos domicílios particulares permanentes ocupados, ponderada pelo peso amostral vezes o
+    número de moradores — o que equivale à renda total da área dividida pelos seus moradores.
+  </li>
+  <li>
+    <strong>Da AP para a zona.</strong> Cada setor censitário pertence a uma única AP e é atribuído a
+    uma única zona OD pelo seu ponto representativo. A renda da zona é a média das APs dos seus
+    setores, ponderada pelos moradores de cada setor no Universo do Censo.
+  </li>
+  <li>
+    <strong>Quintis por número de zonas.</strong> As 355 zonas com demanda são ordenadas pela renda
+    e divididas em cinco grupos de 71. Os grupos são iguais em zonas, não em população: o Q1 tem
+    37% dos moradores e o Q5, 8%.
+  </li>
+</ol>
+
+<p>
+  <strong>Quanto se perde por a amostra estar em áreas de ponderação.</strong> As duas malhas têm
+  granularidade parecida — 332 APs e 343 zonas OD no município de São Paulo — mas não coincidem: a
+  zona mediana tem 94% dos moradores em uma única AP, e um quarto das zonas tem menos de 62%. Para
+  medir o efeito, a mesma operação foi feita com uma variável disponível por setor, o rendimento do
+  responsável pelo domicílio no Universo: agregada direto do setor para a zona ou passando pela AP,
+  ela coloca <strong>83,9% das zonas no mesmo quintil</strong>, 14,6% no quintil vizinho e 1,4% a
+  dois ou mais de distância (correlação de postos de 0,96).
 </p>
 
 <h3>Data de início da política</h3>
@@ -195,7 +241,7 @@
     volume ponderado por demanda, abaixo do limiar de 90% adotado para acionar a alocação espacial
     linha→zona, que por isso não roda.
   </li>
-  <li><code>Diff_Ratio = Ratio_2024 − Ratio_2023</code>, agregado pela mediana dentro de cada tier.</li>
+  <li><code>Diff_Ratio = Ratio_2024 − Ratio_2023</code>, agregado pela mediana dentro de cada quintil de renda.</li>
 </ol>
 
 <div class="quadro-tabela" data-tabela="heterogeneidade_frota"></div>
@@ -309,7 +355,7 @@
   <li>
     <strong>Esparsidade em cortes simultâneos</strong> de zona × gênero × idade × tipo de dia — daí a
     supressão de zonas com base pequena nos mapas (limiares de 200 a 500 embarques conforme o corte)
-    e a prioridade a agregados por tier em vez de por zona individual nesses cruzamentos.
+    e a prioridade a agregados por quintil de renda em vez de por zona individual nesses cruzamentos.
   </li>
   <li>
     <strong>Nem todo registro tem os campos de recorte preenchidos</strong> — cada um é excluído do

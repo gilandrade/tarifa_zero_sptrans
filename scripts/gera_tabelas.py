@@ -256,9 +256,12 @@ registra(Tabela(
 registra(Tabela(
     chave="tiers_periferia",
     fonte=DIR_TABELAS_03 / "tiers_periferia.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("count", "nº de zonas", 0),
+        Coluna("renda_min", "renda per capita mín. (R$)", 0),
+        Coluna("renda_max", "renda per capita máx. (R$)", 0),
+        Coluna("moradores", "moradores", 0),
         Coluna("dist_media_km", "dist. média ao centro (km)", 1),
     ],
 ))
@@ -266,7 +269,7 @@ registra(Tabela(
 registra(Tabela(
     chave="sinal_por_tier_zona",
     fonte=DIR_TABELAS_03 / "sinal_por_tier_zona.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("count", "nº de zonas", 0),
         Coluna("mediana", "mediana (p.p.)", 1, destaque=True),
@@ -277,7 +280,7 @@ registra(Tabela(
 registra(Tabela(
     chave="robustez_zona_vs_linha",
     fonte=DIR_TABELAS_03 / "robustez_zona_vs_linha.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("por_zona", "sinal por zona (p.p.)", 1),
         Coluna("por_linha", "sinal por linha (p.p.)", 1),
@@ -299,7 +302,7 @@ registra(Tabela(
 registra(Tabela(
     chave="sinal_tier_genero",
     fonte=DIR_TABELAS_03 / "sinal_tier_genero.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("F", "feminino (p.p.)", 1),
         Coluna("M", "masculino (p.p.)", 1),
@@ -320,7 +323,7 @@ registra(Tabela(
 registra(Tabela(
     chave="sinal_tier_idade",
     fonte=DIR_TABELAS_03 / "sinal_tier_idade.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("60+", "60 anos ou mais (p.p.)", 1),
         Coluna("<60", "menos de 60 (p.p.)", 1),
@@ -330,7 +333,7 @@ registra(Tabela(
 registra(Tabela(
     chave="ratio_oferta_demanda_tier",
     fonte=DIR_TABELAS_03 / "ratio_oferta_demanda_tier.parquet",
-    rotulo_indice="tier",
+    rotulo_indice="quintil de renda",
     colunas=[
         Coluna("Diff_Ratio_domingo", "Δ ratio domingo", 3),
         Coluna("Diff_Ratio_util", "Δ ratio dia útil", 3),
