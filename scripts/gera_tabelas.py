@@ -320,77 +320,11 @@ registra(Tabela(
 ))
 
 registra(Tabela(
-    chave="ratio_oferta_demanda_tier",
-    fonte=DIR_TABELAS_03 / "ratio_oferta_demanda_tier.parquet",
-    rotulo_indice="quintil de renda",
-    colunas=[
-        Coluna("Diff_Ratio_domingo", "Δ ratio domingo", 3),
-        Coluna("Diff_Ratio_util", "Δ ratio dia útil", 3),
-    ],
-))
-
-registra(Tabela(
     chave="heterogeneidade_frota",
     fonte=DIR_TABELAS_03 / "heterogeneidade_frota.parquet",
     rotulo_indice="métrica",
     colunas=[
         Coluna("valor", "valor", 1),
-    ],
-))
-
-registra(Tabela(
-    chave="validacao_por_linha",
-    fonte=DIR_TABELAS_03 / "validacao_por_linha.parquet",
-    rotulo_indice="ano / tipo de dia",
-    colunas=[
-        Coluna("count", "nº de linhas", 0),
-        Coluna("p05", "p5", 3),
-        Coluna("p25", "p25", 3),
-        Coluna("p50", "mediana", 3, destaque=True),
-        Coluna("p75", "p75", 3),
-        Coluna("p95", "p95", 3),
-    ],
-))
-
-registra(Tabela(
-    chave="linhas_divergentes",
-    fonte=DIR_TABELAS_03 / "linhas_divergentes.parquet",
-    rotulo_indice="linha",
-    colunas=[
-        Coluna("Ano", "ano", 0),
-        Coluna("oficial", "oficial", 0),
-        Coluna("bilhetagem", "bilhetagem", 0),
-        Coluna("razao", "razão", 3, destaque=True),
-    ],
-    ordenar_por="razao",
-    ascendente=False,
-))
-
-registra(Tabela(
-    chave="niveis_mes_ano",
-    fonte=DIR_TABELAS_03 / "niveis_mes_ano.parquet",
-    rotulo_indice="mês-ano",
-    colunas=[
-        Coluna("oficial_domingo", "oficial domingo", 0),
-        Coluna("bilhetagem_domingo", "bilhetagem domingo", 0),
-        Coluna("delta_domingo_pct", "Δ domingo (%)", 1, destaque=True),
-        Coluna("oficial_util", "oficial útil", 0),
-        Coluna("bilhetagem_util", "bilhetagem útil", 0),
-        Coluna("delta_util_pct", "Δ útil (%)", 1, destaque=True),
-    ],
-))
-
-registra(Tabela(
-    chave="sinal_mes_ano",
-    fonte=DIR_TABELAS_03 / "sinal_mes_ano.parquet",
-    rotulo_indice="mês",
-    colunas=[
-        Coluna("oficial_dom_pct", "Δ% domingo (oficial)", 1),
-        Coluna("oficial_util_pct", "Δ% útil (oficial)", 1),
-        Coluna("oficial_sinal", "sinal oficial (p.p.)", 1, destaque=True),
-        Coluna("bilhetagem_dom_pct", "Δ% domingo (bilhet.)", 1),
-        Coluna("bilhetagem_util_pct", "Δ% útil (bilhet.)", 1),
-        Coluna("bilhetagem_sinal", "sinal bilhetagem (p.p.)", 1, destaque=True),
     ],
 ))
 

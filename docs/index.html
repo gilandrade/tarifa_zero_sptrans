@@ -70,7 +70,7 @@
 <p>
   Os três números vêm da <strong>série oficial de passageiros transportados</strong> da
   Prefeitura/SPTrans — a única fonte deste estudo que é publicamente auditável (ver
-  <a href="#confiavel">seção 5</a>). São médias por dia, dentro dos meses de abril, maio, setembro e
+  <a href="metodologia.html#fontes">metodologia</a>). São médias por dia, dentro dos meses de abril, maio, setembro e
   outubro de cada ano.
 </p>
 
@@ -417,164 +417,8 @@
   </p>
 </div>
 
-<h3>Desagregação por linha e quintil de renda</h3>
-
-<p>
-  Leitura complementar, e mais frágil que a agregada acima: aqui a demanda vem da
-  <strong>bilhetagem</strong>, o recorte é a <strong>janela de quatro meses</strong> e o quintil
-  de renda depende da zona de embarque. Serve para ver se a piora se distribui de forma desigual
-  pela cidade, não para medir seu tamanho.
-</p>
-
-<div class="caixa metodo">
-  <h3>O que muda em relação à conta agregada</h3>
-  <p>
-    A capacidade ofertada é construída do mesmo jeito descrito acima. O que muda é a unidade e a
-    fonte da demanda:
-  </p>
-  <ul>
-    <li>
-      <strong>A razão é calculada por linha</strong>, não por zona: a correspondência entre o
-      identificador de linha da bilhetagem e o da base de oferta cobre 73,2% do volume, abaixo do
-      limiar de 90% adotado, então a alocação espacial de oferta para zonas não é executada. O quintil
-      de renda entra só depois, pela zona de embarque predominante de cada linha.
-    </li>
-    <li>
-      O que se publica é a <strong>diferença 2024 − 2023</strong> dessa razão, agregada pela mediana
-      dentro de cada quintil de renda — uma diferença absoluta, não percentual, e por isso não comparável
-      diretamente com os números da conta agregada.
-    </li>
-  </ul>
-</div>
-
-<figure>
-  <img src="img/ratio_oferta_demanda_tier.png" alt="Boxplots da variação da razão oferta/demanda por quintil de renda, domingo e dia útil">
-  <figcaption>
-    Variação 2024−2023 da razão lugares ofertados por embarque, no domingo e no dia útil (controle),
-    por quintil de renda.
-  </figcaption>
-</figure>
-
-<div class="quadro-tabela" data-tabela="ratio_oferta_demanda_tier"></div>
-<p class="legenda-tabela">Mediana da variação da razão oferta/demanda, por quintil de renda e tipo de dia.</p>
-
-<p>
-  Na linha mediana, a razão lugares por embarque sobe nos dois tipos de dia, mas
-  <strong>sobe menos no domingo que no dia útil do Q1 ao Q4</strong> — no Q3 fica parada, contra
-  +0,04 no dia útil. A exceção é o Q5, onde o ganho de domingo é ligeiramente maior. A direção do
-  contraste é a mesma da conta agregada (o domingo perde em relação ao controle), e ele não é
-  uniforme entre as faixas de renda.
-</p>
-
-<div class="caixa alerta">
-  <h3>Duas ressalvas sobre esta subseção</h3>
-  <ul>
-    <li>
-      A capacidade média por veículo é a média do <em>conjunto cadastrado</em> da linha, não da
-      fração dele que efetivamente circula no domingo. Em linha de frota homogênea o desvio é nulo,
-      mas <strong>essa não é a maioria dos casos</strong>: 72% das linhas — e 83% do volume de
-      demanda — rodam com mais de uma tecnologia de veículo, então a exposição é ampla, não um
-      detalhe de borda. O que limita o dano é a escala do desvio dentro dessas linhas: a diferença
-      entre o maior e o menor veículo do conjunto é, na mediana, de apenas 1,33× — a maior parte da
-      mistura é entre categorias de tamanho parecido (ex. Básico e Padron), não entre miniônibus e
-      articulado. E o viés, seja qual for seu tamanho, tende a se repetir em 2023 e 2024 e por isso
-      se cancelar na diferença entre anos, que é o número publicado.
-    </li>
-    <li>
-      A análise é por linha, não por zona, pelo motivo explicado acima — o quintil de renda entra apenas como
-      rótulo da zona de embarque predominante de cada linha.
-    </li>
-  </ul>
-</div>
-
-<div class="quadro-tabela" data-tabela="heterogeneidade_frota"></div>
-<p class="legenda-tabela">
-  Quanto da demanda circula em linhas com mais de uma tecnologia de veículo, e qual a dispersão de
-  capacidade dentro dessas linhas — a medida direta da exposição à ressalva anterior.
-</p>
-
-<!-- ================= 5. VALIDAÇÃO ================= -->
-<h2 id="confiavel">5. A base é confiável?</h2>
-
-<p>
-  Os dados de bilhetagem usados nas seções 2 a 4 vieram de pedidos de acesso à informação e não são
-  públicos — não há como um terceiro conferi-los diretamente. Por isso toda a análise é validada
-  contra uma fonte publicada e independente.
-</p>
-
-<div class="fonte">
-  <p>
-    <strong>Fonte de validação:</strong> <em>Demonstrativo diário de passageiros transportados por
-    linha de ônibus, por modalidade de pagamento</em> — Prefeitura de São Paulo / SPTrans,
-    Acesso à Informação.
-  </p>
-  <p>
-    <a href="https://prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416"
-       target="_blank" rel="noopener">
-      prefeitura.sp.gov.br/mobilidade/w/institucional/sptrans/acesso_a_informacao/152416
-    </a>
-  </p>
-  <p>
-    Foram baixados e compilados <strong>os dias de 2023 a 2026</strong> (2026 até a data de corte).
-    17 dias de outubro/2025 vieram inicialmente com o conteúdo de setembro/2025 sob o nome de
-    outubro — já recuperados junto à fonte, que republicou os arquivos corretos; só 09/12/2025
-    segue genuinamente ausente do portal. Um arquivo por dia, totalizando 1.656.657 registros por
-    dia × linha × modalidade de pagamento em 1.246 datas.
-    Reprodução em <code>01_criacao_de_bases/03_cria_base_oficial.ipynb</code>.
-  </p>
-</div>
-
-<h3>Validação linha a linha</h3>
-
-<p>
-  Comparar apenas os totais da cidade é um teste fraco: erros de sinais opostos se cancelam. O teste
-  forte é confrontar cada linha de ônibus individualmente contra o valor oficial do mesmo ano e tipo
-  de dia.
-</p>
-
-<div class="quadro-tabela" data-tabela="validacao_por_linha"></div>
-<p class="legenda-tabela">
-  Distribuição da razão bilhetagem ÷ oficial, por ano e tipo de dia. Mediana próxima de 1 indica
-  concordância.
-</p>
-
-<p>
-  <strong>96,8% das linhas e 93,3% do volume oficial ficam dentro de ±10%</strong> do valor
-  publicado. Os desvios remanescentes não são ruído difuso: concentram-se num conjunto pequeno,
-  estável e identificável de linhas que divergem <em>nos dois anos</em>, o que aponta para diferença
-  de contabilidade e não para erro de medição.
-</p>
-
-<div class="quadro-tabela" data-tabela="linhas_divergentes"></div>
-<p class="legenda-tabela">
-  Linhas de maior volume com maior divergência frente ao oficial. As que aparecem em 2023 e em 2024
-  são as que merecem investigação de contabilidade.
-</p>
-
-<h3>O sinal é consistente mês a mês?</h3>
-
-<p>
-  O sinal agregado da bilhetagem (+23,9 p.p., excluindo <code>linha_blt</code> nula) fica abaixo do
-  oficial (+28,9 p.p.) porque a razão bilhetagem/oficial não é estável entre 2023 e 2024 — desliza
-  de cerca de 1,05 para cerca de 0,99. Decompondo por mês, essa deriva não está distribuída
-  igualmente: <strong>abril concentra a maior parte da divergência</strong>. Nos outros três meses
-  os dois sinais ficam próximos (diferença de 3 a 4 p.p.); em abril a diferença passa de 11 p.p.
-</p>
-
-<div class="quadro-tabela" data-tabela="niveis_mes_ano"></div>
-<p class="legenda-tabela">
-  Média de passageiros por dia, oficial × bilhetagem (excluindo <code>linha_blt</code> nula), por
-  mês-ano — e a diferença percentual entre as duas fontes em cada célula.
-</p>
-
-<div class="quadro-tabela" data-tabela="sinal_mes_ano"></div>
-<p class="legenda-tabela">
-  Sinal Tarifa Zero (2024 vs. 2023) calculado mês a mês, pela série oficial e pela bilhetagem sem
-  linha nula. Outubro é o mês onde as duas fontes mais concordam; abril é onde mais divergem.
-</p>
-
-<!-- ================= 6. RESSALVAS ================= -->
-<h2 id="ressalvas">6. Ressalvas</h2>
+<!-- ================= 5. RESSALVAS ================= -->
+<h2 id="ressalvas">5. Ressalvas</h2>
 
 <p>Cinco limitações valem para qualquer leitura deste relatório. A versão detalhada está na
    <a href="metodologia.html">página de metodologia</a>.</p>
@@ -588,7 +432,7 @@
     <strong>A composição de frota é conhecida apenas para dia útil.</strong> A capacidade de domingo
     é inferida da frequência dominical aplicada ao conjunto de veículos da linha; o resíduo está em
     linhas de frota mista — que são 83% do volume de demanda, não um caso raro — e é quantificado
-    na <a href="#oferta">seção 4</a>.
+    na <a href="metodologia.html#capacidade">metodologia</a>.
   </li>
   <li>
     <strong>A zona de embarque é uma estimativa da própria SPTrans</strong> (derivada de GPS,

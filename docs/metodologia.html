@@ -54,8 +54,8 @@
     09/12/2025 segue genuinamente ausente do portal (nenhum arquivo publicado sob esse nome, em
     nenhum dos dois padrões de URL usados pela fonte).
     <strong>É a única fonte deste estudo que qualquer pessoa pode conferir diretamente</strong> — é
-    contra ela que a bilhetagem é validada (<a href="index.html#confiavel">seção 5 dos
-    resultados</a>). Reprodução em
+    contra ela que a bilhetagem é validada (<a href="#validacao">validação agregada</a>, mais
+    abaixo). Reprodução em
     <code>01_criacao_de_bases/03_cria_base_oficial.ipynb</code>.
   </p>
 </div>
@@ -210,7 +210,7 @@
   da SPTrans), de modo que <code>n_partidas</code> já é nativamente uma grandeza diária.
 </p>
 
-<h3>Como a capacidade ofertada é calculada</h3>
+<h3 id="capacidade">Como a capacidade ofertada é calculada</h3>
 
 <ol>
   <li><code>Tecnologias.csv</code> dá a frota por linha, mês e tecnologia — só para dia útil.</li>
@@ -235,13 +235,6 @@
     tipos de dia é a frequência, capturada no passo anterior. A capacidade dominical é portanto
     <strong>inferida</strong> a partir de dado observado, não uma suposição não verificável.
   </li>
-  <li>
-    <code>Ratio = Capacidade_ofertada_estimada / N_embarques</code>, por linha — o match
-    <code>linha_blt</code> × <code>Linha</code> cobre 1317/1327 linhas distintas mas só 73,2% do
-    volume ponderado por demanda, abaixo do limiar de 90% adotado para acionar a alocação espacial
-    linha→zona, que por isso não roda.
-  </li>
-  <li><code>Diff_Ratio = Ratio_2024 − Ratio_2023</code>, agregado pela mediana dentro de cada quintil de renda.</li>
 </ol>
 
 <div class="quadro-tabela" data-tabela="heterogeneidade_frota"></div>
@@ -367,7 +360,15 @@
   </li>
 </ol>
 
-<h3>Validação agregada complementar</h3>
+<h3 id="validacao">Validação agregada complementar</h3>
+
+<p>
+  A bilhetagem também foi conferida contra a série oficial <strong>linha a linha</strong>, por ano e
+  tipo de dia: 96,8% das linhas e 93,3% do volume oficial ficam dentro de ±10% do valor publicado.
+  Os desvios restantes se concentram em um conjunto pequeno de linhas que divergem nos dois anos, o
+  que indica diferença de contabilidade, não ruído. As tabelas dessa conferência não são publicadas;
+  ela é reproduzível em <code>03_comparacoes/compara_demanda_oferta_genero_idade.ipynb</code>, Seção 8.
+</p>
 
 <div class="quadro-tabela" data-tabela="razao_base_oficial"></div>
 <p class="legenda-tabela">Razão entre a bilhetagem de domingo e a série oficial, por ano — com e sem excluir registros sem linha identificada.</p>
