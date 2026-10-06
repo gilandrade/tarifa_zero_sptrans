@@ -162,27 +162,6 @@
   distribuição.
 </p>
 
-<h3>Verificação: a mesma conta na unidade observada</h3>
-
-<p>
-  A zona de embarque é uma <em>estimativa</em> da própria SPTrans (ver
-  <a href="metodologia.html#imputacao">metodologia</a>), enquanto a linha de ônibus é observada
-  diretamente. Por isso o mesmo sinal é recalculado tendo a linha como unidade, classificada pelo
-  quintil de renda da sua zona de embarque predominante.
-</p>
-
-<figure>
-  <img src="img/sinal_linha_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por linha, estratificado por quintil de renda">
-  <figcaption>Sinal Tarifa Zero por linha de ônibus, agrupado pelo quintil de renda da zona de embarque predominante no domingo.</figcaption>
-</figure>
-
-<div class="quadro-tabela" data-tabela="robustez_zona_vs_linha"></div>
-<p class="legenda-tabela">
-  Mediana do sinal por quintil de renda nas duas unidades de análise. A divergência máxima entre
-  elas é de cerca de 5 p.p. e o formato se mantém — sinal maior nos quintis intermediários, menor
-  nos extremos —, então as duas contam a mesma história.
-</p>
-
 <!-- ================= 3. QUEM RESPONDE ================= -->
 <h2 id="quem">3. Quem responde à política</h2>
 
@@ -222,11 +201,6 @@
 
 <div class="quadro-tabela" data-tabela="sinal_tier_genero"></div>
 <p class="legenda-tabela">Mediana do sinal por quintil de renda, em cada gênero (p.p.).</p>
-
-<figure>
-  <img src="img/sinal_linha_boxplot_genero.png" alt="Boxplots do sinal por linha, feminino e masculino, por quintil de renda">
-  <figcaption>A mesma leitura na unidade observada (linha), como verificação.</figcaption>
-</figure>
 
 <p>
   No agregado, homens e mulheres respondem praticamente da mesma forma. Por quintil de renda, as
@@ -617,8 +591,8 @@
   </li>
   <li>
     <strong>A zona de embarque é uma estimativa da própria SPTrans</strong> (derivada de GPS,
-    endereço cadastrado e horário da validação) — por isso toda leitura por zona anda ao lado da
-    versão por linha.
+    endereço cadastrado e horário da validação). A leitura por zona parte da premissa de que essa
+    atribuição está correta.
   </li>
   <li>
     <strong>A bilhetagem subestima o crescimento de domingo</strong> em relação à série oficial: a

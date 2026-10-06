@@ -278,17 +278,6 @@ registra(Tabela(
 ))
 
 registra(Tabela(
-    chave="robustez_zona_vs_linha",
-    fonte=DIR_TABELAS_03 / "robustez_zona_vs_linha.parquet",
-    rotulo_indice="quintil de renda",
-    colunas=[
-        Coluna("por_zona", "sinal por zona (p.p.)", 1),
-        Coluna("por_linha", "sinal por linha (p.p.)", 1),
-        Coluna("diferenca_pp", "diferença (p.p.)", 1),
-    ],
-))
-
-registra(Tabela(
     chave="resumo_genero",
     fonte=DIR_TABELAS_03 / "resumo_genero.parquet",
     rotulo_indice="gênero",
