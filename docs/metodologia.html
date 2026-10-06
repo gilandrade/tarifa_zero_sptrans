@@ -65,8 +65,9 @@
   <p>
     Duas entregas: domingos (SEI 5010.2026-0008307-9, 101 arquivos, um domingo por semana, jan/2023
     a dez/2024) e 4 meses (SEI 5010.2026-0011927-8, dias completos de abril, maio, setembro e
-    outubro de 2023 e 2024). Uma entrega anterior (Pedido 097465) é usada apenas como doadora do
-    atributo de zona de embarque nos domingos — ver <a href="#imputacao">imputação</a> abaixo.
+    outubro de 2023 e 2024). A entrega de domingos foi reemitida pela SPTrans já com a zona de
+    embarque original — ver <a href="#imputacao">histórico da zona de embarque nos domingos</a>
+    abaixo.
   </p>
 </div>
 
@@ -250,40 +251,30 @@
 </ol>
 
 <!-- ================= IMPUTAÇÃO ================= -->
-<h2 id="imputacao">Imputação da zona de embarque nos domingos</h2>
+<h2 id="imputacao">Zona de embarque nos domingos: defeito de origem, já corrigido</h2>
 
 <p>
-  A entrega de bilhetagem dos domingos veio com a zona de embarque marcada como não classificada em
-  praticamente 100% dos registros — um defeito de qualidade confirmado diretamente nos arquivos
-  brutos, não introduzido por este pipeline. Uma entrega anterior e mais antiga (Pedido 097465), que
-  replica cada registro por um fator inteiro por classe tarifária e por isso não serve para
-  contagem, preserva no entanto a zona de embarque original e cobre 100% dos pares (cartão, linha)
-  da entrega nova — o que a torna utilizável como <strong>doadora do atributo</strong>, nunca do
+  A primeira entrega de bilhetagem dos domingos veio com a zona de embarque marcada como não
+  classificada em praticamente 100% dos registros — um defeito de qualidade confirmado diretamente
+  nos arquivos brutos. Numa versão anterior deste estudo, a zona foi então <strong>imputada</strong>
+  a partir de uma entrega mais antiga (Pedido 097465), usada só como doadora do atributo, nunca do
   volume.
 </p>
 
 <p>
-  Para cada par (cartão, linha), a entrega antiga dá uma distribuição de zonas — a mesma pessoa pode
-  embarcar na mesma linha em zonas diferentes no mesmo dia. Como a entrega antiga é a nova
-  multiplicada por uma constante por classe, essa distribuição é a real a menos de arredondamento.
-  Os embarques de cada par são então divididos entre as zonas por essa proporção — só os pesos
-  relativos são usados, o que cancela o fator de replicação da entrega antiga.
+  A SPTrans <strong>reemitiu a entrega dos domingos já com a zona de embarque original</strong>:
+  387 zonas distintas, e o código de zona não classificada sobra em apenas ~0,1% dos registros,
+  todos sem linha identificada (que não são embarques em ônibus municipal — ver ressalva 3 abaixo).
+  A contagem de registros por data é idêntica à da entrega anterior. A distribuição de zonas por
+  data × linha da entrega nova coincide em 99,3% com a que a imputação havia produzido, o que
+  confirma que a aproximação era boa e que os mapas por zona mudam pouco. A imputação foi
+  aposentada: os domingos agora usam a zona entregue.
 </p>
 
 <p>
-  <strong>Cobertura:</strong> cerca de 99% do volume que tem linha identificada, 74–78% do volume
-  total (o restante é o ~25% de registros sem linha, que de todo modo não são embarques em ônibus
-  municipal — ver ressalva 3 abaixo). Entre 26% e 33% do volume imputado vem de pares ambíguos (mais
-  de uma zona na entrega doadora), onde a divisão proporcional está de fato estimando, não copiando.
-</p>
-
-<p>
-  <strong>Checagem de sanidade espacial:</strong> a distribuição de zonas por linha em domingos
-  imputados foi comparada com sábados (zona real, sem imputação), por similaridade de cosseno
-  ponderada por volume: <strong>0,994</strong>. Como referência, a mesma comparação entre sábado e
-  dia útil — dois tipos de dia reais, sem imputação nenhuma — dá <strong>0,987</strong>. A
-  imputação, portanto, fica <em>mais</em> próxima do padrão espacial esperado do que a variação
-  natural entre dois tipos de dia observados diretamente.
+  A reemissão também reclassificou cerca de 2 milhões de registros de <code>OUTROS</code> para
+  <code>IDOSO</code> (classe tarifária); isso só afeta recortes por classe, não as contagens
+  totais.
 </p>
 
 <!-- ================= RISCOS ================= -->
@@ -307,8 +298,8 @@
   <li>
     <strong>A zona de embarque é uma estimativa da própria SPTrans</strong> mesmo quando vem
     original na entrega (derivada de GPS do veículo, endereço cadastrado e horário da validação, não
-    observação direta), e no domingo é imputada por cima dessa estimativa. Por isso toda leitura por
-    zona no domingo é acompanhada da versão por linha (unidade observada) como robustez.
+    observação direta). Por isso toda leitura por zona é acompanhada da versão por linha (unidade
+    observada) como robustez.
   </li>
   <li>
     <strong>A bilhetagem subestima o crescimento do domingo</strong> em relação à série oficial: a
