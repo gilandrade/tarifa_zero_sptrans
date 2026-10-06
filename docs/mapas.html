@@ -36,7 +36,7 @@
 
 <p>
   Os dois mapas abaixo são gerados via Folium/Leaflet e embutem a geometria de ~527 zonas da
-  Pesquisa Origem-Destino 2023 — por isso pesam entre 7 e 12 MB cada. Eles não carregam
+  Pesquisa Origem-Destino 2023 — por isso pesam entre 3 e 7 MB cada. Eles não carregam
   automaticamente; use o botão "Carregar mapa" em cada cartão, ou "Tela inteira" para abrir
   diretamente numa aba própria.
 </p>
@@ -56,8 +56,8 @@
 <script>
   const MAPAS = [
     {
-      titulo: "Sinal Tarifa Zero por zona",
-      descricao: "Efeito isolado da política (domingo menos dia útil), por zona de embarque, em pontos percentuais.",
+      titulo: "Sinal Tarifa Zero e renda por zona",
+      descricao: "Efeito isolado da política (domingo menos dia útil), por zona de embarque, em pontos percentuais. Uma segunda camada mostra o quintil de renda de cada zona (Censo 2022); alterne entre as duas no controle do canto superior direito.",
       caminho: "mapa_sinal_tarifa_zero_zona.html",
     },
     {
