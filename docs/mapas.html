@@ -35,7 +35,7 @@
 <main>
 
 <p>
-  Os dois mapas abaixo são gerados via Folium/Leaflet e embutem a geometria de ~527 zonas da
+  Os mapas abaixo são gerados via Folium/Leaflet e embutem a geometria das zonas da
   Pesquisa Origem-Destino 2023 — por isso pesam entre 3 e 7 MB cada. Eles não carregam
   automaticamente; use o botão "Carregar mapa" em cada cartão, ou "Tela inteira" para abrir
   diretamente numa aba própria.
@@ -59,6 +59,11 @@
       titulo: "Sinal Tarifa Zero e renda por zona",
       descricao: "Efeito isolado da política (domingo menos dia útil), por zona de embarque, em pontos percentuais. Uma segunda camada mostra o quintil de renda de cada zona (Censo 2022); alterne entre as duas no controle do canto superior direito.",
       caminho: "mapa_sinal_tarifa_zero_zona.html",
+    },
+    {
+      titulo: "Variáveis por zona",
+      descricao: "O sinal Tarifa Zero e as variáveis contra as quais ele é lido — renda, % de pessoas negras, partidas, lugares ofertados e distância à estação pela rede —, uma camada por variável, em cinco classes com o mesmo número de zonas. Escolha a camada no controle do canto superior direito; a legenda acompanha.",
+      caminho: "mapa_variaveis_zona.html",
     },
     {
       titulo: "Demanda de viagens 2023 × 2024",

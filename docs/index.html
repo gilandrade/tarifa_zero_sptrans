@@ -114,17 +114,19 @@
 <h2 id="territorio">2. Onde o efeito aparece no território</h2>
 
 <p>
-  Cada zona da Pesquisa Origem-Destino 2023 com demanda na bilhetagem foi classificada em um
+  Cada zona da Pesquisa Origem-Destino 2023 <strong>do município de São Paulo</strong> com demanda na bilhetagem foi classificada em um
   <em>tier</em> pela <strong>renda domiciliar per capita média</strong> dos seus moradores, em
   quintis: do Q1, o quinto de zonas de menor renda, ao Q5, o de maior renda. A renda vem dos
-  microdados da amostra do Censo 2022 (ver <a href="metodologia.html#renda">metodologia</a>).
+  microdados da amostra do Censo 2022 (ver <a href="metodologia.html#renda">metodologia</a>). A análise por zona cobre só
+  o município: são 339 das 355 zonas com demanda na bilhetagem — as 16 de municípios vizinhos (Osasco, Diadema etc.)
+  somam 0,4% do volume e ficam de fora.
 </p>
 
 <figure>
   <img src="img/tiers_periferia.png" alt="Mapa das zonas OD classificadas em cinco quintis de renda domiciliar per capita">
   <figcaption>
-    Tiers por quintil de renda domiciliar per capita média (Censo 2022, amostra). 355 zonas da
-    Pesquisa OD 2023 com demanda na bilhetagem; as demais, em cinza, ficam sem tier. Os quintis
+    Tiers por quintil de renda domiciliar per capita média (Censo 2022, amostra). 339 zonas do
+    município de São Paulo com demanda na bilhetagem; as demais, em cinza, ficam sem tier. Os quintis
     também são uma camada do <a href="mapa_sinal_tarifa_zero_zona.html">mapa interativo do sinal</a>.
   </figcaption>
 </figure>
@@ -132,8 +134,8 @@
 <div class="quadro-tabela" data-tabela="tiers_periferia"></div>
 <p class="legenda-tabela">
   Número de zonas, faixa de renda (R$ de julho de 2022), moradores e distância média à Praça da Sé,
-  por quintil. Os quintis têm o mesmo número de zonas, não de moradores: o Q1 reúne 4,6 milhões de
-  pessoas, o Q5 pouco mais de 1 milhão.
+  por quintil. Os quintis têm o mesmo número de zonas, não de moradores: o Q1 reúne 4,2 milhões de
+  pessoas, o Q5 1,0 milhão.
 </p>
 
 <h3>O sinal por zona de embarque</h3>
@@ -142,8 +144,8 @@
   <img src="img/sinal_zona_3paineis.png" alt="Três mapas lado a lado: variação percentual no domingo, no dia útil, e o sinal resultante por zona">
   <figcaption>
     Esquerda: variação % da demanda no domingo. Centro: a mesma variação no dia útil (controle).
-    Direita: o Sinal Tarifa Zero, a diferença entre as duas. Zonas com base pequena em 2023
-    (&lt; 500 embarques no domingo) aparecem em cinza.
+    Direita: o Sinal Tarifa Zero, a diferença entre as duas. Zonas abaixo do percentil 5 do
+    embarque médio diário de 2023 (17 zonas, 0,3% do volume) aparecem em cinza.
   </figcaption>
 </figure>
 
@@ -157,8 +159,8 @@
 
 <p>
   O efeito é <strong>positivo em todos os quintis</strong>, mas não cresce nem cai de forma
-  contínua com a renda: a mediana é maior nas zonas de renda intermediária — entre 31 e 33 p.p. do
-  Q2 ao Q4 — e menor nos dois extremos, cerca de 26 p.p. no Q1 e 23 p.p. no Q5. As zonas mais pobres,
+  contínua com a renda: a mediana é maior nas zonas de renda intermediária — entre 28 e 33 p.p. do
+  Q2 ao Q4 — e menor nos dois extremos, cerca de 26 p.p. no Q1 e 22 p.p. no Q5. As zonas mais pobres,
   que são também as mais distantes do centro, e as mais ricas responderam menos que o miolo da
   distribuição.
 </p>
@@ -206,8 +208,35 @@
 <p>
   No agregado, homens e mulheres respondem praticamente da mesma forma. Por quintil de renda, as
   duas medianas praticamente coincidem no Q1 e se afastam à medida que a renda sobe, com o sinal
-  feminino de 3 a 4 p.p. abaixo do masculino do Q3 ao Q5 — uma diferença pequena diante da dispersão
+  feminino de 3 a 6 p.p. abaixo do masculino do Q3 ao Q5 — uma diferença pequena diante da dispersão
   entre zonas.
+</p>
+
+<h3>Tipo de serviço: grupos de lote</h3>
+
+<p>
+  As linhas de ônibus pertencem a três grupos do edital de concessão — <strong>Estrutural</strong>,
+  <strong>Articulação Regional</strong> e <strong>Distribuição Local</strong> — identificados pelo lote de cada
+  linha (<a href="metodologia.html#grupos">metodologia</a>). Aqui o sinal é lido por tipo de serviço, em vez de por
+  território: não depende da zona de embarque, só da linha.
+</p>
+
+<div class="quadro-tabela" data-tabela="sinal_por_grupo_linha"></div>
+<p class="legenda-tabela">
+  Variação 2023→2024 por grupo de lote da linha, na bilhetagem (médias por dia, sem registros sem
+  <code>linha_blt</code>). Gerado por <code>03_comparacoes/compara_demanda_oferta_genero_idade.ipynb</code>, Seção 3.
+</p>
+
+<div class="quadro-tabela" data-tabela="validacao_grupo_linha"></div>
+<p class="legenda-tabela">O mesmo recorte pela série oficial, ao lado da bilhetagem (Seção 8 do mesmo notebook).</p>
+
+<p>
+  O sinal é parecido nos grupos Estrutural e Articulação Regional (cerca de 28 p.p. na bilhetagem) e
+  <strong>cerca de 9 p.p. menor na Distribuição Local</strong> (19 p.p.). A série oficial conta a mesma história,
+  em níveis mais altos — 34, 35 e 22 p.p. —, e a bilhetagem fica de 3 a 7 p.p. abaixo dela em todos os grupos, a mesma
+  subestimação do crescimento de domingo vista no total da cidade. A causa da diferença da Distribuição Local não foi investigada.
+  Seis linhas grandes migraram de lote durante 2024 (0,4% do volume); tirá-las muda o sinal de cada grupo em no máximo
+  0,2 p.p.
 </p>
 
 <!-- ================= 4. OFERTA ================= -->
@@ -417,10 +446,67 @@
   </p>
 </div>
 
-<!-- ================= 5. RESSALVAS ================= -->
-<h2 id="ressalvas">5. Ressalvas</h2>
+<!-- ================= 5. CORRELATOS ================= -->
+<h2 id="correlatos">5. O que se associa ao sinal por zona</h2>
 
-<p>Cinco limitações valem para qualquer leitura deste relatório. A versão detalhada está na
+<p>
+  Cada ponto abaixo é uma zona OD de São Paulo acima do corte de base mínima (322 zonas), com o
+  Sinal Tarifa Zero no eixo vertical e uma característica da zona no horizontal: renda per capita
+  média, % de pessoas negras (pretas e pardas, Censo 2022), partidas e lugares ofertados por domingo
+  nas linhas que cruzam a zona (2023) e distância caminhando pela rede viária até a estação de
+  trem ou metrô mais próxima. A reta é a regressão de mínimos quadrados simples, com faixa de
+  confiança de 95% (erro-padrão robusto HC3); renda, partidas e lugares entram em log2, de modo que a
+  inclinação é "p.p. de sinal por dobra da variável" (<a href="metodologia.html#correlatos">metodologia</a>).
+</p>
+
+<figure>
+  <img src="img/xy_sinal_variaveis.png" alt="Cinco gráficos de dispersão do sinal Tarifa Zero por zona contra renda, percentual de pessoas negras, partidas, lugares ofertados e distância à estação, com reta de regressão e faixa de confiança">
+  <figcaption>
+    Sinal Tarifa Zero por zona contra cada característica. Cada painel traz a inclinação, o intervalo de 95%,
+    o R² e o Moran's I do resíduo.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="regressoes_sinal_zona"></div>
+<p class="legenda-tabela">
+  Regressão simples do sinal sobre cada variável, uma de cada vez (n = 322 zonas). Gerado por
+  <code>04_correlatos/correlatos_sinal_zona.ipynb</code>.
+</p>
+
+<p>
+  <strong>Só a oferta e a distância ao trilho têm intervalo que exclui o zero, e todas explicam pouco.</strong>
+  Cada dobra das partidas de domingo se associa a um sinal 3,1 p.p. menor (IC 95% −4,7 a −1,5); cada dobra dos
+  lugares, 2,0 p.p. menor; cada quilômetro a mais até a estação, 1,0 p.p. menor. Renda (−1,1 p.p. por dobra, intervalo
+  que inclui zero) e % de pessoas negras (+0,3 p.p. por +10 p.p.) não se distinguem de zero. O R² não passa de 3,9%: o
+  sinal varia muito mais entre zonas do que qualquer uma dessas variáveis explica.
+</p>
+
+<div class="caixa alerta">
+  <h3>Os intervalos são otimistas: as zonas vizinhas se parecem</h3>
+  <p>
+    O Moran's I do sinal, com vizinhança por contiguidade, é <strong>0,48</strong> (p = 0,001), e o do resíduo de cada regressão fica
+    entre 0,46 e 0,49: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
+    independentes e, por isso, são mais estreitos do que deveriam. Inferência de verdade pede um modelo espacial; estes números
+    são descritivos.
+  </p>
+  <p>
+    São <strong>associações entre zonas, não efeitos</strong>. Renda e % de pessoas negras são quase a mesma variável nestas zonas
+    (correlação de −0,91), e a oferta de uma zona cresce com o seu tamanho — uma partida conta em todas as zonas que a linha atravessa.
+  </p>
+</div>
+
+<figure>
+  <img src="img/mapas_variaveis_zona.png" alt="Mapas das zonas de São Paulo: sinal Tarifa Zero e as variáveis do eixo horizontal, em cinco classes">
+  <figcaption>
+    O sinal e cada variável, em cinco classes com o mesmo número de zonas. A versão interativa, com uma camada por
+    variável, está no <a href="mapa_variaveis_zona.html">mapa de variáveis por zona</a>.
+  </figcaption>
+</figure>
+
+<!-- ================= 6. RESSALVAS ================= -->
+<h2 id="ressalvas">6. Ressalvas</h2>
+
+<p>Seis limitações valem para qualquer leitura deste relatório. A versão detalhada está na
    <a href="metodologia.html">página de metodologia</a>.</p>
 
 <ol>
@@ -446,6 +532,11 @@
   <li>
     <strong>Cortes simultâneos de zona × gênero × idade × tipo de dia ficam esparsos</strong> — daí a
     supressão de zonas com base pequena nos mapas e a prioridade aos agregados por quintil de renda.
+  </li>
+  <li>
+    <strong>Os registros sem linha de ônibus não entram em nenhuma contagem</strong> — cerca de 27% dos toques. A leitura mais
+    consistente é que são validações de Bilhete Único no Metrô e na CPTM (inferência: quase todo esse volume está em zonas com
+    estação e, no domingo, não reagiu à Tarifa Zero), mas a SPTrans não confirmou o significado do campo.
   </li>
 </ol>
 

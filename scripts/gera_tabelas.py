@@ -25,6 +25,7 @@ import pandas as pd
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_TABELAS_02 = RAIZ / "outputs" / "02" / "tabelas"
 DIR_TABELAS_03 = RAIZ / "outputs" / "03" / "tabelas"
+DIR_TABELAS_04 = RAIZ / "outputs" / "04" / "tabelas"
 PARQUET_DIAG = RAIZ / "outputs" / "01" / "diag_bases_por_domingo.parquet"
 PARQUET_OFICIAL = RAIZ / "outputs" / "01" / "Dados_Diario_Oficial_2023_2026.parquet"
 SAIDA_JS = RAIZ / "docs" / "tabelas.js"
@@ -71,6 +72,7 @@ class Tabela:
     colunas: list[Coluna]
     ordenar_por: str | None = None
     ascendente: bool = True
+    indice_de: str | None = None  # coluna que vira o rotulo da linha (em vez do indice do parquet)
 
     def carrega(self) -> pd.DataFrame:
         if not self.fonte.exists():
@@ -79,6 +81,8 @@ class Tabela:
                 f"  -> rode (ou reexecute) o notebook que exporta essa tabela antes de rodar este script."
             )
         df = pd.read_parquet(self.fonte)
+        if self.indice_de is not None:
+            df = df.set_index(self.indice_de)
         if self.ordenar_por is not None:
             if self.ordenar_por in df.columns:
                 df = df.sort_values(self.ordenar_por, ascending=self.ascendente)
@@ -336,6 +340,47 @@ registra(Tabela(
         Coluna("domingo", "domingo (mi/dia)", 2),
         Coluna("sabado", "sábado (mi/dia)", 2),
         Coluna("util", "dia útil (mi/dia)", 2),
+    ],
+))
+
+
+# ---- sinal por grupo de lote da linha (03) e correlatos por zona (04) ----------------------
+
+registra(Tabela(
+    chave="sinal_por_grupo_linha",
+    fonte=DIR_TABELAS_03 / "sinal_por_grupo_linha.parquet",
+    rotulo_indice="grupo de lote",
+    colunas=[
+        Coluna("linhas", "linhas com demanda", 0),
+        Coluna("PctDiff_domingo", "Δ% domingo", 1),
+        Coluna("PctDiff_util", "Δ% dia útil", 1),
+        Coluna("Sinal_tarifa_zero", "sinal (p.p.)", 1, destaque=True),
+    ],
+))
+
+registra(Tabela(
+    chave="validacao_grupo_linha",
+    fonte=DIR_TABELAS_03 / "validacao_grupo_linha.parquet",
+    rotulo_indice="grupo de lote",
+    colunas=[
+        Coluna("oficial_Sinal", "sinal pela série oficial (p.p.)", 1, destaque=True),
+        Coluna("bilhetagem_Sinal", "sinal pela bilhetagem (p.p.)", 1),
+        Coluna("dif_pp", "bilhetagem − oficial (p.p.)", 1),
+    ],
+))
+
+registra(Tabela(
+    chave="regressoes_sinal_zona",
+    fonte=DIR_TABELAS_04 / "regressoes_sinal_zona.parquet",
+    rotulo_indice="variável (eixo x)",
+    indice_de="rotulo",
+    colunas=[
+        Coluna("unidade", "inclinação medida", 0),
+        Coluna("inclinacao_pp", "inclinação (p.p. de sinal)", 1, destaque=True),
+        Coluna("ic95_baixo", "IC 95% inferior", 1),
+        Coluna("ic95_alto", "IC 95% superior", 1),
+        Coluna("r2", "R²", 3),
+        Coluna("moran_residuo", "Moran's I do resíduo", 2),
     ],
 ))
 

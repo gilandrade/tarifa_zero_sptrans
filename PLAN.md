@@ -13,8 +13,8 @@ Concluído:
   brutos. O único arquivo corrompido na origem (`20230529.xls`) foi recuperado via Excel.
 - `01_criacao_de_bases/04_diagnostico_domingos_antiga_vs_nova.ipynb` — caracterizou a relação entre
   as duas entregas de domingo e validou a base nova contra o oficial.
-- `01_criacao_de_bases/05_imputa_zona_domingo.ipynb` — **`zona_emb` do domingo imputada**
-  (cobertura ~99% do volume com linha), o que devolveu a análise por zona ao dia da política.
+- `01_criacao_de_bases/05_imputa_zona_domingo.ipynb` — aposentado: a entrega de domingos foi
+  reemitida com `zona_emb` nativa (ver item 5).
 - `02_oferta/compara_oferta_demanda_agregada.ipynb` — **resultado agregado de oferta × demanda, sem
   recorte espacial**, sobre os 24 meses de 2023-2024. Ver seção dedicada abaixo.
 - Migração dos caminhos de origem para `C:\Users\9837292\Desktop\SSD\SPTrans\`, com a constante
@@ -115,13 +115,13 @@ mistas é de apenas **1,33×**, o que limita o tamanho do possível viés. Esse 
 tende a se repetir em 2023 e 2024 e a se cancelar na diferença entre anos, que é o número
 publicado.
 
-### 3. Melhorar o join oferta → zona
+### 3. ~~Melhorar o join oferta → zona~~ — causa identificada
 
-A taxa de match `linha_blt` × `Linha` é de 1317/1327 linhas distintas mas só **73,2% do volume
-ponderado por demanda**, abaixo do limiar de 90% — então `USAR_JOIN_ESPACIAL=False` e a alocação
-espacial linha→zona não roda. Investigar de onde vêm os 27% de volume sem correspondência
-(linhas renomeadas no período? recorte de datas?) destravaria a análise de oferta por zona, que
-hoje não existe.
+Os **73,2%** de match ponderado por demanda que mantinham `USAR_JOIN_ESPACIAL=False` eram artefato
+do denominador: `demanda_por_linha` incluía os registros com `linha_blt` nula (26,8% do volume), que
+por definição não casam com linha nenhuma. Sobre o volume **com** linha o match é **100,00%**
+(1.324 de 1.326 linhas; ficam de fora só `808U-10` e `909K-10`). Não há linha renomeada nem recorte
+de datas a investigar — a oferta por zona está destravada e entra no item 6.
 
 ### 4. Entender as linhas persistentemente divergentes do oficial
 
@@ -131,14 +131,57 @@ nos **dois** anos: `209P-10`, `8700-10`, `5110-10`. Por serem consistentes, prov
 diferença de contabilidade (linha operada em conjunto? código reaproveitado?), não ruído. Vale
 identificar antes de qualquer conclusão por linha.
 
-### 5. Reduzir a dependência de estimativa no domingo
+### 5. ~~Reduzir a dependência de estimativa no domingo~~ — superado
 
-`zona_emb` no domingo é estimativa sobre estimativa: a SPTrans já a deriva de GPS × endereço
-cadastrado × horário, e por cima disso vem a imputação. Além disso ~26–33% do volume imputado sai
-de pares `(hash, linha)` com mais de uma zona no doador. O caminho definitivo é a **SPTrans
-reenviar a entrega de domingos com `zona_emb` preenchido** — enquanto isso não acontece, toda
-leitura por zona no domingo anda de par com a versão por `linha_blt` (unidade observada), que as
-Seções 3 e 6 mantêm ao lado.
+A SPTrans reemitiu a entrega de domingos com `zona_emb` nativa (387 zonas; `999` em 0,11% das
+linhas, todas com `linha_blt` nula). A imputação (`05_imputa_zona_domingo.ipynb`) foi aposentada e
+as versões por `linha_blt` que acompanhavam cada leitura por zona saíram das Seções 3 e 6. O que
+resta é a ressalva de que `zona_emb` é estimativa da própria SPTrans.
+
+### 6. Correlatos do sinal por zona e classificação das linhas
+
+Cruzar o `Sinal_tarifa_zero` por zona OD com características da zona, e classificar as linhas pelos
+grupos de lote. Decisões tomadas em 09/10/2026: corte de base mínima pelo **p05 do dia médio da zona
+em 2023** (útil + sábado + domingo); oferta por zona pelas **linhas cujo traçado cruza a zona**;
+distância de rede via **r5py**; nada novo entra em `docs/` por enquanto.
+
+| # | Tarefa | Onde | Estado |
+|---|---|---|---|
+| 6.1 | Universo só com zonas do município de São Paulo (`NumeroMuni == 36`); quintis de renda recortados sobre essas zonas | `06`, notebook principal, `compara_demanda` | **feito** — 339 zonas; quintis 68/68/67/68/68; 20 zonas (5,9%) mudaram de quintil |
+| 6.2 | Corte p05 no lugar de `N_MIN_ZONA = 500`; exportar `outputs/03/sinal_zona.parquet` | notebook principal, Seção 3 | **feito** — corte 2.081 embarques/dia médio, 17 zonas suprimidas, 322 na análise |
+| 6.3 | Classificação das linhas (Estrutural / Articulação Regional / Distribuição Local) e sinal por grupo | `01/07_cria_base_grupo_linha.ipynb`, Seções 3 e 8 | **feito** — 1.469 linhas; sinal 27,9 / 28,5 / 19,1 p.p. (bilhetagem), 34,2 / 35,4 / 22,4 (oficial) |
+| 6.4 | % de pessoas negras e distância euclidiana à estação de trem/metrô mais próxima | `01/08_cria_base_covariaveis_zona.ipynb` | **feito** — município 43,51% negros, bate com as zonas; 198 paradas de trilho |
+| 6.5 | Partidas e lugares por zona (linhas que cruzam a zona) | notebook principal, Seção 4 | **feito** — match de linhas 100% (o 73,2% era artefato); soma entre zonas = 9,8× o total da cidade |
+| 6.6 | Gráficos XY do sinal contra cada variável e mapas das variáveis | `04_correlatos/correlatos_sinal_zona.ipynb` | **feito** — saídas em `outputs/04/` |
+| 6.7 | Distância de rede (R5) do centroide da zona à estação mais próxima | `01/09_cria_base_dist_rede_estacao.ipynb` | **feito** — r5py 1.1.7; circuidade mediana 1,31 |
+
+Medido: das 355 zonas com demanda, 339 são de São Paulo; as 16 de municípios vizinhos somam 0,42%
+do volume. O p05 do dia médio tira 17 das 339 zonas (0,29% do volume) — o corte anterior tirava 2.
+
+**O que os gráficos mostram** (MQO simples, 322 zonas, sem ponderar por população; a distância em linha
+reta saiu da análise): por dobra das partidas por domingo o sinal cai 3,1 p.p. (IC95 −4,7 a −1,5), dos
+lugares 2,0 (−3,5 a −0,4) e a cada +1 km de distância pela rede à estação 1,0 (−1,7 a −0,3); renda
+(−1,1 por dobra, IC inclui zero) e % de pessoas negras (+0,3 por +10 p.p.) não se distinguem de zero.
+O R² não passa de 3,9%. Renda e % de negros são quase a mesma variável (r = −0,91). São associações
+entre zonas, não efeito. **As zonas não são independentes** (Moran's I do sinal 0,48, p = 0,001; dos
+resíduos 0,46–0,49), então os intervalos estão otimistas.
+
+**Pontas soltas deste bloco:**
+
+- Seis linhas grandes migraram de lote em 2024 (`D10` → `AR6`/`E05`/`E06`); o grupo delas é o dominante
+  em volume, e `mudou_grupo` as marca. Se o recorte por grupo virar resultado publicado, decidir se
+  essas linhas entram pelo grupo de 2024 em vez do dominante.
+- O sinal por grupo pela bilhetagem fica 3–7 p.p. abaixo do oficial em todos os grupos (a mesma
+  subestimação do total da cidade); vale o mesmo cuidado de citar níveis pelo oficial.
+- **Inferência espacial.** Falta um modelo de erro ou defasagem espacial (`spreg`) e, talvez, ponderar pela
+  população da zona; os intervalos do MQO simples assumem independência que não existe.
+- Possíveis variáveis a mais no eixo x, se a leitura pedir: partidas por morador (tira o efeito do
+  tamanho da zona) e variação 2023→2024 da oferta (o sinal é uma variação).
+
+### 7. ~~Republicar o site com o novo universo de zonas~~ — feito em 11/10/2026
+
+`docs/` regenerado (figuras, mapas, `tabelas.js`) e páginas revisadas: texto do território, subseção de grupos de lote,
+nova seção 5 de correlatos, metodologia e `mapas.html`. Falta commitar e publicar.
 
 ## Riscos permanentes a sinalizar em qualquer publicação
 

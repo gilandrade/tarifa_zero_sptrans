@@ -82,7 +82,7 @@
 
 <div class="fonte">
   <p><strong>Zonas de embarque</strong> — Pesquisa Origem-Destino 2023, Metrô/SP.</p>
-  <p>527 zonas, usadas para o mapeamento territorial; 355 têm demanda na bilhetagem.</p>
+  <p>527 zonas na pesquisa; a análise territorial usa só as 343 do município de São Paulo, das quais 339 têm demanda na bilhetagem. As 16 zonas de municípios vizinhos com demanda somam 0,4% do volume e ficam de fora.</p>
 </div>
 
 <div class="fonte">
@@ -132,19 +132,19 @@
     setores, ponderada pelos moradores de cada setor no Universo do Censo.
   </li>
   <li>
-    <strong>Quintis por número de zonas.</strong> As 355 zonas com demanda são ordenadas pela renda
-    e divididas em cinco grupos de 71. Os grupos são iguais em zonas, não em população: o Q1 tem
-    37% dos moradores e o Q5, 8%.
+    <strong>Quintis por número de zonas.</strong> As 339 zonas de São Paulo com demanda são ordenadas pela renda
+    e divididas em cinco grupos de 67 ou 68. Os grupos são iguais em zonas, não em população: o Q1 tem
+    37% dos moradores e o Q5, 9%.
   </li>
 </ol>
 
 <p>
   <strong>Quanto se perde por a amostra estar em áreas de ponderação.</strong> As duas malhas têm
   granularidade parecida — 332 APs e 343 zonas OD no município de São Paulo — mas não coincidem: a
-  zona mediana tem 94% dos moradores em uma única AP, e um quarto das zonas tem menos de 62%. Para
+  zona mediana tem 95% dos moradores em uma única AP, e um quarto das zonas tem menos de 67%. Para
   medir o efeito, a mesma operação foi feita com uma variável disponível por setor, o rendimento do
   responsável pelo domicílio no Universo: agregada direto do setor para a zona ou passando pela AP,
-  ela coloca <strong>83,9% das zonas no mesmo quintil</strong>, 14,6% no quintil vizinho e 1,4% a
+  ela coloca <strong>82,3% das zonas no mesmo quintil</strong>, 15,9% no quintil vizinho e 1,8% a
   dois ou mais de distância (correlação de postos de 0,96).
 </p>
 
@@ -317,6 +317,30 @@
 </p>
 
 <!-- ================= RISCOS ================= -->
+<h2 id="correlatos">Correlatos por zona e grupos de lote</h2>
+
+<h3 id="grupos">Grupos de lote das linhas</h3>
+<p>
+  Cada linha recebe o grupo de lote (Estrutural, Articulação Regional ou Distribuição Local) que concentra a maior parte do seu volume
+  de passageiros em 2023–2024, lido da própria série oficial de passageiros transportados, que traz grupo, lote e empresa por linha e
+  dia. Só 0,18% do volume fica fora do grupo dominante da linha. Seis linhas grandes (lote D10 em 2023, AR6/E05/E06 em quase todo 2024)
+  mudaram de grupo e estão marcadas. Conferido contra a planilha diária de 02/09/2026: 99,5% das linhas em comum estão no mesmo grupo.
+</p>
+
+<h3 id="correlatos-oferta">Oferta, % de negros e distância por zona</h3>
+<ul>
+  <li><strong>Oferta por zona.</strong> Partidas e lugares de domingo (2023) das linhas cujo traçado cruza a zona, com ao menos 100 m de trecho dentro dela.
+      Uma partida conta em todas as zonas que a linha atravessa, de modo que a soma entre zonas é cerca de 10 vezes o total da cidade: mede o serviço
+      disponível na zona, não uma fatia da oferta. A programação é de dia típico; usa-se a média dos quatro meses, nunca a soma.</li>
+  <li><strong>% de pessoas negras.</strong> Pretas mais pardas sobre o total de moradores, no Universo do Censo 2022, somando os setores de cada zona.
+      Três zonas sem moradores ficam sem o valor.</li>
+  <li><strong>Distância à estação.</strong> Caminhada pela rede viária (OpenStreetMap, motor R5 via r5py) do centroide da zona à estação de trem ou
+      metrô mais próxima, a 3,6 km/h. As estações vêm do GTFS e nenhuma foi aberta de 2023 em diante. O centroide é colado na rua mais próxima antes
+      do cálculo e representa a zona inteira.</li>
+  <li><strong>Regressão.</strong> Mínimos quadrados simples por variável, erro-padrão robusto HC3. <strong>Moran's I</strong> com vizinhança por
+      contiguidade tipo rainha e 999 permutações. As zonas são tratadas sem ponderar por população.</li>
+</ul>
+
 <h2 id="riscos">Limitações permanentes</h2>
 
 <ol>
@@ -347,14 +371,14 @@
   </li>
   <li>
     <strong>Esparsidade em cortes simultâneos</strong> de zona × gênero × idade × tipo de dia — daí a
-    supressão de zonas com base pequena nos mapas (limiares de 200 a 500 embarques conforme o corte)
+    supressão de zonas com base pequena nos mapas (saem as zonas abaixo do percentil 5 do embarque médio diário de 2023; nos cortes de gênero e idade há ainda um piso de 200 embarques)
     e a prioridade a agregados por quintil de renda em vez de por zona individual nesses cruzamentos.
   </li>
   <li>
     <strong>Nem todo registro tem os campos de recorte preenchidos</strong> — cada um é excluído do
     recorte correspondente, nunca contado como uma categoria à parte:
     <code>linha_blt</code> nulo em ~26-28% dos registros (não é embarque de ônibus municipal —
-    excluído de toda contagem de demanda deste site, incluindo os mapas); <code>genero</code> nulo
+    excluído de toda contagem de demanda deste site, incluindo os mapas; a leitura mais consistente é que são validações de Bilhete Único no Metrô e na CPTM — 99,9% desse volume está em zonas que contêm estação e, no domingo, ele não reagiu à Tarifa Zero (+0,6% de 2023 a 2024, contra +28,0% do ônibus) —, mas é inferência: a SPTrans não confirmou o significado do campo); <code>genero</code> nulo
     em ~4-5% (cartão não identificado/não cadastrado — excluído dos recortes por gênero);
     <code>faixa_etaria</code> nulo em ~3-4% (excluído dos recortes por idade).
   </li>
