@@ -484,8 +484,8 @@
 <div class="caixa alerta">
   <h3>Os intervalos são otimistas: as zonas vizinhas se parecem</h3>
   <p>
-    O Moran's I do sinal, com vizinhança por contiguidade, é <strong>0,48</strong> (p = 0,001), e o do resíduo de cada regressão fica
-    entre 0,46 e 0,49: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
+    O Moran's I do sinal, tomando como vizinhas as zonas a até 1 km uma da outra, é <strong>0,45</strong> (p = 0,001), e o do resíduo de cada regressão fica
+    entre 0,43 e 0,46: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
     independentes e, por isso, são mais estreitos do que deveriam. Inferência de verdade pede um modelo espacial; estes números
     são descritivos.
   </p>
@@ -502,6 +502,47 @@
     variável, está no <a href="mapa_variaveis_zona.html">mapa de variáveis por zona</a>.
   </figcaption>
 </figure>
+
+<h3 id="lisa">Onde o sinal se aglomera</h3>
+
+<p>
+  O Moran's I global diz que zonas vizinhas se parecem, mas não onde. O Moran local (LISA) dá um valor para cada
+  zona e a classifica pelo par (sinal da zona, média do sinal das vizinhas), com "alto" e "baixo" medidos contra a
+  média das zonas (29,8 p.p.), não contra zero: o sinal é positivo em todas as 322 zonas, então "baixo" quer dizer
+  que o domingo cresceu menos em relação ao dia útil, não que caiu.
+</p>
+
+<figure>
+  <img src="img/lisa_sinal_zona.png" alt="À esquerda, diagrama de Moran do sinal por zona; à direita, mapa de São Paulo com as zonas em aglomerados de sinal alto (vermelho) e baixo (azul)">
+  <figcaption>
+    À esquerda, o sinal de cada zona contra a média das vizinhas; a inclinação da reta é o I global. À direita, as zonas
+    com p &lt; 0,05 no teste local. A versão interativa é a última camada do
+    <a href="mapa_variaveis_zona.html">mapa de variáveis por zona</a>.
+  </figcaption>
+</figure>
+
+<p>
+  Das 322 zonas, 141 saem significativas, e formam poucos blocos grandes e contíguos.
+  <strong>60 são alto-alto</strong> (sinal médio de 47,3 p.p.): um bloco de 45 zonas no centro (Sé, República, Brás,
+  Pari, Liberdade, Bela Vista, Bom Retiro) e outro de 13 na zona leste, em torno de São Mateus e Sapopemba.
+  <strong>68 são baixo-baixo</strong> (17,1 p.p.): um bloco de 47 zonas do sudoeste ao sul (Pinheiros, Butantã, Morumbi,
+  Santo Amaro, até Jardim Ângela, Grajaú e Parelheiros) e blocos menores na Lapa e Perdizes, em Tucuruvi e Mandaqui e no
+  Itaim Paulista. Outras 13 zonas destoam das vizinhas (8 baixo-alto, 5 alto-baixo), quase todas dentro ou na borda desses blocos.
+</p>
+
+<div class="caixa alerta">
+  <h3>Como ler o mapa</h3>
+  <p>
+    O corte é p &lt; 0,05 <strong>sem correção para testes múltiplos</strong>: são 322 testes, e cerca de 16 zonas podem
+    estar marcadas por acaso. Vale ler os blocos, não as zonas isoladas. Em 13 das 141 zonas o próprio sinal está a menos
+    de 3,3 p.p. da média, e o rótulo vem das vizinhas.
+  </p>
+  <p>
+    O agrupamento é descritivo. As cinco variáveis acima explicam pouco dele (o Moran's I do resíduo continua em 0,43–0,46), e
+    nos blocos altos a base de domingo de 2023 é pequena (mediana de 2.252 embarques por domingo, contra 4.758 nas zonas sem
+    aglomerado), o que também infla a variação percentual. É onde procurar a variável que falta, não uma explicação.
+  </p>
+</div>
 
 <!-- ================= 6. RESSALVAS ================= -->
 <h2 id="ressalvas">6. Ressalvas</h2>

@@ -337,8 +337,12 @@
   <li><strong>Distância à estação.</strong> Caminhada pela rede viária (OpenStreetMap, motor R5 via r5py) do centroide da zona à estação de trem ou
       metrô mais próxima, a 3,6 km/h. As estações vêm do GTFS e nenhuma foi aberta de 2023 em diante. O centroide é colado na rua mais próxima antes
       do cálculo e representa a zona inteira.</li>
-  <li><strong>Regressão.</strong> Mínimos quadrados simples por variável, erro-padrão robusto HC3. <strong>Moran's I</strong> com vizinhança por
-      contiguidade tipo rainha e 999 permutações. As zonas são tratadas sem ponderar por população.</li>
+  <li><strong>Regressão.</strong> Mínimos quadrados simples por variável, erro-padrão robusto HC3. <strong>Moran's I</strong> com 999 permutações; são
+      vizinhas as zonas a até 1 km uma da outra, medido de borda a borda, o que inclui as que se tocam. As zonas são tratadas sem ponderar por população.</li>
+  <li><strong>Moran local (LISA).</strong> Calculado com a mesma vizinhança e linhas padronizadas, com 9.999 permutações condicionais (o valor da zona fica
+      fixo e as vizinhas são sorteadas entre as outras) e pseudo-p unicaudal na direção observada. O corte é p &lt; 0,05, sem correção para testes múltiplos,
+      por ser uma leitura exploratória antes de um modelo espacial; com a correção de Benjamini-Hochberg a 5% (corte em p ≤ 0,015) restam 98 zonas, nos
+      mesmos blocos e com bordas mais estreitas. "Alto" e "baixo" são relativos à média do sinal entre as zonas, não a zero.</li>
 </ul>
 
 <h2 id="riscos">Limitações permanentes</h2>
