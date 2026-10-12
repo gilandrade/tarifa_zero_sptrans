@@ -343,6 +343,15 @@
       fixo e as vizinhas são sorteadas entre as outras) e pseudo-p unicaudal na direção observada. O corte é p &lt; 0,05, sem correção para testes múltiplos,
       por ser uma leitura exploratória antes de um modelo espacial; com a correção de Benjamini-Hochberg a 5% (corte em p ≤ 0,015) restam 98 zonas, nos
       mesmos blocos e com bordas mais estreitas. "Alto" e "baixo" são relativos à média do sinal entre as zonas, não a zero.</li>
+  <li><strong>Regressão espacial.</strong> Desfecho: variação % do embarque médio de domingo, 2023 → 2024 (médias por dia, em p.p.), por zona. Termos: variação % do
+      dia útil (peso estimado), log2 da base de domingo de 2023, log2 da renda per capita, partidas por domingo em milhares e distância de rede em km. A base de
+      domingo entra porque está no denominador da variação. MQO com testes do multiplicador de Lagrange, erro espacial, defasagem espacial e Durbin espacial,
+      por máxima verossimilhança (<code>spreg</code>), com a mesma vizinhança de 1 km e linhas padronizadas; comparação por AIC e pelo Moran's I do resíduo
+      filtrado. No modelo de defasagem o coeficiente não é o efeito marginal.</li>
+  <li><strong>GWR e MGWR.</strong> Pacote <code>mgwr</code>, núcleo bisquare adaptativo, escala por AICc (uma só no GWR, uma por variável no MGWR), mínimo de 40
+      vizinhas. Desfecho e variáveis padronizados na busca, com os coeficientes convertidos de volta para a unidade original. A significância local usa a correção
+      para testes múltiplos do pacote. Os comparadores são o MQO na mesma escala e um GWR só com intercepto local. É uma leitura exploratória: os coeficientes
+      locais não são independentes entre si.</li>
 </ul>
 
 <h2 id="riscos">Limitações permanentes</h2>

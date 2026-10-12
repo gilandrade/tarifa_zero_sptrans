@@ -384,6 +384,46 @@ registra(Tabela(
     ],
 ))
 
+# regressao_espacial_sinal.ipynb: modelos espaciais globais e MGWR (desfecho: variacao % do domingo)
+registra(Tabela(
+    chave="regressao_espacial_publicada",
+    fonte=DIR_TABELAS_04 / "regressao_espacial_publicada.parquet",
+    rotulo_indice="termo",
+    colunas=[
+        Coluna("unidade", "unidade do coeficiente", 0),
+        Coluna("mqo", "MQO", 2),
+        Coluna("p_mqo", "p", 0),
+        Coluna("sem", "erro espacial", 2, destaque=True),
+        Coluna("p_sem", "p", 0),
+        Coluna("sar", "defasagem espacial", 2),
+        Coluna("p_sar", "p", 0),
+    ],
+))
+
+registra(Tabela(
+    chave="mgwr_comparacao",
+    fonte=DIR_TABELAS_04 / "mgwr_comparacao.parquet",
+    rotulo_indice="modelo",
+    indice_de="modelo",
+    colunas=[
+        Coluna("aicc", "AICc", 1, destaque=True),
+        Coluna("r2", "R²", 2),
+        Coluna("enp", "parâmetros efetivos", 1),
+        Coluna("moran_residuo", "Moran's I do resíduo", 2),
+    ],
+))
+
+registra(Tabela(
+    chave="mgwr_escalas",
+    fonte=DIR_TABELAS_04 / "mgwr_escalas.parquet",
+    rotulo_indice="termo",
+    indice_de="termo",
+    colunas=[
+        Coluna("bw", "vizinhas usadas (de 322)", 0),
+        Coluna("escala_pct", "% das zonas", 0, destaque=True),
+    ],
+))
+
 
 # ==== main =============================================================================
 

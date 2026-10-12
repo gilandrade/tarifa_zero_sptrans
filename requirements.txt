@@ -72,6 +72,7 @@ libpysal==4.15.0
 MarkupSafe==3.0.3
 matplotlib==3.11.1
 matplotlib-inline==0.2.2
+mgwr==2.2.1
 mistune==3.3.4
 narwhals==2.26.0
 nbclient==0.11.0
@@ -120,6 +121,8 @@ shapely==2.1.2
 simplification==1.0.0
 six==1.17.0
 soupsieve==2.9.1
+spglm==1.1.0
+spreg==1.9.1
 stack-data==0.6.3
 terminado==0.18.1
 threadpoolctl==3.7.0

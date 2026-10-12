@@ -173,15 +173,46 @@ resíduos 0,46–0,49), então os intervalos estão otimistas.
   essas linhas entram pelo grupo de 2024 em vez do dominante.
 - O sinal por grupo pela bilhetagem fica 3–7 p.p. abaixo do oficial em todos os grupos (a mesma
   subestimação do total da cidade); vale o mesmo cuidado de citar níveis pelo oficial.
-- **Inferência espacial.** Falta um modelo de erro ou defasagem espacial (`spreg`) e, talvez, ponderar pela
-  população da zona; os intervalos do MQO simples assumem independência que não existe.
-- Possíveis variáveis a mais no eixo x, se a leitura pedir: partidas por morador (tira o efeito do
-  tamanho da zona) e variação 2023→2024 da oferta (o sinal é uma variação).
+- ~~**Inferência espacial.**~~ Feita em `04_correlatos/regressao_espacial_sinal.ipynb` (erro, defasagem, Durbin,
+  GWR/MGWR; ver item 8). Ponderar pela população da zona continua em aberto.
+- Variáveis a mais no eixo x: ver o item 8 (o item "partidas por morador" saiu: o problema era o tamanho da base de
+  domingo, que agora entra como controle).
 
 ### 7. ~~Republicar o site com o novo universo de zonas~~ — feito em 11/10/2026
 
 `docs/` regenerado (figuras, mapas, `tabelas.js`) e páginas revisadas: texto do território, subseção de grupos de lote,
 nova seção 5 de correlatos, metodologia e `mapas.html`. Falta commitar e publicar.
+
+Acrescentado em 12/10/2026 (ainda sem commit): na seção 5 de `index.html`, as subseções "Regressão espacial" e "Coeficientes
+que variam no território (MGWR)", com `img/mgwr_coef_locais.png` e três tabelas novas em `tabelas.js`
+(`regressao_espacial_publicada`, `mgwr_escalas`, `mgwr_comparacao`); um item na metodologia; dois parágrafos antigos da seção 5
+apontam para a regressão espacial, porque a oferta deixa de ser significativa quando a base de domingo entra no modelo.
+
+### 8. Regressão espacial e novas variáveis explicativas
+
+**Feito (11–12/10/2026):** `04_correlatos/regressao_espacial_sinal.ipynb`, uma só especificação ("D"): desfecho = variação %
+do embarque médio de domingo 2023 → 2024; controles = variação % do dia útil (peso livre, deu 1,06), log2 da base de domingo
+de 2023, log2 da renda, partidas em milhares, distância de rede em km. Modelos globais (MQO + LM, SEM, SAR, SDM) e GWR/MGWR.
+Resultado resumido: base e renda significativas; oferta e distância não; os testes LM e o AIC favorecem a defasagem; o MGWR dá
+escala global à base e às partidas e escala local (~20% das zonas) à renda e à distância. Números completos no `CLAUDE.md`.
+
+**A fazer: testar mais variáveis**, escolhidas pelo que a literatura usa em modelos de demanda de transporte coletivo por área
+(meta-análises de ambiente construído e uso de transporte, estudos de Toronto, Waterloo e Xangai, trabalhos brasileiros sobre zonas
+de tráfego) e pelo que já temos em casa. Todas em nível **pré-política (2023)**, para não contaminar o desfecho.
+
+| # | Variável | Fonte | Como construir | Cuidados |
+|---|---|---|---|---|
+| 8.1 | Automóveis (e motos) por domicílio; % de domicílios sem automóvel | O-D 2023: `Banco2023_divulgacao_310125.csv` (`qt_auto`, `qt_moto`, `zona`, `Fe_dom`) | Média ponderada por `Fe_dom`, por zona de residência | Anda com a renda; parcialmente endógena à oferta de transporte; usar motos à parte |
+| 8.2 | % das viagens feitas de ônibus (uso prévio) | O-D 2023 (`modoprin`, `zona_o`, `fe_via`) | Parcela ponderada por `fe_via`, por zona de origem | Base teórica: onde o uso já era alto, o efeito da tarifa zero é menor (Cats et al. 2017, Hess 2017, citados por Perez e Pereira 2025); a pesquisa é de dia útil |
+| 8.3 | Parcela de embarques **pagantes** em 2023 (comum, VT, dinheiro, contra idoso e PCD) | Bilhetagem de domingos 2023 (`classificacao`) | Parcela, não soma; só embarques com `linha_blt` | Ideia própria, não vem da busca de literatura: mede quanto da demanda tinha algo a ganhar com a gratuidade |
+| 8.4 | Densidade populacional e população absoluta | Censo 2022 (`pop` já está na base) ÷ área da zona | Entrar as duas juntas | Em zonas grandes a densidade esconde o total |
+| 8.5 | Destinos de domingo e uso misto (comércio, lazer/parques, equipamentos religiosos, entropia), densidade de interseções | OSM (`Dados/r5/sao_paulo/sao_paulo.osm.pbf`) | Contagens por zona via `pyogrio`; entropia de uso | Liga com o texto da Outras Palavras sobre ambiente de caminhada; efeitos em fim de semana são não lineares |
+| 8.6 | Acessibilidade a oportunidades por transporte público | r5py + GTFS (já montados no `09`) com destinos do OSM | Matriz zona × destino por tempo | Custo alto; só se 8.1–8.5 não bastarem |
+
+Ordem sugerida: **8.1, 8.2, 8.4** (dados já em casa, nenhum download), depois **8.3**, **8.5** e, só se preciso, **8.6**.
+Procedimento: uma de cada vez na especificação D, comparando o AIC do erro e da defasagem; checar VIF e o Moran do resíduo
+filtrado; manter poucas variáveis (a meta-análise mostra que o desenho do modelo explica mais de 40% da variação dos achados).
+Atualizar o site só se uma variável nova mudar a conclusão.
 
 ## Riscos permanentes a sinalizar em qualquer publicação
 

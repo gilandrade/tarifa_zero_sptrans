@@ -478,7 +478,9 @@
   Cada dobra das partidas de domingo se associa a um sinal 3,1 p.p. menor (IC 95% −4,7 a −1,5); cada dobra dos
   lugares, 2,0 p.p. menor; cada quilômetro a mais até a estação, 1,0 p.p. menor. Renda (−1,1 p.p. por dobra, intervalo
   que inclui zero) e % de pessoas negras (+0,3 p.p. por +10 p.p.) não se distinguem de zero. O R² não passa de 3,9%: o
-  sinal varia muito mais entre zonas do que qualquer uma dessas variáveis explica.
+  sinal varia muito mais entre zonas do que qualquer uma dessas variáveis explica. Esse quadro muda quando o modelo trata a dependência
+  espacial e controla pelo tamanho da base de domingo: na <a href="#regressao-espacial">regressão espacial</a>, a oferta e a distância
+  deixam de se distinguir de zero.
 </p>
 
 <div class="caixa alerta">
@@ -486,8 +488,8 @@
   <p>
     O Moran's I do sinal, tomando como vizinhas as zonas a até 1 km uma da outra, é <strong>0,45</strong> (p = 0,001), e o do resíduo de cada regressão fica
     entre 0,43 e 0,46: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
-    independentes e, por isso, são mais estreitos do que deveriam. Inferência de verdade pede um modelo espacial; estes números
-    são descritivos.
+    independentes e, por isso, são mais estreitos do que deveriam. Inferência de verdade pede um modelo espacial, ajustado na
+    <a href="#regressao-espacial">regressão espacial</a> abaixo; estes números são descritivos.
   </p>
   <p>
     São <strong>associações entre zonas, não efeitos</strong>. Renda e % de pessoas negras são quase a mesma variável nestas zonas
@@ -541,6 +543,90 @@
     O agrupamento é descritivo. As cinco variáveis acima explicam pouco dele (o Moran's I do resíduo continua em 0,43–0,46), e
     nos blocos altos a base de domingo de 2023 é pequena (mediana de 2.252 embarques por domingo, contra 4.758 nas zonas sem
     aglomerado), o que também infla a variação percentual. É onde procurar a variável que falta, não uma explicação.
+  </p>
+</div>
+
+<h3 id="regressao-espacial">Regressão espacial: o que sobrevive à dependência entre zonas</h3>
+
+<p>
+  As regressões simples acima deixaram o Moran's I do resíduo em 0,43–0,46. Para tratar essa dependência, a análise seguinte
+  usa um único modelo, em que o desfecho é a <strong>variação % do embarque médio de domingo, 2023 → 2024</strong> (e não mais o
+  sinal). O crescimento do dia útil entra como controle, com <strong>peso estimado</strong> em vez de ser subtraído com peso 1,
+  e a <strong>base de domingo de 2023</strong> também entra: ela está no denominador da variação, então uma zona de base pequena
+  tem variação grande por construção, e sem esse controle o tamanho da zona se mistura com qualquer variável que ande junto com ele,
+  como a oferta. Base e renda entram em log2 (coeficiente por dobra); as partidas, em milhares.
+</p>
+
+<div class="quadro-tabela" data-tabela="regressao_espacial_publicada"></div>
+<p class="legenda-tabela">
+  Coeficientes em p.p. da variação % do domingo, 322 zonas, vizinhas a até 1 km. No modelo de defasagem o coeficiente de uma variável
+  não é o efeito marginal (há um multiplicador de cerca de 2,7), então as inclinações se leem no MQO e no modelo de erro. Gerado por
+  <code>04_correlatos/regressao_espacial_sinal.ipynb</code>.
+</p>
+
+<p>
+  <strong>Dois resultados se sustentam nos modelos espaciais.</strong> Cada dobra da base de domingo de 2023 se associa a uma
+  variação do domingo 3,3 p.p. menor, e cada dobra da renda per capita, 5,2 p.p. menor (p &lt; 0,001, no modelo de erro). O peso
+  estimado do dia útil é 1,06, bem perto de 1: subtrair o dia útil com peso 1, como faz o sinal, é uma boa aproximação.
+  <strong>A oferta e a distância à estação não se distinguem de zero.</strong> Quando a base de domingo e a dependência espacial
+  entram no modelo, as partidas deixam de se associar a um crescimento menor, e a distância cai de −1,3 p.p. por km no MQO
+  (p = 0,002) para −0,7 (p = 0,15) no modelo de erro.
+</p>
+
+<p>
+  Os testes do multiplicador de Lagrange apontam a defasagem espacial (robusto de defasagem 38,1, contra 6,1 do de erro), e o AIC concorda:
+  2.365 na defasagem, 2.370 no erro e 2.473 no MQO. O resíduo filtrado dos modelos espaciais tem Moran's I perto de zero. Os modelos de
+  erro e de defasagem concordam em quais termos são significativos.
+</p>
+
+<h3 id="mgwr">Coeficientes que variam no território (MGWR)</h3>
+
+<p>
+  O GWR deixa o coeficiente variar de zona para zona, estimado com as vizinhas mais próximas. O MGWR vai além: escolhe uma
+  <strong>escala espacial para cada variável</strong>. Uma variável com efeito parecido na cidade toda ganha uma escala quase global;
+  uma cuja associação muda de região, uma escala local.
+</p>
+
+<figure>
+  <img src="img/mgwr_coef_locais.png" alt="Mapas de São Paulo com os coeficientes locais do MGWR para a tendência espacial, o controle do dia útil, a renda e a distância à estação; zonas sem coeficiente significativo em cinza">
+  <figcaption>
+    Coeficiente local de cada termo (p.p. da variação % do domingo). Em cinza, zonas sem coeficiente local significativo; hachuradas,
+    zonas fora da análise. Os efeitos da base de domingo e das partidas têm escala global e não ganham mapa.
+  </figcaption>
+</figure>
+
+<div class="quadro-tabela" data-tabela="mgwr_escalas"></div>
+<p class="legenda-tabela">
+  Escala espacial de cada termo no MGWR, em vizinhas e em % das zonas. Perto de 100% quer dizer efeito global.
+</p>
+
+<div class="quadro-tabela" data-tabela="mgwr_comparacao"></div>
+<p class="legenda-tabela">
+  Ajuste de cada modelo sobre o desfecho padronizado (AICc menor é melhor). O GWR só com intercepto local é uma superfície de tendência
+  espacial sem nenhuma variável explicativa.
+</p>
+
+<p>
+  <strong>A renda é o que varia no território.</strong> O coeficiente local é negativo e significativo em 76% das zonas, com mediana de
+  −7,4 p.p. por dobra, mais forte no centro e no centro-oeste e sem significância no leste e no extremo sul. A
+  <strong>distância à estação</strong> só pesa no centro (significativa em 28% das zonas, com mediana de −7,5 p.p. por km entre elas) e é próxima de zero
+  fora dele. A base de domingo, com −3,3 p.p. por dobra, e o peso do dia útil, com mediana 1,00, são parecidos em toda a cidade, e as partidas não
+  têm efeito local significativo em nenhuma zona. O MGWR ajusta bem (AICc 608, contra 736 do MQO na mesma escala), e as variáveis
+  contam: a superfície de tendência sozinha fica em 757, pior que o MQO com as variáveis.
+</p>
+
+<div class="caixa alerta">
+  <h3>Como ler esta seção</h3>
+  <p>
+    São <strong>associações entre zonas, não efeitos</strong>, e em variação <strong>relativa</strong>. Nas zonas de maior base de domingo o
+    aumento em passageiros foi maior, mesmo com variação % menor (mediana de +560, +1.438 e +3.152 embarques por domingo nos terços de base
+    menor, médio e maior, contra variações de 37,0%, 32,8% e 25,9%). O efeito da base é em parte aritmético, porque bases pequenas oscilam
+    mais, e pode também refletir um teto de crescimento; o modelo não separa os dois.
+  </p>
+  <p>
+    O MGWR é exploratório: os coeficientes locais não são independentes entre si, então vale ler regiões, não zonas isoladas. A
+    significância local usa a correção para testes múltiplos do pacote, e a escala mínima é de 40 vizinhas. A inferência vem dos modelos
+    espaciais globais.
   </p>
 </div>
 
