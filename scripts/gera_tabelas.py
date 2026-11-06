@@ -276,8 +276,24 @@ registra(Tabela(
     rotulo_indice="quintil de renda",
     colunas=[
         Coluna("count", "nº de zonas", 0),
-        Coluna("mediana", "mediana (p.p.)", 1, destaque=True),
-        Coluna("media", "média (p.p.)", 1),
+        Coluna("mediana", "sinal mediano (p.p.)", 1, destaque=True),
+        Coluna("razao_dom_util_2023", "domingo / dia útil em 2023 (mediana)", 2),
+        Coluna("ganho_abs_mediano", "embarques extras por domingo, zona mediana", 0, destaque=True),
+        Coluna("ganho_abs_total", "embarques extras por domingo, soma do quintil", 0),
+        Coluna("ganho_por_mil_moradores", "embarques extras por mil moradores", 1, destaque=True),
+    ],
+))
+
+registra(Tabela(
+    chave="cobertura_identificacao",
+    fonte=DIR_TABELAS_03 / "cobertura_identificacao.parquet",
+    rotulo_indice="tipo de dia",
+    colunas=[
+        Coluna("com_genero_2023_pct", "com gênero, 2023 (%)", 1),
+        Coluna("com_genero_2024_pct", "com gênero, 2024 (%)", 1),
+        Coluna("com_idade_2023_pct", "com idade, 2023 (%)", 1),
+        Coluna("com_idade_2024_pct", "com idade, 2024 (%)", 1),
+        Coluna("crescimento_sem_com_genero_pct", "parte do crescimento sem gênero (%)", 0, destaque=True),
     ],
 ))
 
@@ -391,12 +407,14 @@ registra(Tabela(
     rotulo_indice="termo",
     colunas=[
         Coluna("unidade", "unidade do coeficiente", 0),
+        Coluna("sar_direto", "defasagem: efeito direto", 2, destaque=True),
+        Coluna("sar_indireto", "defasagem: indireto", 2),
+        Coluna("sar_total", "defasagem: total", 2),
+        Coluna("p_sar", "p", 0),
+        Coluna("sem", "erro espacial", 2),
+        Coluna("p_sem", "p", 0),
         Coluna("mqo", "MQO", 2),
         Coluna("p_mqo", "p", 0),
-        Coluna("sem", "erro espacial", 2, destaque=True),
-        Coluna("p_sem", "p", 0),
-        Coluna("sar", "defasagem espacial", 2),
-        Coluna("p_sar", "p", 0),
     ],
 ))
 

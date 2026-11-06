@@ -158,7 +158,7 @@
   e 2024 é o primeiro ano <em>completo</em> de gratuidade, não o primeiro ano de gratuidade.
 </p>
 
-<h3>Critério de calendário da análise agregada</h3>
+<h3 id="calendario">Critério de calendário</h3>
 
 <p>
   A seção agregada de oferta × demanda
@@ -170,35 +170,60 @@
   dados até dezembro de 2025.
 </p>
 
-<p>Quatro correções de calendário, todas por critério explícito e as três primeiras com o efeito
-  medido na tabela de sensibilidade:</p>
+<p>
+  O calendário é o mesmo nas duas comparações — a agregada, com a série oficial em 12 meses, e a por zona, gênero e
+  idade, com a bilhetagem em quatro meses — e mora num módulo único do código (<code>src/calendario.py</code>), para
+  que as duas excluam as mesmas datas. Todas as exclusões são por critério explícito e impressas pelos notebooks.
+</p>
 
 <ul>
   <li>
-    <strong>Feriados com tarifa zero somam-se ao domingo (tratamento).</strong> Natal, Ano Novo e
-    Aniversário de São Paulo também têm gratuidade quando caem fora do domingo. A partir do início
-    da política, essas três datas deixam de ser tratadas como feriado comum (que seria excluído) e
-    passam a contar como uma observação de domingo — exceto quando isso contaminaria a linha de
-    base pré-política (o Natal de 2023, que cai na janela de transição de dezembro/2023, continua
-    fora por esse motivo). Ficam também fora da regra de outlier abaixo, já que um feriado tem
-    volume naturalmente mais baixo que um domingo comum, e isso não é um problema de dado.
+    <strong>Feriados com tarifa zero somam-se ao domingo (tratamento).</strong> Ano Novo e Aniversário de São Paulo
+    também têm gratuidade quando caem fora do domingo. A partir do início da política, essas datas deixam de ser
+    tratadas como feriado comum (que seria excluído) e passam a contar como uma observação de domingo. Ficam também
+    fora da regra de outlier abaixo, já que um feriado tem volume naturalmente mais baixo que um domingo comum, e isso
+    não é um problema de dado. O Natal também é tarifa zero, mas cai na janela de fim de ano (último item).
   </li>
   <li>
     <strong>Feriados comuns.</strong> <code>tipo_dia</code> é derivado do dia da semana, então um
     feriado de terça entraria no controle como dia útil comum. São cerca de 15 datas por ano
     (nacionais, estaduais de SP e municipais, incluindo 09/07, 25/01 e 20/11), excluídas por lista
     explícita mesmo quando caem no fim de semana, para o critério ficar simétrico entre tipos de
-    dia.
+    dia. Na janela de quatro meses da bilhetagem, o dia útil de 2023 tinha 6 feriados e pontes, contra 2 em
+    2024; mantidos, deprimiam o controle de 2023 e tiravam cerca de 2 p.p. do sinal.
   </li>
   <li>
-    <strong>Vésperas e recesso</strong> — 24/12, 31/12 e 02/01 — também por lista.
+    <strong>Pontes</strong> — a sexta depois de um feriado na quinta, a segunda antes de um feriado na terça —, a
+    cerca de 75–80% do volume de um dia útil comum, que a regra de outlier não pega. Levantadas na série oficial.
+  </li>
+  <li>
+    <strong>Dias atípicos</strong> — 24/12, 31/12, 02/01 e quarta-feira de cinzas — também por lista.
+  </li>
+  <li>
+    <strong>Domingos de eleição</strong> (06/10 e 27/10/2024), com cerca de 1,3 vez o volume de um domingo comum.
+    Só 2024 tem eleição no período, então mantê-los infla o domingo de 2024. A entrega da bilhetagem já não os
+    trazia; na série oficial em 12 meses saem por lista.
   </li>
   <li>
     <strong>Outliers residuais</strong>: qualquer dia com volume abaixo de <strong>60% da mediana do
     seu próprio <code>tipo_dia</code>/ano</strong>, calculada já sem feriados, atípicos e
     feriados-tarifa-zero. A regra pega três domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na
-    série oficial com cerca de um terço do volume habitual. Eles rebaixam a linha de base de 2023 e,
-    mantidos, <em>inflam</em> o crescimento medido do domingo.
+    série oficial com cerca de um terço do volume habitual — e 01/10 está também na bilhetagem, com o mesmo terço.
+    As três datas coincidem com a eleição unificada dos conselhos tutelares e com os dois domingos do ENEM; uma
+    hipótese, não verificada, é catraca liberada sem registro. Eles rebaixam a linha de base de 2023 e,
+    mantidos, <em>inflam</em> o crescimento medido do domingo: só 01/10/2023 respondia por cerca de 4 p.p. do
+    crescimento do domingo na janela de quatro meses.
+  </li>
+  <li>
+    <strong>Entrega truncada da bilhetagem.</strong> Na comparação por zona, sai também todo dia em que a bilhetagem
+    fica abaixo de 90% da série oficial: 13/04/2024 (sábado, 0,39) e 14/04/2024 (domingo, 0,76). Nos demais dias
+    entregues a razão fica entre 0,98 e 1,06.
+  </li>
+  <li>
+    <strong>A janela de 17 a 31 de dezembro sai em todos os anos.</strong> Em 2023 esses dias já são gratuitos e não
+    podem entrar na linha de base. Cortá-los só em 2023 deixava dezembro de 2023 com a primeira quinzena e dezembro
+    de 2024 e 2025 inteiros, com as compras de Natal e o recesso; com a mesma janela em todos os anos, dezembro fica
+    comparável.
   </li>
 </ul>
 
@@ -259,7 +284,7 @@
 <div class="quadro-tabela" data-tabela="resumo_fontes"></div>
 
 <p>
-  <strong>O intervalo 23,9–28,9 p.p. é apenas o mínimo e o máximo dessas duas linhas.</strong> Não
+  <strong>O intervalo 24,1–27,1 p.p. é apenas o mínimo e o máximo dessas duas linhas.</strong> Não
   há amostragem em nenhuma delas: cada uma soma <em>todos</em> os embarques do período que a fonte
   cobre, não uma amostra de um universo maior. Erro-padrão, desvio-padrão entre observações e
   intervalo de confiança pressupõem uma distribuição amostral, que não existe aqui. A amplitude
@@ -341,13 +366,19 @@
       vizinhas as zonas a até 1 km uma da outra, medido de borda a borda, o que inclui as que se tocam. As zonas são tratadas sem ponderar por população.</li>
   <li><strong>Moran local (LISA).</strong> Calculado com a mesma vizinhança e linhas padronizadas, com 9.999 permutações condicionais (o valor da zona fica
       fixo e as vizinhas são sorteadas entre as outras) e pseudo-p unicaudal na direção observada. O corte é p &lt; 0,05, sem correção para testes múltiplos,
-      por ser uma leitura exploratória antes de um modelo espacial; com a correção de Benjamini-Hochberg a 5% (corte em p ≤ 0,015) restam 98 zonas, nos
-      mesmos blocos e com bordas mais estreitas. "Alto" e "baixo" são relativos à média do sinal entre as zonas, não a zero.</li>
+      por ser uma leitura exploratória antes de um modelo espacial; com a correção de Benjamini-Hochberg a 5% (corte em p ≤ 0,015) restam 95 zonas, nos
+      mesmos blocos e com bordas mais estreitas. "Alto" e "baixo" são relativos à média do sinal entre as zonas, não a zero. O mesmo LISA roda também
+      sobre o resíduo do MQO da variação % do domingo contra a variação % do dia útil e o log2 da base de domingo de 2023, para separar o que é
+      efeito do tamanho da zona.</li>
   <li><strong>Regressão espacial.</strong> Desfecho: variação % do embarque médio de domingo, 2023 → 2024 (médias por dia, em p.p.), por zona. Termos: variação % do
       dia útil (peso estimado), log2 da base de domingo de 2023, log2 da renda per capita, partidas por domingo em milhares e distância de rede em km. A base de
       domingo entra porque está no denominador da variação. MQO com testes do multiplicador de Lagrange, erro espacial, defasagem espacial e Durbin espacial,
       por máxima verossimilhança (<code>spreg</code>), com a mesma vizinhança de 1 km e linhas padronizadas; comparação por AIC e pelo Moran's I do resíduo
-      filtrado. No modelo de defasagem o coeficiente não é o efeito marginal.</li>
+      filtrado. A leitura principal é o modelo de defasagem, preferido pelos testes robustos e pelo AIC; como nele o coeficiente não é o efeito
+      marginal, publicam-se os impactos direto, indireto e total (LeSage e Pace, pela matriz (I − ρW)<sup>−1</sup>). Robustez: cinco outras vizinhanças
+      (contiguidade, 2 km, 6 e 10 mais próximas, e uma por linhas de ônibus compartilhadas), estimação por GMM com erro-padrão robusto à
+      heterocedasticidade, teste de regressão à média (base medida com metade dos domingos de 2023 e variação com a outra metade) e um modelo com
+      lugares ofertados por embarque no domingo de 2023.</li>
   <li><strong>GWR e MGWR.</strong> Pacote <code>mgwr</code>, núcleo bisquare adaptativo, escala por AICc (uma só no GWR, uma por variável no MGWR), mínimo de 40
       vizinhas. Desfecho e variáveis padronizados na busca, com os coeficientes convertidos de volta para a unidade original. A significância local usa a correção
       para testes múltiplos do pacote. Os comparadores são o MQO na mesma escala e um GWR só com intercepto local. É uma leitura exploratória: os coeficientes
@@ -379,8 +410,9 @@
   </li>
   <li>
     <strong>A bilhetagem subestima o crescimento do domingo</strong> em relação à série oficial: a
-    razão entre bilhetagem e oficial escorrega de cerca de 1,05 em 2023 para cerca de 0,99 em 2024.
-    É por isso que o número de manchete vem da série oficial, não da bilhetagem.
+    razão entre bilhetagem e oficial escorrega de cerca de 1,05 em 2023 para cerca de 1,00 em 2024, e o sinal da
+    bilhetagem fica cerca de 3 p.p. abaixo do oficial. É por isso que o número de manchete vem da série oficial, não da
+    bilhetagem.
   </li>
   <li>
     <strong>Esparsidade em cortes simultâneos</strong> de zona × gênero × idade × tipo de dia — daí a
@@ -391,9 +423,12 @@
     <strong>Nem todo registro tem os campos de recorte preenchidos</strong> — cada um é excluído do
     recorte correspondente, nunca contado como uma categoria à parte:
     <code>linha_blt</code> nulo em ~26-28% dos registros (não é embarque de ônibus municipal —
-    excluído de toda contagem de demanda deste site, incluindo os mapas; a leitura mais consistente é que são validações de Bilhete Único no Metrô e na CPTM — 99,9% desse volume está em zonas que contêm estação e, no domingo, ele não reagiu à Tarifa Zero (+0,6% de 2023 a 2024, contra +28,0% do ônibus) —, mas é inferência: a SPTrans não confirmou o significado do campo); <code>genero</code> nulo
-    em ~4-5% (cartão não identificado/não cadastrado — excluído dos recortes por gênero);
-    <code>faixa_etaria</code> nulo em ~3-4% (excluído dos recortes por idade).
+    excluído de toda contagem de demanda deste site, incluindo os mapas; a leitura mais consistente é que são validações de Bilhete Único no Metrô e na CPTM — 99,9% desse volume está em zonas que contêm estação e, no domingo, ele não reagiu à Tarifa Zero (+0,6% de 2023 a 2024, contra +28,0% do ônibus) —, mas é inferência: a SPTrans não confirmou o significado do campo); <code>genero</code> e
+    <code>faixa_etaria</code> nulos (passagem sem cartão identificado — excluídos dos recortes por gênero e idade).
+    Esta falta <strong>não é constante</strong>: fica em ~5% no dia útil dos dois anos e no domingo de 2023, mas
+    chega a ~15% no domingo de 2024, quando a catraca de graça fez crescer a passagem sem cartão. Metade do
+    crescimento do domingo não tem gênero nem idade, e os recortes por gênero e idade descrevem só quem validou
+    cartão.
   </li>
 </ol>
 
@@ -401,7 +436,7 @@
 
 <p>
   A bilhetagem também foi conferida contra a série oficial <strong>linha a linha</strong>, por ano e
-  tipo de dia: 96,8% das linhas e 93,3% do volume oficial ficam dentro de ±10% do valor publicado.
+  tipo de dia: 96,8% das linhas e 93,1% do volume oficial ficam dentro de ±10% do valor publicado.
   Os desvios restantes se concentram em um conjunto pequeno de linhas que divergem nos dois anos, o
   que indica diferença de contabilidade, não ruído. As tabelas dessa conferência não são publicadas;
   ela é reproduzível em <code>03_comparacoes/compara_demanda_oferta_genero_idade.ipynb</code>, Seção 8.

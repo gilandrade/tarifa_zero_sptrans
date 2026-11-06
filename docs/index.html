@@ -54,15 +54,15 @@
 
 <div class="numeros">
   <div class="numero alta">
-    <span class="valor">+35,95%</span>
+    <span class="valor">+32,0%</span>
     <span class="rotulo">demanda aos domingos, 2024 vs. 2023</span>
   </div>
   <div class="numero controle">
-    <span class="valor">+7,03%</span>
+    <span class="valor">+4,9%</span>
     <span class="rotulo">demanda em dia útil (controle)</span>
   </div>
   <div class="numero principal">
-    <span class="valor">+28,9 p.p.</span>
+    <span class="valor">+27,1 p.p.</span>
     <span class="rotulo">Sinal Tarifa Zero (efeito isolado)</span>
   </div>
 </div>
@@ -71,7 +71,9 @@
   Os três números vêm da <strong>série oficial de passageiros transportados</strong> da
   Prefeitura/SPTrans — a única fonte deste estudo que é publicamente auditável (ver
   <a href="metodologia.html#fontes">metodologia</a>). São médias por dia, dentro dos meses de abril, maio, setembro e
-  outubro de cada ano.
+  outubro de cada ano, nas datas entregues pela bilhetagem, sem feriados, pontes, dias anômalos e dias em que a
+  entrega veio truncada (ver <a href="metodologia.html#calendario">calendário</a>). Sem essa limpeza o número era
+  +28,9 p.p.: um domingo de 2023 com um terço do volume normal (01/10) entrava na linha de base.
 </p>
 
 <h3>O mesmo efeito medido por duas fontes</h3>
@@ -84,7 +86,7 @@
 </p>
 
 <div class="caixa alerta">
-  <h3>A amplitude 23,9–28,9 p.p. não é um intervalo de confiança</h3>
+  <h3>A amplitude 24,1–27,1 p.p. não é um intervalo de confiança</h3>
   <p>
     São <strong>duas estimativas pontuais</strong> do mesmo efeito, calculadas pelo mesmo
     procedimento sobre fontes diferentes: a série oficial de passageiros transportados e a
@@ -103,7 +105,7 @@
   <h3>Regra editorial deste relatório</h3>
   <p>
     <strong>Níveis pela série oficial; desagregação (zona, gênero, idade) pela bilhetagem.</strong>
-    O número de manchete é <strong>+28,9 p.p.</strong>, da fonte auditável. Os recortes internos —
+    O número de manchete é <strong>+27,1 p.p.</strong>, da fonte auditável. Os recortes internos —
     onde o efeito acontece e sobre quem — só existem na bilhetagem, que subestima levemente o
     crescimento de domingo. Por isso as seções seguintes leem <em>padrões</em> e <em>contrastes
     relativos</em>, não níveis absolutos.
@@ -150,7 +152,13 @@
 </figure>
 
 <div class="quadro-tabela" data-tabela="sinal_por_tier_zona"></div>
-<p class="legenda-tabela">Sinal Tarifa Zero por zona, agregado por quintil de renda (p.p.).</p>
+<p class="legenda-tabela">
+  Três leituras por quintil de renda. <strong>Sinal mediano</strong>: a variação relativa, em p.p.
+  <strong>Embarques extras por domingo</strong>: quanto o domingo de 2024 ficou acima do que seria se tivesse
+  crescido como o dia útil da própria zona, na zona mediana e somado no quintil. <strong>Por mil moradores</strong>:
+  a soma do quintil dividida pelos seus moradores. Também a razão domingo / dia útil de 2023, que mede quanto a zona
+  já usava o ônibus no domingo antes da política. Todas em embarques por dia.
+</p>
 
 <figure>
   <img src="img/sinal_zona_boxplot_tier.png" alt="Boxplot do sinal Tarifa Zero por zona, estratificado por quintil de renda">
@@ -158,20 +166,64 @@
 </figure>
 
 <p>
-  O efeito é <strong>positivo em todos os quintis</strong>, mas não cresce nem cai de forma
-  contínua com a renda: a mediana é maior nas zonas de renda intermediária — entre 28 e 33 p.p. do
-  Q2 ao Q4 — e menor nos dois extremos, cerca de 26 p.p. no Q1 e 22 p.p. no Q5. As zonas mais pobres,
-  que são também as mais distantes do centro, e as mais ricas responderam menos que o miolo da
-  distribuição.
+  O efeito é <strong>positivo em todos os quintis</strong>, mas a ordem entre eles depende de como se mede.
+</p>
+
+<ul>
+  <li>
+    <strong>Em variação relativa</strong>, a mediana é maior nas zonas de renda intermediária (cerca de 32 p.p. no Q2 e
+    no Q3, 28 no Q4) e menor nos extremos (27 p.p. no Q1, 22 no Q5). Parte desse U invertido é o centro: 22 das 59
+    zonas do aglomerado de sinal alto do centro (seção 5) estão no Q3.
+  </li>
+  <li>
+    <strong>Em embarques extras por zona</strong>, o Q1 ganha mais: cerca de 1.980 embarques por domingo na zona mediana,
+    contra 590 no Q5. As zonas mais pobres já usavam mais o ônibus no domingo (razão domingo / dia útil de 0,36 em 2023,
+    contra 0,23 no Q5), então partem de uma base maior e crescem menos em porcentagem.
+  </li>
+  <li>
+    <strong>Por morador</strong>, o Q1 ganha menos: 40 embarques extras por domingo a cada mil moradores, contra 52 a 58
+    nos demais quintis. O Q1 reúne 37% dos moradores da cidade em 64 zonas.
+  </li>
+</ul>
+
+<p>
+  Nenhuma das três leituras é a "certa": o embarque é contado na zona onde acontece, não na zona onde o passageiro
+  mora, e nas zonas centrais quem embarca não é quem mora. A leitura por morador é a mais próxima de "quem se
+  beneficia", com essa ressalva.
 </p>
 
 <!-- ================= 3. QUEM RESPONDE ================= -->
 <h2 id="quem">3. Quem responde à política</h2>
 
-<h3>Idade: o contraste mais forte do estudo</h3>
+<div class="caixa alerta">
+  <h3>Gênero e idade cobrem só quem validou cartão</h3>
+  <p>
+    Gênero e idade vêm do cadastro do cartão. Com a catraca de graça, cresceu muito a passagem sem cartão
+    identificado no domingo: a classe "dinheiro" da bilhetagem foi de cerca de 118 mil para 409 mil registros por
+    domingo, e a parcela de embarques com gênero caiu de 94% para 85% — no dia útil ficou em torno de 95% nos dois
+    anos. <strong>Metade do crescimento do domingo não tem gênero nem idade.</strong>
+  </p>
+  <p>
+    Por isso as tabelas abaixo descrevem quem validou cartão, e o sinal delas fica bem abaixo do sinal de todos os
+    embarques: cerca de 10–12 p.p. por gênero, contra 24 p.p. no total (linha "todos" de cada tabela). Os contrastes
+    entre grupos são a informação útil; os níveis, não.
+  </p>
+</div>
+
+<div class="quadro-tabela" data-tabela="cobertura_identificacao"></div>
+<p class="legenda-tabela">
+  Parcela dos embarques com gênero e com idade no cadastro, por tipo de dia, e quanto do crescimento do domingo de
+  2023 para 2024 não tem gênero (médias por dia, embarques com linha). Gerado por
+  <code>03_comparacoes/compara_demanda_oferta_genero_idade.ipynb</code>, Seção 6.
+</p>
+
+<h3>Idade</h3>
 
 <div class="quadro-tabela" data-tabela="resumo_idade"></div>
-<p class="legenda-tabela">Demanda e sinal por faixa etária agregada (60 anos ou mais × menos de 60).</p>
+<p class="legenda-tabela">
+  Demanda e sinal por faixa etária agregada (60 anos ou mais × menos de 60), entre quem tem idade no cadastro, e a
+  linha de todos os embarques.
+</p>
 
 <figure>
   <img src="img/sinal_zona_idade.png" alt="Dois mapas do sinal Tarifa Zero por zona: 60 anos ou mais, e menos de 60">
@@ -182,19 +234,39 @@
 <p class="legenda-tabela">Mediana do sinal por quintil de renda, em cada grupo etário (p.p.).</p>
 
 <p>
-  <strong>O resultado é internamente consistente com a política.</strong> Pessoas com 60 anos ou mais
-  <em>já tinham gratuidade</em> antes da Tarifa Zero — para elas o domingo de 2024 não mudou de
-  preço, e o sinal é próximo de zero ou negativo. Praticamente todo o efeito vem do grupo com menos
-  de 60 anos, exatamente o que passou a não pagar. Esse contraste funciona como um teste de placebo:
-  se o sinal aparecesse igualmente nos dois grupos, ele estaria capturando alguma outra coisa.
+  Entre os menores de 60 anos o domingo cresceu 17% contra 1% no dia útil, um sinal de 16 p.p. Entre os 60+, o
+  domingo ficou parado (−1%) e o sinal é negativo (−13 p.p.).
 </p>
 
-<h3>Gênero: sem diferença relevante</h3>
+<p>
+  <strong>Esse contraste não funciona como teste de placebo.</strong> Pessoas com 60 anos ou mais já tinham
+  gratuidade, e seria natural esperar sinal perto de zero para elas. Ele dá negativo por duas razões que não são
+  resposta à política:
+</p>
+
+<ul>
+  <li>
+    <strong>Quem se move é o controle.</strong> O dia útil dos 60+ cresce 12% de 2023 para 2024 — o cartão de idoso
+    sobe cerca de 17% —, contra 1% dos menores de 60. Pode ser a volta mais lenta dos idosos depois da pandemia, mas é
+    um movimento do dia útil, sem relação com o domingo.
+  </li>
+  <li>
+    <strong>A medição do domingo mudou com a própria política.</strong> Com a catraca liberada, quem tem cartão de
+    gratuidade não precisa validar e pode passar sem registro de idade. No domingo de 2024 os embarques com cartão de
+    idoso caem, e aparecem 60+ validando com cartão comum.
+  </li>
+</ul>
+
+<p>
+  A política também muda o domingo de quem não paga: ônibus mais cheios, acompanhantes que agora viajam de graça.
+  O contraste entre 60+ e &lt;60 fica como descrição, não como evidência de que o efeito é só de preço.
+</p>
+
+<h3>Gênero</h3>
 
 <div class="quadro-tabela" data-tabela="resumo_genero"></div>
 <p class="legenda-tabela">
-  Demanda e sinal por gênero. Cerca de 4% dos embarques não têm gênero identificado e ficam de fora
-  desta tabela — não constituem uma terceira categoria.
+  Demanda e sinal por gênero, entre quem tem gênero no cadastro, e a linha de todos os embarques.
 </p>
 
 <figure>
@@ -206,10 +278,10 @@
 <p class="legenda-tabela">Mediana do sinal por quintil de renda, em cada gênero (p.p.).</p>
 
 <p>
-  No agregado, homens e mulheres respondem praticamente da mesma forma. Por quintil de renda, as
-  duas medianas praticamente coincidem no Q1 e se afastam à medida que a renda sobe, com o sinal
-  feminino de 3 a 6 p.p. abaixo do masculino do Q3 ao Q5 — uma diferença pequena diante da dispersão
-  entre zonas.
+  Entre quem validou cartão, homens e mulheres respondem de forma parecida: 12 p.p. contra 10 p.p. Por quintil de
+  renda, as duas medianas coincidem no Q1 e se afastam à medida que a renda sobe, com o sinal feminino de 2 a 6 p.p.
+  abaixo do masculino do Q2 ao Q5 — uma diferença pequena diante da dispersão entre zonas. Como metade do crescimento
+  não tem gênero, não dá para saber se o mesmo vale para quem passou sem cartão.
 </p>
 
 <h3>Tipo de serviço: grupos de lote</h3>
@@ -231,9 +303,9 @@
 <p class="legenda-tabela">O mesmo recorte pela série oficial, ao lado da bilhetagem (Seção 8 do mesmo notebook).</p>
 
 <p>
-  O sinal é parecido nos grupos Estrutural e Articulação Regional (cerca de 28 p.p. na bilhetagem) e
-  <strong>cerca de 9 p.p. menor na Distribuição Local</strong> (19 p.p.). A série oficial conta a mesma história,
-  em níveis mais altos — 34, 35 e 22 p.p. —, e a bilhetagem fica de 3 a 7 p.p. abaixo dela em todos os grupos, a mesma
+  O sinal é parecido nos grupos Estrutural e Articulação Regional (cerca de 28–29 p.p. na bilhetagem) e
+  <strong>cerca de 10 p.p. menor na Distribuição Local</strong> (19 p.p.). A série oficial conta a mesma história,
+  em níveis mais altos — 32, 34 e 21 p.p. —, e a bilhetagem fica de 2 a 5 p.p. abaixo dela em todos os grupos, a mesma
   subestimação do crescimento de domingo vista no total da cidade. A causa da diferença da Distribuição Local não foi investigada.
   Seis linhas grandes migraram de lote durante 2024 (0,4% do volume); tirá-las muda o sinal de cada grupo em no máximo
   0,2 p.p.
@@ -245,13 +317,13 @@
 <p>
   Se a demanda de domingo cresceu bem acima do controle, a pergunta seguinte é se a oferta de
   lugares cresceu junto. <strong>Não cresceu.</strong> Entre 2023 e 2025, aos domingos, a demanda
-  subiu cerca de 29% e o serviço programado ficou praticamente igual — o sistema absorveu o
+  subiu cerca de 30% e o serviço programado ficou praticamente igual — o sistema absorveu o
   aumento por <strong>ocupação</strong>, não por ampliação.
 </p>
 
 <div class="numeros">
   <div class="numero alta">
-    <span class="valor">+29%</span>
+    <span class="valor">+30%</span>
     <span class="rotulo">embarques por domingo, 2025 vs. 2023</span>
   </div>
   <div class="numero controle">
@@ -259,7 +331,7 @@
     <span class="rotulo">partidas programadas por domingo</span>
   </div>
   <div class="numero principal">
-    <span class="valor">−22%</span>
+    <span class="valor">−22,5%</span>
     <span class="rotulo">lugares ofertados por embarque, aos domingos</span>
   </div>
 </div>
@@ -397,29 +469,40 @@
   <h3>O que sai da conta, o que entra, e por quê</h3>
   <ul>
     <li>
-      <strong>Feriados com tarifa zero somam-se ao domingo, não são descartados.</strong> Natal,
-      Ano Novo e Aniversário de São Paulo também têm gratuidade quando caem fora do domingo — a
-      partir do início da política, essas datas contam como tratamento em vez de serem jogadas fora
-      como feriado comum. Ficam de fora, porém, da própria regra de outlier abaixo: um feriado tem
-      naturalmente menos gente circulando que um domingo comum, e isso não é defeito de dado.
+      <strong>Feriados com tarifa zero somam-se ao domingo, não são descartados.</strong> Ano Novo e
+      Aniversário de São Paulo também têm gratuidade quando caem fora do domingo — a partir do início da
+      política, essas datas contam como tratamento em vez de serem jogadas fora como feriado comum. Ficam
+      de fora, porém, da própria regra de outlier abaixo: um feriado tem naturalmente menos gente
+      circulando que um domingo comum, e isso não é defeito de dado. O Natal também é tarifa zero, mas cai
+      na janela de fim de ano, que sai da comparação (último item).
     </li>
     <li>
       <strong>Feriados comuns.</strong> O tipo de dia vem do dia da semana, então um feriado de
       terça-feira entraria no controle como dia útil comum. São cerca de 15 datas por ano —
       nacionais, estaduais e municipais — excluídas por lista explícita, inclusive quando caem no
-      fim de semana, para o critério ficar simétrico.
+      fim de semana, para o critério ficar simétrico. Saem também as <strong>pontes</strong> (a sexta
+      depois de um feriado na quinta, a segunda antes de um feriado na terça), que ficam em cerca de 75–80%
+      do volume de um dia útil comum.
     </li>
     <li>
-      <strong>Vésperas e recesso</strong> (24/12, 31/12, 02/01) e <strong>dias com volume anômalo</strong>
+      <strong>Domingos de eleição.</strong> Com voto obrigatório, os domingos de eleição municipal de 2024
+      (06/10 e 27/10) tiveram cerca de 1,3 vez o volume de um domingo comum. Como 2023 e 2025 não têm
+      eleição, mantê-los inflaria o domingo de 2024. Não mudam o 2023→2025, mas mudam as duas transições
+      ano a ano.
+    </li>
+    <li>
+      <strong>Vésperas, 02/01 e quarta-feira de cinzas</strong> e <strong>dias com volume anômalo</strong>
       — qualquer dia abaixo de 60% da mediana do seu próprio tipo de dia no ano. Essa regra pega três
       domingos de 2023 (01/10, 05/11 e 12/11) que aparecem na série oficial com cerca de um terço do
-      volume habitual. Mantê-los rebaixaria a linha de base de 2023 e <em>inflaria</em> o crescimento
-      medido.
+      volume habitual — e que coincidem com a eleição dos conselhos tutelares e os dois domingos do ENEM
+      (hipótese não verificada: catraca liberada sem registro). Mantê-los rebaixaria a linha de base de
+      2023 e <em>inflaria</em> o crescimento medido.
     </li>
     <li>
-      <strong>Os três domingos já gratuitos de dezembro de 2023</strong> ficam fora da linha de base
-      de 2023 (inclui o Natal daquele ano, mesmo já sendo feriado-tarifa-zero — contá-lo em 2023
-      contaminaria justamente essa linha de base).
+      <strong>A janela de 17 a 31 de dezembro sai em todos os anos.</strong> Em 2023 esses dias já são
+      gratuitos e não podem entrar na linha de base. Cortá-los só em 2023, como na versão anterior,
+      deixava dezembro de 2023 só com a primeira quinzena e dezembro de 2024 e 2025 inteiros, com as
+      compras de Natal e o recesso — por isso a janela agora sai de todos os anos.
     </li>
   </ul>
   <p>
@@ -439,7 +522,7 @@
   <p>
     A tabela de capacidade nominal por tecnologia é uma <strong>aproximação a partir de dado público,
     não um valor oficial certificado</strong>. Por isso os níveis absolutos de lugares por embarque
-    (3,12 em 2023, 2,34 em 2024, 2,44 em 2025) valem como <strong>ordem de grandeza provisória</strong>, e o número
+    (3,12 em 2023, 2,34 em 2024, 2,42 em 2025) valem como <strong>ordem de grandeza provisória</strong>, e o número
     de manchete é a <strong>variação percentual</strong>, em que um erro constante de escala se
     cancela. As partidas por dia, essas sim, são contagem direta da programação e não têm essa
     ressalva — e apontam a mesma coisa.
@@ -475,9 +558,9 @@
 
 <p>
   <strong>Só a oferta e a distância ao trilho têm intervalo que exclui o zero, e todas explicam pouco.</strong>
-  Cada dobra das partidas de domingo se associa a um sinal 3,1 p.p. menor (IC 95% −4,7 a −1,5); cada dobra dos
-  lugares, 2,0 p.p. menor; cada quilômetro a mais até a estação, 1,0 p.p. menor. Renda (−1,1 p.p. por dobra, intervalo
-  que inclui zero) e % de pessoas negras (+0,3 p.p. por +10 p.p.) não se distinguem de zero. O R² não passa de 3,9%: o
+  Cada dobra das partidas de domingo se associa a um sinal 2,8 p.p. menor (IC 95% −4,4 a −1,3); cada dobra dos
+  lugares, 1,7 p.p. menor; cada quilômetro a mais até a estação, 1,1 p.p. menor. Renda (−0,7 p.p. por dobra, intervalo
+  que inclui zero) e % de pessoas negras (+0,1 p.p. por +10 p.p.) não se distinguem de zero. O R² não passa de 3,5%: o
   sinal varia muito mais entre zonas do que qualquer uma dessas variáveis explica. Esse quadro muda quando o modelo trata a dependência
   espacial e controla pelo tamanho da base de domingo: na <a href="#regressao-espacial">regressão espacial</a>, a oferta e a distância
   deixam de se distinguir de zero.
@@ -487,7 +570,7 @@
   <h3>Os intervalos são otimistas: as zonas vizinhas se parecem</h3>
   <p>
     O Moran's I do sinal, tomando como vizinhas as zonas a até 1 km uma da outra, é <strong>0,45</strong> (p = 0,001), e o do resíduo de cada regressão fica
-    entre 0,43 e 0,46: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
+    entre 0,42 e 0,45: as variáveis explicam quase nada da estrutura espacial. Os intervalos acima supõem zonas
     independentes e, por isso, são mais estreitos do que deveriam. Inferência de verdade pede um modelo espacial, ajustado na
     <a href="#regressao-espacial">regressão espacial</a> abaixo; estes números são descritivos.
   </p>
@@ -510,7 +593,7 @@
 <p>
   O Moran's I global diz que zonas vizinhas se parecem, mas não onde. O Moran local (LISA) dá um valor para cada
   zona e a classifica pelo par (sinal da zona, média do sinal das vizinhas), com "alto" e "baixo" medidos contra a
-  média das zonas (29,8 p.p.), não contra zero: o sinal é positivo em todas as 322 zonas, então "baixo" quer dizer
+  média das zonas (29,9 p.p.), não contra zero: o sinal é positivo em todas as 322 zonas, então "baixo" quer dizer
   que o domingo cresceu menos em relação ao dia útil, não que caiu.
 </p>
 
@@ -518,66 +601,126 @@
   <img src="img/lisa_sinal_zona.png" alt="À esquerda, diagrama de Moran do sinal por zona; à direita, mapa de São Paulo com as zonas em aglomerados de sinal alto (vermelho) e baixo (azul)">
   <figcaption>
     À esquerda, o sinal de cada zona contra a média das vizinhas; a inclinação da reta é o I global. À direita, as zonas
-    com p &lt; 0,05 no teste local. A versão interativa é a última camada do
+    com p &lt; 0,05 no teste local. A versão interativa é a penúltima camada do
     <a href="mapa_variaveis_zona.html">mapa de variáveis por zona</a>.
   </figcaption>
 </figure>
 
 <p>
-  Das 322 zonas, 141 saem significativas, e formam poucos blocos grandes e contíguos.
-  <strong>60 são alto-alto</strong> (sinal médio de 47,3 p.p.): um bloco de 45 zonas no centro (Sé, República, Brás,
+  Das 322 zonas, 135 saem significativas, e formam poucos blocos grandes e contíguos.
+  <strong>59 são alto-alto</strong> (sinal médio de 47,1 p.p.): um bloco de 45 zonas no centro (Sé, República, Brás,
   Pari, Liberdade, Bela Vista, Bom Retiro) e outro de 13 na zona leste, em torno de São Mateus e Sapopemba.
-  <strong>68 são baixo-baixo</strong> (17,1 p.p.): um bloco de 47 zonas do sudoeste ao sul (Pinheiros, Butantã, Morumbi,
-  Santo Amaro, até Jardim Ângela, Grajaú e Parelheiros) e blocos menores na Lapa e Perdizes, em Tucuruvi e Mandaqui e no
-  Itaim Paulista. Outras 13 zonas destoam das vizinhas (8 baixo-alto, 5 alto-baixo), quase todas dentro ou na borda desses blocos.
+  <strong>63 são baixo-baixo</strong> (17,6 p.p.): um bloco de 47 zonas do sudoeste ao sul (Pinheiros, Butantã, Morumbi,
+  Santo Amaro, até Jardim Ângela, Grajaú e Parelheiros) e blocos menores em Tucuruvi e Mandaqui e no
+  Itaim Paulista. Outras 13 zonas destoam das vizinhas (7 baixo-alto, 6 alto-baixo), quase todas dentro ou na borda desses blocos.
 </p>
 
 <div class="caixa alerta">
   <h3>Como ler o mapa</h3>
   <p>
     O corte é p &lt; 0,05 <strong>sem correção para testes múltiplos</strong>: são 322 testes, e cerca de 16 zonas podem
-    estar marcadas por acaso. Vale ler os blocos, não as zonas isoladas. Em 13 das 141 zonas o próprio sinal está a menos
-    de 3,3 p.p. da média, e o rótulo vem das vizinhas.
+    estar marcadas por acaso. Vale ler os blocos, não as zonas isoladas. Em 15 das 135 zonas o próprio sinal está a menos
+    de 3,2 p.p. da média, e o rótulo vem das vizinhas.
   </p>
   <p>
-    O agrupamento é descritivo. As cinco variáveis acima explicam pouco dele (o Moran's I do resíduo continua em 0,43–0,46), e
-    nos blocos altos a base de domingo de 2023 é pequena (mediana de 2.252 embarques por domingo, contra 4.758 nas zonas sem
-    aglomerado), o que também infla a variação percentual. É onde procurar a variável que falta, não uma explicação.
+    O agrupamento é descritivo. As cinco variáveis acima explicam pouco dele (o Moran's I do resíduo continua em 0,42–0,45), e
+    a base de domingo de 2023 muda de um bloco para o outro: mediana de 2.330 embarques por domingo nos blocos altos, 7.052
+    nos baixos e 4.911 nas zonas sem aglomerado. Como zona de base grande cresce menos em porcentagem (ver a regressão
+    abaixo), parte do mapa é efeito da base — o mapa seguinte separa essa parte.
   </p>
 </div>
+
+<h3 id="lisa-residuo">O que sobra do aglomerado depois da base</h3>
+
+<p>
+  O mesmo Moran local, agora sobre o <strong>resíduo</strong> de uma regressão da variação % do domingo contra a variação
+  % do dia útil e a base de domingo de 2023: o que fica alto ou baixo depois de descontar o tamanho da zona e a tendência
+  do seu dia útil.
+</p>
+
+<figure>
+  <img src="img/lisa_residuo_zona.png" alt="Dois mapas de São Paulo lado a lado: os aglomerados do sinal e os aglomerados do resíduo depois de controlar a base de domingo e o dia útil">
+  <figcaption>
+    À esquerda, o LISA do sinal (o mesmo mapa acima). À direita, o LISA do resíduo. Mesma vizinhança e mesmo corte. A
+    versão interativa é a última camada do <a href="mapa_variaveis_zona.html">mapa de variáveis por zona</a>.
+  </figcaption>
+</figure>
+
+<p>
+  <strong>O centro continua:</strong> 45 das 59 zonas alto-alto seguem alto-alto no resíduo, ou seja, o crescimento do
+  domingo no centro vai além do que o tamanho das zonas explica. O bloco rico do sudoeste (Pinheiros, Morumbi, Vila
+  Olímpia, Brooklin) também continua baixo-baixo. <strong>Já a periferia muda:</strong> 26 das 63 zonas baixo-baixo
+  deixam de ser, entre elas quase todo o extremo sul (Grajaú, Parelheiros, Jardim Ângela, Capão Redondo, Cocaia) e o
+  extremo leste (Itaim Paulista, Vila Curuçá, Jardim Robru). Ali o sinal baixo é o de zonas que já tinham muito
+  embarque no domingo antes da política: elas cresceram menos em porcentagem, mas não ficaram para trás em número de
+  passageiros.
+</p>
 
 <h3 id="regressao-espacial">Regressão espacial: o que sobrevive à dependência entre zonas</h3>
 
 <p>
-  As regressões simples acima deixaram o Moran's I do resíduo em 0,43–0,46. Para tratar essa dependência, a análise seguinte
+  As regressões simples acima deixaram o Moran's I do resíduo em 0,42–0,45. Para tratar essa dependência, a análise seguinte
   usa um único modelo, em que o desfecho é a <strong>variação % do embarque médio de domingo, 2023 → 2024</strong> (e não mais o
   sinal). O crescimento do dia útil entra como controle, com <strong>peso estimado</strong> em vez de ser subtraído com peso 1,
   e a <strong>base de domingo de 2023</strong> também entra: ela está no denominador da variação, então uma zona de base pequena
-  tem variação grande por construção, e sem esse controle o tamanho da zona se mistura com qualquer variável que ande junto com ele,
+  pode ter variação grande só por isso, e sem esse controle o tamanho da zona se mistura com qualquer variável que ande junto com ele,
   como a oferta. Base e renda entram em log2 (coeficiente por dobra); as partidas, em milhares.
 </p>
 
 <div class="quadro-tabela" data-tabela="regressao_espacial_publicada"></div>
 <p class="legenda-tabela">
-  Coeficientes em p.p. da variação % do domingo, 322 zonas, vizinhas a até 1 km. No modelo de defasagem o coeficiente de uma variável
-  não é o efeito marginal (há um multiplicador de cerca de 2,7), então as inclinações se leem no MQO e no modelo de erro. Gerado por
+  Efeitos em p.p. da variação % do domingo, 322 zonas, vizinhas a até 1 km. No modelo de defasagem (a leitura principal), o efeito
+  aparece em três partes: <strong>direto</strong> (na própria zona, contando o retorno pelas vizinhas), <strong>indireto</strong>
+  (nas outras zonas) e <strong>total</strong>; o p é o do coeficiente. Ao lado, o modelo de erro espacial e o MQO. Gerado por
   <code>04_correlatos/regressao_espacial_sinal.ipynb</code>.
 </p>
 
 <p>
-  <strong>Dois resultados se sustentam nos modelos espaciais.</strong> Cada dobra da base de domingo de 2023 se associa a uma
-  variação do domingo 3,3 p.p. menor, e cada dobra da renda per capita, 5,2 p.p. menor (p &lt; 0,001, no modelo de erro). O peso
-  estimado do dia útil é 1,06, bem perto de 1: subtrair o dia útil com peso 1, como faz o sinal, é uma boa aproximação.
-  <strong>A oferta e a distância à estação não se distinguem de zero.</strong> Quando a base de domingo e a dependência espacial
-  entram no modelo, as partidas deixam de se associar a um crescimento menor, e a distância cai de −1,3 p.p. por km no MQO
-  (p = 0,002) para −0,7 (p = 0,15) no modelo de erro.
+  <strong>Por que o modelo de defasagem.</strong> Os testes do multiplicador de Lagrange apontam a defasagem espacial (robusto de
+  defasagem 38,2, contra 4,5 do de erro), e o AIC concorda: 2.352 na defasagem, 2.358 no erro, 2.356 no Durbin espacial (que inclui
+  os dois e não melhora) e 2.458 no MQO. Há também um mecanismo para a defasagem: a viagem de volta. Quem passa a embarcar no domingo
+  numa zona volta embarcando em outra, em geral próxima, e o crescimento de uma zona aparece nas vizinhas. No modelo, isso vira um
+  multiplicador: com ρ = 0,64, o efeito total é cerca de 2,8 vezes o coeficiente. O efeito <strong>direto</strong> é o número
+  comparável ao do MQO e do modelo de erro; o total responde a "se todas as zonas mudassem juntas", que para a renda tem pouca
+  leitura prática.
 </p>
 
 <p>
-  Os testes do multiplicador de Lagrange apontam a defasagem espacial (robusto de defasagem 38,1, contra 6,1 do de erro), e o AIC concorda:
-  2.365 na defasagem, 2.370 no erro e 2.473 no MQO. O resíduo filtrado dos modelos espaciais tem Moran's I perto de zero. Os modelos de
-  erro e de defasagem concordam em quais termos são significativos.
+<p>
+  <strong>Dois resultados se sustentam nos modelos espaciais.</strong> Cada dobra da base de domingo de 2023 se associa a uma
+  variação do domingo 3,8 p.p. menor na própria zona (efeito direto; 9,9 p.p. no total), e cada dobra da renda per capita, 3,3 p.p.
+  menor (8,5 no total), os dois com p &lt; 0,001. No modelo de erro os números são parecidos com o efeito direto: −3,2 para a base e
+  −4,6 para a renda. O peso estimado do dia útil fica entre 1,06 e 1,10: subtrair o dia útil com peso 1, como faz o sinal, é uma boa
+  aproximação. <strong>A oferta e a distância à estação não se distinguem de zero.</strong> Quando a base de domingo e a dependência
+  espacial entram no modelo, as partidas deixam de se associar a um crescimento menor, e a distância cai de −1,2 p.p. por km no MQO
+  (p = 0,004) para −0,3 (p = 0,47) na defasagem. O resíduo filtrado dos modelos espaciais tem Moran's I perto de zero.
 </p>
+
+<div class="caixa metodo">
+  <h3>Os testes de robustez</h3>
+  <ul>
+    <li>
+      <strong>Vizinhança.</strong> Com contiguidade, 2 km, 6 ou 10 vizinhas mais próximas, o coeficiente da renda fica entre −2,9 e −3,9
+      na defasagem (−4,0 a −6,0 no modelo de erro) e o da base entre −3,6 e −4,1. Uma vizinhança pela rede de ônibus (as zonas com as linhas
+      mais parecidas) ajusta pior que todas as geográficas: a dependência é de proximidade, não de linhas compartilhadas.
+    </li>
+    <li>
+      <strong>Heterocedasticidade.</strong> Estimados por GMM, com erro-padrão robusto, os dois modelos dão os mesmos coeficientes e as
+      mesmas conclusões.
+    </li>
+    <li>
+      <strong>Regressão à média.</strong> Se o efeito da base fosse ruído (um domingo de 2023 medido baixo por acaso cresce muito
+      depois), medir a base com metade dos domingos de 2023 e a variação com a outra metade o faria encolher. Não encolhe: −3,5 nas duas
+      combinações, contra −3,6. Medir a base pelo sábado ou pelo dia útil dá o mesmo.
+    </li>
+    <li>
+      <strong>Folga de oferta.</strong> Com lugares ofertados por embarque no domingo de 2023 no modelo, o efeito da base some
+      (−0,5, p = 0,70), a folga entra com +3,1 p.p. por dobra (p = 0,01) e o ajuste melhora (AIC 2.348). Ou seja: as zonas grandes
+      cresceram menos onde os ônibus já andavam mais cheios. Os dados não separam "base grande" de "pouca folga", porque as duas andam
+      juntas, mas a leitura de teto de capacidade é tão compatível com eles quanto a de base grande.
+    </li>
+  </ul>
+</div>
 
 <h3 id="mgwr">Coeficientes que variam no território (MGWR)</h3>
 
@@ -607,21 +750,22 @@
 </p>
 
 <p>
-  <strong>A renda é o que varia no território.</strong> O coeficiente local é negativo e significativo em 76% das zonas, com mediana de
-  −7,4 p.p. por dobra, mais forte no centro e no centro-oeste e sem significância no leste e no extremo sul. A
-  <strong>distância à estação</strong> só pesa no centro (significativa em 28% das zonas, com mediana de −7,5 p.p. por km entre elas) e é próxima de zero
-  fora dele. A base de domingo, com −3,3 p.p. por dobra, e o peso do dia útil, com mediana 1,00, são parecidos em toda a cidade, e as partidas não
-  têm efeito local significativo em nenhuma zona. O MGWR ajusta bem (AICc 608, contra 736 do MQO na mesma escala), e as variáveis
-  contam: a superfície de tendência sozinha fica em 757, pior que o MQO com as variáveis.
+  <strong>A renda é o que varia no território.</strong> O coeficiente local é negativo e significativo em 74% das zonas, com mediana de
+  −6,5 p.p. por dobra, mais forte no centro e no centro-oeste e sem significância no leste e no extremo sul. A
+  <strong>distância à estação</strong> só pesa no centro (significativa em 27% das zonas, com mediana de −7,5 p.p. por km entre elas) e é próxima de zero
+  fora dele — mas no centro as distâncias variam pouco, então esse coeficiente local é instável. A base de domingo, com −3,0 p.p. por dobra, tem
+  escala global; o peso do dia útil, com mediana 0,94, varia numa escala regional (26% das zonas), e as partidas não têm efeito local significativo
+  em nenhuma zona. O MGWR ajusta bem (AICc 619, contra 743 do MQO na mesma escala), e as variáveis contam: a superfície de tendência sozinha fica
+  em 762, pior que o MQO com as variáveis.
 </p>
 
 <div class="caixa alerta">
   <h3>Como ler esta seção</h3>
   <p>
     São <strong>associações entre zonas, não efeitos</strong>, e em variação <strong>relativa</strong>. Nas zonas de maior base de domingo o
-    aumento em passageiros foi maior, mesmo com variação % menor (mediana de +560, +1.438 e +3.152 embarques por domingo nos terços de base
-    menor, médio e maior, contra variações de 37,0%, 32,8% e 25,9%). O efeito da base é em parte aritmético, porque bases pequenas oscilam
-    mais, e pode também refletir um teto de crescimento; o modelo não separa os dois.
+    aumento em passageiros foi maior, mesmo com variação % menor (mediana de +535, +1.354 e +3.067 embarques por domingo nos terços de base
+    menor, médio e maior, contra variações de 34,7%, 30,8% e 24,6%). O efeito da base não é ruído de medida (teste das metades, acima), e
+    pode refletir um teto de capacidade: o modelo não distingue base grande de pouca folga de lugares.
   </p>
   <p>
     O MGWR é exploratório: os coeficientes locais não são independentes entre si, então vale ler regiões, não zonas isoladas. A
@@ -633,7 +777,7 @@
 <!-- ================= 6. RESSALVAS ================= -->
 <h2 id="ressalvas">6. Ressalvas</h2>
 
-<p>Seis limitações valem para qualquer leitura deste relatório. A versão detalhada está na
+<p>Oito limitações valem para qualquer leitura deste relatório. A versão detalhada está na
    <a href="metodologia.html">página de metodologia</a>.</p>
 
 <ol>
@@ -654,7 +798,17 @@
   </li>
   <li>
     <strong>A bilhetagem subestima o crescimento de domingo</strong> em relação à série oficial: a
-    razão entre as duas escorrega de cerca de 1,05 para cerca de 0,99 entre os anos.
+    razão entre as duas escorrega de cerca de 1,05 para cerca de 1,00 entre os anos, e o sinal da
+    bilhetagem fica cerca de 3 p.p. abaixo do oficial (24,1 contra 27,1).
+  </li>
+  <li>
+    <strong>Gênero e idade só existem para quem validou cartão</strong>, e no domingo de 2024 metade do
+    crescimento passou sem cartão identificado. Os recortes por gênero e idade descrevem esse subconjunto,
+    e a falta muda com o próprio tratamento.
+  </li>
+  <li>
+    <strong>A zona é a de embarque, não a de moradia.</strong> Renda e % de pessoas negras descrevem quem
+    mora na zona; nas zonas centrais, quem embarca é, em boa parte, quem vem de fora.
   </li>
   <li>
     <strong>Cortes simultâneos de zona × gênero × idade × tipo de dia ficam esparsos</strong> — daí a

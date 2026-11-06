@@ -214,6 +214,45 @@ Procedimento: uma de cada vez na especificação D, comparando o AIC do erro e d
 filtrado; manter poucas variáveis (a meta-análise mostra que o desenho do modelo explica mais de 40% da variação dos achados).
 Atualizar o site só se uma variável nova mudar a conclusão.
 
+### 9. ~~Correções da revisão de métodos (06/11/2026)~~ — feito, sem commit
+
+Quatro correções, todas rodadas de ponta a ponta e publicadas em `docs/`:
+
+1. **Gênero e idade cobrem só quem validou cartão.** No domingo de 2024 a parcela com gênero cai de 94% para 85%
+   (dia útil fica em ~95%), e metade do crescimento do domingo não tem gênero nem idade. Tabela
+   `cobertura_identificacao`, linha "todos" em `resumo_genero`/`resumo_idade`. O contraste 60+ × <60 deixou de ser
+   chamado de placebo: o sinal dos 60+ vem do dia útil (cartão `IDOSO` +17%) e da medição do domingo, que mudou com a
+   política.
+2. **Calendário único** em `src/calendario.py` (feriados, pontes, atípicos, eleições, janela de 17–31/12 em todos os
+   anos), usado pelos dois notebooks de comparação, mais regras de outlier e de entrega truncada da bilhetagem.
+   Manchete: 28,9 → **27,1 p.p.** (oficial), 23,9 → 24,1 (bilhetagem). Agregado 2023→2025: −19,5 → −20,0 p.p.
+3. **Quintis em três leituras** (relativo, ganho absoluto por zona, ganho por morador) e LISA do resíduo com base e
+   dia útil controlados. O Q1 ganha mais embarques por zona e menos por morador; o baixo-baixo da periferia some no
+   resíduo, o centro fica.
+4. **Regressão espacial lida pelo SAR**, com impactos direto, indireto e total, e uma seção de robustez (outras
+   vizinhanças, GMM, regressão à média, folga de oferta). O efeito da base não é ruído; a folga de lugares o absorve.
+
+### 10. Próximos passos registrados (não implementados)
+
+- **Diagnóstico dos erros espaciais do SAR.** Rodar Moran e LISA sobre o resíduo do SAR (e do SEM) e mapear os clusters.
+  Perguntas: onde o modelo erra de forma sistemática (centro, eixos de trilho, periferia); se os clusters coincidem com
+  variáveis que faltam (centralidade, uso do solo, terminais); se a escolha da matriz W muda o padrão.
+- **IC por bootstrap de dias** (possibilidade, decidido não implementar por ora). Reamostrar dias com reposição dentro de
+  ano × mês × tipo de dia, 4.000 réplicas, recalculando a estatística inteira (média do mês, média dos meses, variação,
+  sinal) a cada réplica. Resultado preliminar na bilhetagem: sinal 24,0 p.p., IC95 de 20,0 a 27,7.
+  - Prós: mede a variação entre dias que já aparece no projeto (um único domingo anômalo mexia 4 p.p.); usa o mesmo
+    procedimento da estimativa pontual, sem supor distribuição; serve para as duas fontes e diz se 24 e 27 p.p. são
+    compatíveis.
+  - Contras: não cobre viés (tendências paralelas, `zona_emb`, defeitos de entrega), que é o risco maior, e pode passar
+    falsa precisão; supõe dias independentes dentro do mês (um bootstrap por semana atenua); há células com 2 domingos,
+    que subestimam a variância; a leitura passa a ser sobre "domingos típicos desses meses", não sobre o total ocorrido.
+- **Fora do escopo, anotado:** `03_comparacoes/compara_demanda.ipynb` compara abril de 2023 com abril de 2024 por soma
+  mensal (`02_cria_base_demanda_mes`), não por média diária — contra a regra do projeto; estudo de evento mensal da
+  razão domingo/dia útil com anos anteriores a 2023 (teste de tendências paralelas); efeito do reajuste de tarifa de
+  janeiro de 2025 na transição 2024→2025; diagnósticos de colinearidade local e teste de não estacionariedade do MGWR;
+  sinal por zona de residência (zona provável do cartão pelo `hash_anonimizado`) em vez de zona de embarque; oferta
+  medida pelas partidas nas paradas da zona (GTFS) em vez das linhas que a cruzam.
+
 ## Riscos permanentes a sinalizar em qualquer publicação
 
 1. Capacidade nominal por tecnologia é aproximação pública, não valor oficial certificado — é essa
